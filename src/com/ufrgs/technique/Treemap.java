@@ -1,9 +1,11 @@
 package com.ufrgs.technique;
 
 import com.ufrgs.model.Entity;
+import com.ufrgs.model.Point;
 import com.ufrgs.model.Rectangle;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static java.lang.Double.max;
@@ -11,51 +13,60 @@ import static java.lang.Math.pow;
 
 public class Treemap {
 
-    private List<Entity> entityCopy = new ArrayList<>();
-
-
     public Treemap(Entity root, double width, double height) {
-
-        treemapMultidimensional(root.getChildren().get(0).getChildren(), 0, 0, width, height);
+        treemapMultidimensional(root.getChildren(), new Rectangle(0, 0, width, height));
     }
 
+    // Use recursion to compute single dimensional treemaps from a hierarchical dataset
+    private void treemapMultidimensional(List<Entity> entityList, Rectangle rectangle) {
 
-    private void treemapMultidimensional(List<Entity> entityList, double x, double y, double width, double height) {
-
-
-
+        // Sort using entities weight -- layout tends to turn out better
+        entityList.sort(Comparator.comparing(Entity::getWeight).reversed());
+        // Make a copy of data, as the original is destroyed during treemapSingledimensional computation
+        List<Entity> entityCopy = new ArrayList<>();
         entityCopy.addAll(entityList);
 
-        treemapSingledimensional(entityList, x, y, width, height);
+        treemapSingledimensional(entityList, rectangle);
+
+        // Recursive calls for the children
+        for (Entity entity : entityCopy) {
+            if (!entity.isLeaf()) {
+                List<Entity> newEntityList = new ArrayList<>();
+                newEntityList.addAll(entity.getChildren());
+                treemapMultidimensional(newEntityList, entity.getRectangle());
+            }
+        }
 
         for (Entity entity : entityCopy) {
-            Rectangle r = entity.getRectangle();
-            System.out.println("ctx.rect(" + r.x + ", " + r.y + ", " + (r.width - r.x) + ", " + (r.height - r.y) + ");");
+            Point r = entity.getPoint();
+            System.out.println("ctx.rect(" + r.x + ", " + r.y + ", " + 1 + ", " + 1 + ");");
         }
     }
 
-    private void treemapSingledimensional(List<Entity> entityList, double x, double y, double width, double height) {
+    private void treemapSingledimensional(List<Entity> entityList, Rectangle rectangle) {
 
-        normalize(entityList, width * height);
+        // Bruls' algorithm assumes that the data is normalized
+        normalize(entityList, rectangle.width * rectangle.height);
 
         List<Entity> currentRow = new ArrayList<Entity>();
-        Rectangle rectangle = new Rectangle(x, y, width, height);
         squarify(entityList, currentRow, rectangle);
     }
 
     private void squarify(List<Entity> entityList, List<Entity> currentRow, Rectangle rectangle) {
 
+        // If all elements have been placed, save coordinates into objects
         if (entityList.size() == 0) {
             saveCoordinates(currentRow, rectangle);
             return;
         }
 
+        // Test if new element should be included in current row
         if (improvesRatio(currentRow, entityList.get(0).getNormalizedWeight(), rectangle.getShortEdge())) {
             currentRow.add(entityList.get(0));
             entityList.remove(0);
             squarify(entityList, currentRow, rectangle);
         } else {
-
+            // New row must be created, subtract area of previous row from container
             double sum = 0;
             for (Entity entity : currentRow) {
                 sum += entity.getNormalizedWeight();
@@ -83,19 +94,23 @@ public class Treemap {
             for (Entity entity : currentRow) {
                 double x = subxOffset;
                 double y = subyOffset;
-                double width = subxOffset + areaWidth;
-                double height = subyOffset + entity.getNormalizedWeight() / areaWidth;
+                double width = areaWidth;
+                double height = entity.getNormalizedWeight() / areaWidth;
                 entity.setRectangle(new Rectangle(x, y, width, height));
                 subyOffset += entity.getNormalizedWeight() / areaWidth;
+                // Save center as we'll be using it as input to the nmap algorithm
+                entity.setPoint(new Point(x + width/2, y + height/2));
             }
         } else {
             for (Entity entity : currentRow) {
                 double x = subxOffset;
                 double y = subyOffset;
-                double width = subxOffset + entity.getNormalizedWeight() / areaHeight;
-                double height = subyOffset + areaHeight;
+                double width = entity.getNormalizedWeight() / areaHeight;
+                double height = areaHeight;
                 entity.setRectangle(new Rectangle(x, y, width, height));
                 subxOffset += entity.getNormalizedWeight() / areaHeight;
+                // Save center as we'll be using it as input to the nmap algorithm
+                entity.setPoint(new Point(x + width/2, y + height/2));
             }
         }
     }

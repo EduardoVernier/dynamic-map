@@ -61,4 +61,9 @@ public class Entity {
     public List<Entity> getChildren() {
         return children;
     }
+
+    public boolean isLeaf() {
+        return children.size() == 0;
+    }
+
 }
