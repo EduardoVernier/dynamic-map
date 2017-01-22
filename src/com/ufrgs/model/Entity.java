@@ -7,6 +7,7 @@ public class Entity {
 
     private String id;
     private double weight;
+    private double normalizedWeight;
     private Point point;
     private Rectangle rectangle;
     private List<Entity> children =  new ArrayList<>();
@@ -26,6 +27,14 @@ public class Entity {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public double getNormalizedWeight() {
+        return normalizedWeight;
+    }
+
+    public void setNormalizedWeight(double normalizedWeight) {
+        this.normalizedWeight = normalizedWeight;
     }
 
     public Point getPoint() {
