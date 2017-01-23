@@ -11,14 +11,20 @@ import java.util.List;
 import static java.lang.Double.max;
 import static java.lang.Math.pow;
 
-public class Treemap {
+public class SquarifiedTreemap {
 
-    public Treemap(Entity root, double width, double height) {
-        treemapMultidimensional(root.getChildren(), new Rectangle(0, 0, width, height));
+    private Entity treeRoot;
+
+    public SquarifiedTreemap(Entity root, double width, double height) {
+        treeRoot = treemapMultidimensional(root.getChildren(), new Rectangle(0, 0, width, height));
+    }
+
+    public Entity getTreeRoot() {
+        return treeRoot;
     }
 
     // Use recursion to compute single dimensional treemaps from a hierarchical dataset
-    private void treemapMultidimensional(List<Entity> entityList, Rectangle rectangle) {
+    private Entity treemapMultidimensional(List<Entity> entityList, Rectangle rectangle) {
 
         // Sort using entities weight -- layout tends to turn out better
         entityList.sort(Comparator.comparing(Entity::getWeight).reversed());
@@ -37,10 +43,7 @@ public class Treemap {
             }
         }
 
-        for (Entity entity : entityCopy) {
-            Point r = entity.getPoint();
-            System.out.println("ctx.rect(" + r.x + ", " + r.y + ", " + 1 + ", " + 1 + ");");
-        }
+        return entityCopy.get(0);
     }
 
     private void treemapSingledimensional(List<Entity> entityList, Rectangle rectangle) {
@@ -161,6 +164,5 @@ public class Treemap {
 
         return currentRatio >= newRatio;
     }
-
 }
 
