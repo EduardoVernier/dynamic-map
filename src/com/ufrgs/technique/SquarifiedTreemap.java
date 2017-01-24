@@ -15,8 +15,8 @@ public class SquarifiedTreemap {
 
     private Entity treeRoot;
 
-    public SquarifiedTreemap(Entity root, double width, double height) {
-        treeRoot = treemapMultidimensional(root.getChildren(), new Rectangle(0, 0, width, height));
+    public SquarifiedTreemap(Entity root, Rectangle rectangle) {
+        treeRoot = treemapMultidimensional(root.getChildren(), rectangle);
     }
 
     public Entity getTreeRoot() {
