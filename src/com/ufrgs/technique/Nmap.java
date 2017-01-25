@@ -5,20 +5,36 @@ import com.ufrgs.model.Point;
 import com.ufrgs.model.Rectangle;
 
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Nmap {
 
     public Nmap(Entity root, Rectangle rectangle) {
-        equalWeight(root.getChildren(), rectangle);
+
+        nmap(root.getChildren(), rectangle);
         root.getPoint();
+    }
+
+    private void nmap(List<Entity> entityList, Rectangle rectangle) {
+
+        List<Entity> entityCopy = new ArrayList<>();
+        entityCopy.addAll(entityList);
+
+        equalWeight(entityList, rectangle);
+
+        for (Entity entity : entityCopy) {
+            if (!entity.isLeaf()) {
+                nmap(entity.getChildren(), entity.getRectangle());
+            }
+        }
     }
 
     private void equalWeight(List<Entity> entityList, Rectangle rectangle) {
 
         if (entityList.size() == 1) {
             entityList.get(0).setRectangle(rectangle);
-            //entityList.get(0).getPoint().setValues(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
+            entityList.get(0).getPoint().setValues(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
             System.out.println("ctx.rect(" + rectangle.x + ", " + rectangle.y + ", " + rectangle.width + ", " + rectangle.height + ");");
         } else {
 
