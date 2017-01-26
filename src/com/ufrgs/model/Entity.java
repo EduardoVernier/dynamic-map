@@ -6,29 +6,40 @@ import java.util.List;
 public class Entity {
 
     private String id;
-    private double weight;
+    private List<Double> weightList;
     private double normalizedWeight;
     private Point point;
     private Rectangle rectangle;
-    private List<Entity> children =  new ArrayList<>();
+    private List<Entity> children;
 
-    public Entity(String id, double weight) {
+    public Entity(String id, int numberOfRevisions) {
+
         this.id = id;
-        this.weight = weight;
+        // Initialize lists
+        children  = new ArrayList<>();
+        weightList = new ArrayList<>(numberOfRevisions);
+        for (int i = 0; i < numberOfRevisions; ++i) {
+            weightList.add(0.0);
+        }
     }
 
     public String getId() {
         return id;
     }
 
-    public double getWeight() {
-        return weight;
+    public int getNumberOfRevisions() {
+        return weightList.size();
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public double getWeight(int index) {
+        return weightList.get(index);
     }
 
+    public void setWeight(double weight, int revision) {
+        weightList.set(revision, weight);
+    }
+
+    // Only used on Squarified Treemap
     public double getNormalizedWeight() {
         return normalizedWeight;
     }
@@ -54,8 +65,11 @@ public class Entity {
     }
 
     public void addChild(Entity entity) {
+
         children.add(entity);
-        weight += entity.getWeight();
+        for (int revision = 0; revision < getNumberOfRevisions(); ++revision) {
+            weightList.set(revision, weightList.get(revision) + entity.getWeight(revision));
+        }
     }
 
     public List<Entity> getChildren() {

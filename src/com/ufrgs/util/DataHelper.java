@@ -3,36 +3,73 @@ package com.ufrgs.util;
 import com.ufrgs.model.Entity;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class DataHelper {
 
-    private static List<Entity> parseCSV(String csvFile) {
+    private static int numberOfRevisions;
+
+    private static List<Entity> parseCSVs(String directory) {
 
         List<Entity> entityList = new ArrayList<>();
 
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(csvFile));
-            String currentLine = bufferedReader.readLine();
-            String[] header = currentLine.split(",");
+        File[] fileList = new File(directory).listFiles();
+        List<String> fileNames = new ArrayList<>();
 
-            if (!header[0].equals("id") || !header[1].equals("weight")) {
-                System.err.println("Error parsing csv file");
-                System.exit(-1);
+        if (fileList != null) {
+            for (File file : fileList) {
+                if (file.isFile()) {
+                    try {
+                        fileNames.add(file.getCanonicalPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+        } else {
+            System.err.println("Invalid dir path.");
+            System.exit(-1);
+        }
 
-            while ((currentLine = bufferedReader.readLine()) != null) {
+        try {
 
-                String[] split = currentLine.split(",");
+            numberOfRevisions = fileNames.size();
+            for (int revision = 0; revision < numberOfRevisions; ++revision) {
 
-                if (split.length != 2) {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(fileNames.get(revision)));
+                String currentLine = bufferedReader.readLine();
+                String[] header = currentLine.split(",");
+
+                if (!header[0].equals("id") || !header[1].equals("weight")) {
                     System.err.println("Error parsing csv file");
                     System.exit(-1);
-                } else {
-                    Entity entity = new Entity(split[0], Double.parseDouble(split[1]));
-                    entityList.add(entity);
+                }
+
+                while ((currentLine = bufferedReader.readLine()) != null) {
+
+                    String[] split = currentLine.split(",");
+
+                    if (split.length != 2) {
+                        System.err.println("Error parsing csv file");
+                        System.exit(-1);
+                    } else {
+                        String id = split[0];
+                        double weight = Double.parseDouble(split[1]);
+                        if (contains(entityList, id)) {
+                            Entity entity = entityList.get(find(entityList, id));
+                            entity.setWeight(weight, revision);
+                        } else {
+                            Entity entity = new Entity(id, numberOfRevisions);
+                            entity.setWeight(weight, revision);
+                            entityList.add(entity);
+                        }
+                    }
                 }
             }
         } catch (IOException e) {
@@ -44,16 +81,16 @@ public class DataHelper {
 
     public static Entity buildHierarchy(String csvFile) {
 
-        List<Entity> entityList = parseCSV(csvFile);
-
+        List<Entity> entityList = parseCSVs(csvFile);
 
         List<Entity> auxList = new ArrayList<>();
-        Entity root = new Entity("", 0);
+        Entity root = new Entity("", numberOfRevisions);
         auxList.add(root);
 
         // Lexicographic sort
         entityList.sort(Comparator.comparing(Entity::getId));
 
+        // Add children to direct parent
         for (int i = 0; i < entityList.size(); ++i) {
             Entity entity = entityList.get(i);
             int dividerIndex = entity.getId().lastIndexOf(".");
@@ -71,7 +108,7 @@ public class DataHelper {
                     --i;
                 } else {
                     // Initialize package with its first found child
-                    Entity newParent = new Entity(prefix, entity.getWeight());
+                    Entity newParent = new Entity(prefix, numberOfRevisions);
                     newParent.addChild(entity);
                     // Remove child from list
                     entityList.remove(i);
@@ -105,10 +142,10 @@ public class DataHelper {
         return root;
     }
 
-    private static int find(List<Entity> entityList, String prefix) {
+    private static int find(List<Entity> entityList, String entityId) {
 
         for (int i = 0; i < entityList.size(); ++i) {
-            if (entityList.get(i).getId().equals(prefix)){
+            if (entityList.get(i).getId().equals(entityId)){
                 return i;
             }
         }

@@ -27,7 +27,7 @@ public class SquarifiedTreemap {
     private Entity treemapMultidimensional(List<Entity> entityList, Rectangle rectangle) {
 
         // Sort using entities weight -- layout tends to turn out better
-        entityList.sort(Comparator.comparing(Entity::getWeight).reversed());
+        entityList.sort(Comparator.comparing(o -> ((Entity) o).getWeight(0)).reversed());
         // Make a copy of data, as the original is destroyed during treemapSingledimensional computation
         List<Entity> entityCopy = new ArrayList<>();
         entityCopy.addAll(entityList);
@@ -122,11 +122,11 @@ public class SquarifiedTreemap {
 
         double sum = 0;
         for (Entity entity : entityList) {
-            sum += entity.getWeight();
+            sum += entity.getWeight(0);
         }
 
         for (Entity entity : entityList) {
-            entity.setNormalizedWeight(entity.getWeight() * (area / sum));
+            entity.setNormalizedWeight(entity.getWeight(0) * (area / sum));
         }
     }
 

@@ -1,19 +1,19 @@
 package com.ufrgs.technique;
 
 import com.ufrgs.model.Entity;
-import com.ufrgs.model.Point;
 import com.ufrgs.model.Rectangle;
 
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Nmap {
 
-    public Nmap(Entity root, Rectangle rectangle) {
+    private int revision;
 
+    public Nmap(Entity root, Rectangle rectangle, int revision) {
+
+        this.revision = revision;
         nmap(root.getChildren(), rectangle);
-        root.getPoint();
     }
 
     private void nmap(List<Entity> entityList, Rectangle rectangle) {
@@ -33,11 +33,11 @@ public class Nmap {
     private void equalWeight(List<Entity> entityList, Rectangle rectangle) {
 
         if (entityList.size() == 1) {
+            // Done dividing
             entityList.get(0).setRectangle(rectangle);
             entityList.get(0).getPoint().setValues(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
             System.out.println("ctx.rect(" + rectangle.x + ", " + rectangle.y + ", " + rectangle.width + ", " + rectangle.height + ");");
         } else {
-
             // Define if we should bisect the data vertically or horizontally and sort the data accordingly
             if (rectangle.width > rectangle.height) {
                 entityList.sort((a, b) -> ((Double) a.getPoint().x).compareTo(b.getPoint().x));
@@ -49,8 +49,8 @@ public class Nmap {
             List<Entity> entityListA = entityList.subList(0, cutIndex);
             List<Entity> entityListB = entityList.subList(cutIndex, entityList.size());
 
-            double sumA = entityListA.stream().mapToDouble(Entity::getNormalizedWeight).sum();
-            double sumB = entityListB.stream().mapToDouble(Entity::getNormalizedWeight).sum();
+            double sumA = entityListA.stream().mapToDouble(entity -> entity.getWeight(revision)).sum();
+            double sumB = entityListB.stream().mapToDouble(entity -> entity.getWeight(revision)).sum();
             double sumTotal = sumA + sumB;
             Rectangle rectangleA, rectangleB;
 
@@ -74,7 +74,7 @@ public class Nmap {
                 affineTransformation(rectangleA, affineMatrixA);
                 affineTransformation(entityListB, affineMatrixB);
                 affineTransformation(rectangleB, affineMatrixB);
-                sumA = sumA;
+
             } else {
 
                 double rectangleHeightA = (sumA / sumTotal) * rectangle.height;
@@ -93,6 +93,7 @@ public class Nmap {
                 affineTransformation(rectangleA, affineMatrixA);
                 affineTransformation(entityListB, affineMatrixB);
                 affineTransformation(rectangleB, affineMatrixB);
+
             }
 
             equalWeight(entityListA, rectangleA);
@@ -126,12 +127,12 @@ public class Nmap {
 
         int cutElement = 1;
         double sumA = 0;
-        double sumB = entityList.stream().mapToDouble(Entity::getWeight).sum();
+        double sumB = entityList.stream().mapToDouble(entity -> entity.getWeight(revision)).sum();
 
         double minDiff = Double.MAX_VALUE;
         for (int i = 0; i < entityList.size(); ++i) {
-            sumA += entityList.get(i).getWeight();
-            sumB -= entityList.get(i).getWeight();
+            sumA += entityList.get(i).getWeight(revision);
+            sumB -= entityList.get(i).getWeight(revision);
             if (Math.abs(sumA - sumB) < minDiff) {
                 minDiff = Math.abs(sumA - sumB);
                 cutElement = i + 1;

@@ -11,9 +11,9 @@ public class Main {
     public static void main(String[] args) {
 
         Rectangle canvas = new Rectangle(800, 600);
-        Entity root = DataHelper.buildHierarchy("dataset/ExoPlayer.full.data");
+        Entity root = DataHelper.buildHierarchy("dataset/exoplayer");
         SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas);
         root = squarifiedTreemap.getTreeRoot();
-        Nmap nmap = new Nmap(root, canvas);
+        Nmap nmap = new Nmap(root, canvas, 0);
     }
 }
