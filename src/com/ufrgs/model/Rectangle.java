@@ -1,8 +1,5 @@
 package com.ufrgs.model;
 
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
-
 public class Rectangle {
 
     public double x, y, width, height;
@@ -44,13 +41,4 @@ public class Rectangle {
         this.width = width;
         this.height = height;
     }
-
-    public void paint(Graphics g1D) {
-
-        Graphics2D g = (Graphics2D) g1D;
-
-        g.setColor(Color.BLACK);
-        g.draw(new Rectangle2D.Double(x, y, width, height));
-    }
-
 }

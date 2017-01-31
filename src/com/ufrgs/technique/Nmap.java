@@ -35,7 +35,7 @@ public class Nmap {
         if (entityList.size() == 1) {
             // Done dividing
             entityList.get(0).setRectangle(rectangle);
-            entityList.get(0).getPoint().setValues(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
+            entityList.get(0).setPoint(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
             System.out.println("ctx.rect(" + rectangle.x + ", " + rectangle.y + ", " + rectangle.width + ", " + rectangle.height + ");");
         } else {
             // Define if we should bisect the data vertically or horizontally and sort the data accordingly

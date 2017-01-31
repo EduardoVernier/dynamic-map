@@ -1,5 +1,7 @@
 package com.ufrgs.model;
 
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,15 +10,15 @@ public class Entity {
     private String id;
     private List<Double> weightList;
     private double normalizedWeight;
-    private Point point;
-    private Rectangle rectangle;
+    private Point point, pastPoint;
+    private Rectangle rectangle, pastRectangle;
     private List<Entity> children;
 
     public Entity(String id, int numberOfRevisions) {
 
         this.id = id;
         // Initialize lists
-        children  = new ArrayList<>();
+        children = new ArrayList<>();
         weightList = new ArrayList<>(numberOfRevisions);
         for (int i = 0; i < numberOfRevisions; ++i) {
             weightList.add(0.0);
@@ -39,6 +41,10 @@ public class Entity {
         weightList.set(revision, weight);
     }
 
+    public double getMaximumWeight() {
+        return weightList.stream().max(Double::compare).get();
+    }
+
     // Only used on Squarified Treemap
     public double getNormalizedWeight() {
         return normalizedWeight;
@@ -56,12 +62,26 @@ public class Entity {
         this.point = point;
     }
 
+    public void setPoint(double x, double y) {
+        this.point.setValues(x, y);
+    }
+
     public Rectangle getRectangle() {
         return rectangle;
     }
 
-    public void setRectangle(Rectangle rectangle) {
-        this.rectangle = rectangle;
+    public Rectangle getPastRectangle() {
+        return pastRectangle;
+    }
+
+    public void setRectangle(Rectangle newRectangle) {
+
+        if (this.rectangle == null) {
+            pastRectangle = newRectangle;
+        } else {
+            pastRectangle = this.rectangle;
+        }
+        this.rectangle = newRectangle;
     }
 
     public void addChild(Entity entity) {
@@ -80,4 +100,16 @@ public class Entity {
         return children.size() == 0;
     }
 
+    public void draw(Graphics g1D, double progress) {
+
+        Graphics2D g = (Graphics2D) g1D;
+
+        g.setColor(Color.BLACK);
+        double x = rectangle.x * progress + pastRectangle.x * (1 - progress);
+        double y = rectangle.y * progress + pastRectangle.y * (1 - progress);
+        double width = rectangle.width * progress + pastRectangle.width * (1 - progress);
+        double height = rectangle.height * progress + pastRectangle.height * (1 - progress);
+
+        g.draw(new Rectangle2D.Double(x, y, width, height));
+    }
 }
