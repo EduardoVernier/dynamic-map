@@ -1,7 +1,6 @@
 package com.ufrgs.model;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +56,10 @@ public class Entity {
 
     public Point getAnchorPoint() {
         return anchorPoint;
+    }
+
+    public void setAnchorPoint(double x, double y) {
+        anchorPoint.setValues(x, y);
     }
 
     public Point getMovingPoint() {
@@ -119,14 +122,14 @@ public class Entity {
 
         g.draw(new Rectangle2D.Double(x, y, width, height));
 
-        if (isLeaf()) {
-//            double px = point.x * progress + pastPoint.x * (1 - progress);
-//            double py = point.y * progress + pastPoint.y * (1 - progress);
-
-            g.draw(new Rectangle2D.Double(anchorPoint.x, anchorPoint.y, 2, 2));
-            g.draw(new Rectangle2D.Double(movingPoint.x, movingPoint.y, 2, 2));
-            g.draw(new Line2D.Double(anchorPoint.x, anchorPoint.y, movingPoint.x, movingPoint.y));
-        }
+//        if (isLeaf()) {
+////            double px = point.x * progress + pastPoint.x * (1 - progress);
+////            double py = point.y * progress + pastPoint.y * (1 - progress);
+//
+//            g.draw(new Rectangle2D.Double(anchorPoint.x, anchorPoint.y, 2, 2));
+//            g.draw(new Rectangle2D.Double(movingPoint.x, movingPoint.y, 2, 2));
+//            g.draw(new Line2D.Double(anchorPoint.x, anchorPoint.y, movingPoint.x, movingPoint.y));
+//        }
 
     }
 }
