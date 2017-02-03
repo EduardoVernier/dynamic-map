@@ -1,6 +1,7 @@
 package com.ufrgs.model;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ public class Entity {
     private String id;
     private List<Double> weightList;
     private double normalizedWeight;
-    private Point point, pastPoint;
+    private Point movingPoint, anchorPoint;
     private Rectangle rectangle, pastRectangle;
     private List<Entity> children;
 
@@ -54,16 +55,22 @@ public class Entity {
         this.normalizedWeight = normalizedWeight;
     }
 
-    public Point getPoint() {
-        return point;
+    public Point getAnchorPoint() {
+        return anchorPoint;
     }
 
-    public void setPoint(Point point) {
-        this.point = point;
+    public Point getMovingPoint() {
+        return movingPoint;
     }
 
-    public void setPoint(double x, double y) {
-        this.point.setValues(x, y);
+    public void initPoint(Point point) {
+        anchorPoint = new Point(point.x, point.y);
+        movingPoint = new Point(point.x, point.y);
+    }
+
+    public void setMovingPoint(double x, double y) {
+        //pastPoint.setValues(point.x, point.y);
+        movingPoint.setValues(x, y);
     }
 
     public Rectangle getRectangle() {
@@ -111,5 +118,15 @@ public class Entity {
         double height = rectangle.height * progress + pastRectangle.height * (1 - progress);
 
         g.draw(new Rectangle2D.Double(x, y, width, height));
+
+        if (isLeaf()) {
+//            double px = point.x * progress + pastPoint.x * (1 - progress);
+//            double py = point.y * progress + pastPoint.y * (1 - progress);
+
+            g.draw(new Rectangle2D.Double(anchorPoint.x, anchorPoint.y, 2, 2));
+            g.draw(new Rectangle2D.Double(movingPoint.x, movingPoint.y, 2, 2));
+            g.draw(new Line2D.Double(anchorPoint.x, anchorPoint.y, movingPoint.x, movingPoint.y));
+        }
+
     }
 }

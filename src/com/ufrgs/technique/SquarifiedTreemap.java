@@ -102,7 +102,7 @@ public class SquarifiedTreemap {
                 entity.setRectangle(new Rectangle(x, y, width, height));
                 subyOffset += entity.getNormalizedWeight() / areaWidth;
                 // Save center as we'll be using it as input to the nmap algorithm
-                entity.setPoint(new Point(x + width/2, y + height/2));
+                entity.initPoint(new Point(x + width/2, y + height/2));
             }
         } else {
             for (Entity entity : currentRow) {
@@ -113,7 +113,7 @@ public class SquarifiedTreemap {
                 entity.setRectangle(new Rectangle(x, y, width, height));
                 subxOffset += entity.getNormalizedWeight() / areaHeight;
                 // Save center as we'll be using it as input to the nmap algorithm
-                entity.setPoint(new Point(x + width/2, y + height/2));
+                entity.initPoint(new Point(x + width/2, y + height/2));
             }
         }
     }

@@ -21,6 +21,10 @@ public class Nmap {
         List<Entity> entityCopy = new ArrayList<>();
         entityCopy.addAll(entityList);
 
+        for (Entity entity : entityCopy) {
+            entity.setMovingPoint(entity.getAnchorPoint().x, entity.getAnchorPoint().y);
+        }
+
         equalWeight(entityList, rectangle);
 
         for (Entity entity : entityCopy) {
@@ -35,14 +39,14 @@ public class Nmap {
         if (entityList.size() == 1) {
             // Done dividing
             entityList.get(0).setRectangle(rectangle);
-            entityList.get(0).setPoint(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
-            System.out.println("ctx.rect(" + rectangle.x + ", " + rectangle.y + ", " + rectangle.width + ", " + rectangle.height + ");");
+            //entityList.get(0).setPoint(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
+            // System.out.println("ctx.rect(" + rectangle.x + ", " + rectangle.y + ", " + rectangle.width + ", " + rectangle.height + ");");
         } else {
             // Define if we should bisect the data vertically or horizontally and sort the data accordingly
             if (rectangle.width > rectangle.height) {
-                entityList.sort((a, b) -> ((Double) a.getPoint().x).compareTo(b.getPoint().x));
+                entityList.sort((a, b) -> ((Double) a.getAnchorPoint().x).compareTo(b.getAnchorPoint().x));
             } else {
-                entityList.sort((a, b) -> ((Double) a.getPoint().y).compareTo(b.getPoint().y));
+                entityList.sort((a, b) -> ((Double) a.getAnchorPoint().y).compareTo(b.getAnchorPoint().y));
             }
 
             int cutIndex = findCutElement(entityList);
@@ -58,7 +62,7 @@ public class Nmap {
 
                 double rectangleWidthA = (sumA / sumTotal) * rectangle.width;
                 double rectangleWidthB = (sumB / sumTotal) * rectangle.width;
-                double boundary = (entityListA.get(entityListA.size() - 1).getPoint().x + entityListB.get(0).getPoint().x) / 2;
+                double boundary = (entityListA.get(entityListA.size() - 1).getAnchorPoint().x + entityListB.get(0).getAnchorPoint().x) / 2;
 
                 rectangleA = new Rectangle(rectangle.x, rectangle.y,
                         boundary - rectangle.x, rectangle.height);
@@ -79,7 +83,7 @@ public class Nmap {
 
                 double rectangleHeightA = (sumA / sumTotal) * rectangle.height;
                 double rectangleHeightB = (sumB / sumTotal) * rectangle.height;
-                double boundary = (entityListA.get(entityListA.size() - 1).getPoint().y + entityListB.get(0).getPoint().y) / 2;
+                double boundary = (entityListA.get(entityListA.size() - 1).getAnchorPoint().y + entityListB.get(0).getAnchorPoint().y) / 2;
 
                 rectangleA = new Rectangle(rectangle.x, rectangle.y,
                         rectangle.width, boundary - rectangle.y);
@@ -105,9 +109,9 @@ public class Nmap {
     private void affineTransformation(List<Entity> entityList, double m[]) {
         // Transform points
         for (Entity entity : entityList) {
-            double x = entity.getPoint().x * m[0] + entity.getPoint().y * m[2] + m[4];
-            double y = entity.getPoint().x * m[1] + entity.getPoint().y * m[3] + m[5];
-            entity.getPoint().setValues(x, y);
+            double x = entity.getMovingPoint().x * m[0] + entity.getMovingPoint().y * m[2] + m[4];
+            double y = entity.getMovingPoint().x * m[1] + entity.getMovingPoint().y * m[3] + m[5];
+            entity.setMovingPoint(x, y);
         }
     }
 
