@@ -1,4 +1,4 @@
-package com.ufrgs;
+package com.ufrgs.view;
 
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;

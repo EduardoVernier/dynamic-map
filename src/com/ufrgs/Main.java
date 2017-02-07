@@ -4,6 +4,7 @@ import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
 import com.ufrgs.technique.SquarifiedTreemap;
 import com.ufrgs.util.DataHelper;
+import com.ufrgs.view.Panel;
 
 import javax.swing.*;
 

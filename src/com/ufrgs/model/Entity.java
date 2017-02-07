@@ -1,5 +1,7 @@
 package com.ufrgs.model;
 
+import com.ufrgs.view.Colormap;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -84,6 +86,12 @@ public class Entity {
         return pastRectangle;
     }
 
+    public float getAspectRatio() {
+
+        return (float) Double.min(rectangle.width / rectangle.height,
+                rectangle.height / rectangle.width);
+    }
+
     public void setRectangle(Rectangle newRectangle) {
 
         if (this.rectangle == null) {
@@ -114,22 +122,17 @@ public class Entity {
 
         Graphics2D g = (Graphics2D) g1D;
 
-        g.setColor(Color.BLACK);
         double x = rectangle.x * progress + pastRectangle.x * (1 - progress);
         double y = rectangle.y * progress + pastRectangle.y * (1 - progress);
         double width = rectangle.width * progress + pastRectangle.width * (1 - progress);
         double height = rectangle.height * progress + pastRectangle.height * (1 - progress);
 
+        if (isLeaf()) {
+            g.setColor(Colormap.sequentialColormap(1 - getAspectRatio()));
+            g.fill(new Rectangle2D.Double(x, y, width, height));
+        }
+
+        g.setColor(Color.black);
         g.draw(new Rectangle2D.Double(x, y, width, height));
-
-//        if (isLeaf()) {
-////            double px = point.x * progress + pastPoint.x * (1 - progress);
-////            double py = point.y * progress + pastPoint.y * (1 - progress);
-//
-//            g.draw(new Rectangle2D.Double(anchorPoint.x, anchorPoint.y, 2, 2));
-//            g.draw(new Rectangle2D.Double(movingPoint.x, movingPoint.y, 2, 2));
-//            g.draw(new Line2D.Double(anchorPoint.x, anchorPoint.y, movingPoint.x, movingPoint.y));
-//        }
-
     }
 }

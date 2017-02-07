@@ -184,8 +184,8 @@ public class Nmap {
     }
 
 
-    private void affineTransformation(List<Entity> entityList, double m[]) {
         // Transform points
+    private void affineTransformation(List<Entity> entityList, double m[]) {
         for (Entity entity : entityList) {
             double x = entity.getMovingPoint().x * m[0] + entity.getMovingPoint().y * m[2] + m[4];
             double y = entity.getMovingPoint().x * m[1] + entity.getMovingPoint().y * m[3] + m[5];
