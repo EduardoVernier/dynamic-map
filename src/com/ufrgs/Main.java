@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Prepare data for Dmap
-        root = DataHelper.buildHierarchy("dataset/exoplayer");
+        root = DataHelper.buildHierarchy("dataset/calcuta");
         SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas);
         root = squarifiedTreemap.getTreeRoot();
 

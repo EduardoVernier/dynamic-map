@@ -46,22 +46,29 @@ public class Nmap {
 
     private void alternateCut(List<Entity> entityList, Rectangle rectangle, boolean verticalBissection) {
 
-        if (entityList.size() == 1) {
+
+        List<Entity> entityCopy = new ArrayList<>();
+        entityCopy.addAll(entityList);
+        entityCopy.removeIf(entity -> entity.getWeight(revision) <= 0.0);
+
+        if (entityCopy.size() == 0) {
+            return;
+        } else if (entityCopy.size() == 1) {
             // Done dividing
-            entityList.get(0).setRectangle(rectangle);
-            entityList.get(0).setAnchorPoint(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
+            entityCopy.get(0).setRectangle(rectangle);
+            entityCopy.get(0).setAnchorPoint(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
             // System.out.println("ctx.rect(" + rectangle.x + ", " + rectangle.y + ", " + rectangle.width + ", " + rectangle.height + ");");
         } else {
 
             if (verticalBissection) {
-                entityList.sort((a, b) -> ((Double) a.getAnchorPoint().x).compareTo(b.getAnchorPoint().x));
+                entityCopy.sort((a, b) -> ((Double) a.getAnchorPoint().x).compareTo(b.getAnchorPoint().x));
             } else {
-                entityList.sort((a, b) -> ((Double) a.getAnchorPoint().y).compareTo(b.getAnchorPoint().y));
+                entityCopy.sort((a, b) -> ((Double) a.getAnchorPoint().y).compareTo(b.getAnchorPoint().y));
             }
 
-            int cutIndex = entityList.size()/2;
-            List<Entity> entityListA = entityList.subList(0, cutIndex);
-            List<Entity> entityListB = entityList.subList(cutIndex, entityList.size());
+            int cutIndex = entityCopy.size()/2;
+            List<Entity> entityListA = entityCopy.subList(0, cutIndex);
+            List<Entity> entityListB = entityCopy.subList(cutIndex, entityCopy.size());
             double sumA = entityListA.stream().mapToDouble(entity -> entity.getWeight(revision)).sum();
             double sumB = entityListB.stream().mapToDouble(entity -> entity.getWeight(revision)).sum();
             double sumTotal = sumA + sumB;
@@ -114,7 +121,9 @@ public class Nmap {
 
     private void equalWeight(List<Entity> entityList, Rectangle rectangle) {
 
-        if (entityList.size() == 1) {
+        if (entityList.size() == 0) {
+            return;
+        } else if (entityList.size() == 1) {
             // Done dividing
             entityList.get(0).setRectangle(rectangle);
             //entityList.get(0).setPoint(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
@@ -127,7 +136,7 @@ public class Nmap {
                 entityList.sort((a, b) -> ((Double) a.getAnchorPoint().y).compareTo(b.getAnchorPoint().y));
             }
 
-            int cutIndex = findCutElement(entityList);
+            int cutIndex = findEWCutElement(entityList);
             List<Entity> entityListA = entityList.subList(0, cutIndex);
             List<Entity> entityListB = entityList.subList(cutIndex, entityList.size());
 
@@ -202,10 +211,14 @@ public class Nmap {
         x1 = (rectangle.x + rectangle.width) * m[0] + (rectangle.y + rectangle.height) * m[2] + m[4];
         y1 = (rectangle.x + rectangle.width) * m[1] + (rectangle.y + rectangle.height) * m[3] + m[5];
 
+        if (Double.isNaN(x0) || Double.isNaN(x1) || Double.isNaN(y0) || Double.isNaN(y1)) {
+            int a = (int) rectangle.width;
+        }
+
         rectangle.setValues(x0, y0, x1 - x0, y1 - y0);
     }
 
-    private int findCutElement(List<Entity> entityList) {
+    private int findEWCutElement(List<Entity> entityList) {
 
         int cutElement = 1;
         double sumA = 0;

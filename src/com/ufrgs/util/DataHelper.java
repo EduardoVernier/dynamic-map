@@ -37,6 +37,9 @@ public class DataHelper {
             System.exit(-1);
         }
 
+        fileNames.sort(String::compareTo);
+        fileNames.sort((o1, o2) -> Integer.valueOf(o1.length()).compareTo(Integer.valueOf(o2.length())));
+
         try {
 
             numberOfRevisions = fileNames.size();
@@ -93,7 +96,7 @@ public class DataHelper {
         // Add children to direct parent
         for (int i = 0; i < entityList.size(); ++i) {
             Entity entity = entityList.get(i);
-            int dividerIndex = entity.getId().lastIndexOf(".");
+            int dividerIndex = entity.getId().lastIndexOf("/");
 
             if (dividerIndex != -1) {
                 String prefix = entity.getId().substring(0, dividerIndex);

@@ -14,9 +14,16 @@ import static java.lang.Math.pow;
 public class SquarifiedTreemap {
 
     private Entity treeRoot;
+    private double normalizer = 0;
 
     public SquarifiedTreemap(Entity root, Rectangle rectangle) {
-        treeRoot = treemapMultidimensional(root.getChildren(), rectangle);
+        treeRoot = root;
+        root.setRectangle(rectangle);
+        root.initPoint(new Point(rectangle.x/2.0, rectangle.y/2.0));
+        List<Entity> children = treemapMultidimensional(root.getChildren(), rectangle);
+        for (Entity entity : children) {
+            treeRoot.addChild(entity);
+        }
     }
 
     public Entity getTreeRoot() {
@@ -24,7 +31,7 @@ public class SquarifiedTreemap {
     }
 
     // Use recursion to compute single dimensional treemaps from a hierarchical dataset
-    private Entity treemapMultidimensional(List<Entity> entityList, Rectangle rectangle) {
+    private List<Entity> treemapMultidimensional(List<Entity> entityList, Rectangle rectangle) {
 
         // Sort using entities weight -- layout tends to turn out better
         entityList.sort(Comparator.comparing(o -> ((Entity) o).getWeight(0)).reversed());
@@ -43,7 +50,7 @@ public class SquarifiedTreemap {
             }
         }
 
-        return entityCopy.get(0);
+        return entityCopy;
     }
 
     private void treemapSingledimensional(List<Entity> entityList, Rectangle rectangle) {
@@ -64,7 +71,7 @@ public class SquarifiedTreemap {
         }
 
         // Test if new element should be included in current row
-        if (improvesRatio(currentRow, entityList.get(0).getNormalizedWeight(), rectangle.getShortEdge())) {
+        if (improvesRatio(currentRow, getNormalizedWeight(entityList.get(0)), rectangle.getShortEdge())) {
             currentRow.add(entityList.get(0));
             entityList.remove(0);
             squarify(entityList, currentRow, rectangle);
@@ -72,7 +79,7 @@ public class SquarifiedTreemap {
             // New row must be created, subtract area of previous row from container
             double sum = 0;
             for (Entity entity : currentRow) {
-                sum += entity.getNormalizedWeight();
+                sum += getNormalizedWeight(entity);
             }
 
             Rectangle newRectangle = rectangle.cutArea(sum);
@@ -86,7 +93,7 @@ public class SquarifiedTreemap {
 
         double normalizedSum = 0;
         for (Entity entity : currentRow) {
-            normalizedSum += entity.getNormalizedWeight();
+            normalizedSum += getNormalizedWeight(entity);
         }
 
         double subxOffset = rectangle.x, subyOffset = rectangle.y; // Offset within the container
@@ -98,9 +105,9 @@ public class SquarifiedTreemap {
                 double x = subxOffset;
                 double y = subyOffset;
                 double width = areaWidth;
-                double height = entity.getNormalizedWeight() / areaWidth;
+                double height = getNormalizedWeight(entity) / areaWidth;
                 entity.setRectangle(new Rectangle(x, y, width, height));
-                subyOffset += entity.getNormalizedWeight() / areaWidth;
+                subyOffset += getNormalizedWeight(entity) / areaWidth;
                 // Save center as we'll be using it as input to the nmap algorithm
                 entity.initPoint(new Point(x + width/2, y + height/2));
             }
@@ -108,25 +115,13 @@ public class SquarifiedTreemap {
             for (Entity entity : currentRow) {
                 double x = subxOffset;
                 double y = subyOffset;
-                double width = entity.getNormalizedWeight() / areaHeight;
+                double width = getNormalizedWeight(entity) / areaHeight;
                 double height = areaHeight;
                 entity.setRectangle(new Rectangle(x, y, width, height));
-                subxOffset += entity.getNormalizedWeight() / areaHeight;
+                subxOffset += getNormalizedWeight(entity) / areaHeight;
                 // Save center as we'll be using it as input to the nmap algorithm
                 entity.initPoint(new Point(x + width/2, y + height/2));
             }
-        }
-    }
-
-    private void normalize(List<Entity> entityList, double area) {
-
-        double sum = 0;
-        for (Entity entity : entityList) {
-            sum += entity.getWeight(0);
-        }
-
-        for (Entity entity : entityList) {
-            entity.setNormalizedWeight(entity.getWeight(0) * (area / sum));
         }
     }
 
@@ -139,12 +134,12 @@ public class SquarifiedTreemap {
 
         double minCurrent = Double.MAX_VALUE, maxCurrent = Double.MIN_VALUE;
         for (Entity entity : currentRow) {
-            if (entity.getNormalizedWeight() > maxCurrent) {
-                maxCurrent = entity.getNormalizedWeight();
+            if (getNormalizedWeight(entity) > maxCurrent) {
+                maxCurrent = getNormalizedWeight(entity);
             }
 
-            if (entity.getNormalizedWeight() < minCurrent) {
-                minCurrent = entity.getNormalizedWeight();
+            if (getNormalizedWeight(entity) < minCurrent) {
+                minCurrent = getNormalizedWeight(entity);
             }
         }
 
@@ -153,7 +148,7 @@ public class SquarifiedTreemap {
 
         double sumCurrent = 0;
         for (Entity entity : currentRow) {
-            sumCurrent += entity.getNormalizedWeight();
+            sumCurrent += getNormalizedWeight(entity);
         }
         double sumNew = sumCurrent + nextEntity;
 
@@ -163,6 +158,32 @@ public class SquarifiedTreemap {
                 pow(sumNew, 2) / (pow(length, 2) * minNew));
 
         return currentRatio >= newRatio;
+    }
+
+    private void normalize(List<Entity> entityList, double area) {
+
+        double sum = 0;
+        for (Entity entity : entityList) {
+            double max = 0;
+            for (int i = 0; i < entity.getNumberOfRevisions(); ++i) {
+                if (entity.getWeight(i) > max) {
+                    max = entity.getWeight(i);
+                }
+            }
+            sum += max;
+        }
+        normalizer = area / sum;
+    }
+
+    private double getNormalizedWeight(Entity entity) {
+
+        double max = 0;
+        for (int i = 0; i < entity.getNumberOfRevisions(); ++i) {
+            if (entity.getWeight(i) > max) {
+                max = entity.getWeight(i);
+            }
+        }
+        return max * normalizer;
     }
 }
 

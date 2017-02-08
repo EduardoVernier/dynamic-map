@@ -25,6 +25,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     List<Entity> entityList;
     double maxWeight;
     // Animation
+    private double lastRevisionWeight = 0;
     private double progress = 0.0;
     private Timer timer;
     private int DELAY = 3;
@@ -33,7 +34,6 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
         this.root = root;
         this.canvas = canvas;
-
 
         maxWeight = root.getMaximumWeight();
         entityList = new ArrayList<>();
@@ -58,14 +58,28 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
     private void computeNmap() {
         new Nmap(root, canvas, revision);
+        int a = 0;
     }
 
     @Override
-    protected void paintComponent(Graphics graphics) {
-        super.paintComponent(graphics);
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D graphics = (Graphics2D) g;
+        double maxWeight = 0;
+        for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
+            if (root.getWeight(i) > maxWeight) {
+                maxWeight = root.getWeight(i);
+            }
+        }
+
+        double scale = (progress * (root.getWeight(revision)) + (1 - progress) * lastRevisionWeight) / maxWeight;
+        graphics.scale(scale, scale);
 
         for (Entity entity : entityList) {
-            entity.draw(graphics, progress);
+            if (entity.getWeight(revision) > 0) {
+                entity.draw(graphics, progress);
+            }
         }
 
         Toolkit.getDefaultToolkit().sync();
@@ -81,6 +95,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     public void keyReleased(KeyEvent keyEvent) {
 
         if (keyEvent.getKeyCode() == KeyEvent.VK_X) {
+            lastRevisionWeight = root.getWeight(revision);
             revision++;
             progress = 0.0;
             computeNmap();
@@ -91,10 +106,16 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
 
         if (progress < 1) {
-            progress += 0.001;
+            //progress += 0.001;
             repaint();
         } else  {
-            progress = 1;
+            // Auto
+            lastRevisionWeight = root.getWeight(revision);
+            revision++;
+            progress = 0.0;
+            computeNmap();
+            // Manual
+            // progress = 1;
         }
     }
 }

@@ -11,7 +11,6 @@ public class Entity {
 
     private String id;
     private List<Double> weightList;
-    private double normalizedWeight;
     private Point movingPoint, anchorPoint;
     private Rectangle rectangle, pastRectangle;
     private List<Entity> children;
@@ -45,15 +44,6 @@ public class Entity {
 
     public double getMaximumWeight() {
         return weightList.stream().max(Double::compare).get();
-    }
-
-    // Only used on Squarified Treemap
-    public double getNormalizedWeight() {
-        return normalizedWeight;
-    }
-
-    public void setNormalizedWeight(double normalizedWeight) {
-        this.normalizedWeight = normalizedWeight;
     }
 
     public Point getAnchorPoint() {
@@ -118,9 +108,7 @@ public class Entity {
         return children.size() == 0;
     }
 
-    public void draw(Graphics g1D, double progress) {
-
-        Graphics2D g = (Graphics2D) g1D;
+    public void draw(Graphics2D graphics, double progress) {
 
         double x = rectangle.x * progress + pastRectangle.x * (1 - progress);
         double y = rectangle.y * progress + pastRectangle.y * (1 - progress);
@@ -128,11 +116,11 @@ public class Entity {
         double height = rectangle.height * progress + pastRectangle.height * (1 - progress);
 
         if (isLeaf()) {
-            g.setColor(Colormap.sequentialColormap(1 - getAspectRatio()));
-            g.fill(new Rectangle2D.Double(x, y, width, height));
-        }
+            graphics.setColor(Colormap.sequentialColormap(1 - getAspectRatio()));
+            graphics.fill(new Rectangle2D.Double(x, y, width, height));
 
-        g.setColor(Color.black);
-        g.draw(new Rectangle2D.Double(x, y, width, height));
+            graphics.setColor(Color.black);
+            graphics.draw(new Rectangle2D.Double(x, y, width, height));
+        }
     }
 }
