@@ -12,7 +12,7 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static boolean STRATEGY = Constants.ALTERNATE_CUT;
+    public static boolean STRATEGY = Constants.EQUAL_WEIGHT;
     public static boolean DISPLAY = Constants.ANIMATION;
 
     private static Entity root;

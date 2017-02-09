@@ -126,74 +126,85 @@ public class Nmap {
 
     private void equalWeight(List<Entity> entityList, Rectangle rectangle) {
 
-        if (entityList.size() == 0) {
+        List<Entity> entityCopy = new ArrayList<>();
+        entityCopy.addAll(entityList);
+        entityCopy.removeIf(entity -> entity.getWeight(revision) <= 0.0);
+
+        if (entityCopy.size() == 0) {
             return;
-        } else if (entityList.size() == 1) {
+        } else if (entityCopy.size() == 1) {
             // Done dividing
-            entityList.get(0).setRectangle(rectangle);
-            //entityList.get(0).setPoint(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
+            entityCopy.get(0).setRectangle(rectangle);
+            //entityCopy.get(0).setPoint(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
             // System.out.println("ctx.rect(" + rectangle.x + ", " + rectangle.y + ", " + rectangle.width + ", " + rectangle.height + ");");
         } else {
             // Define if we should bisect the data vertically or horizontally and sort the data accordingly
             if (rectangle.width > rectangle.height) {
-                entityList.sort((a, b) -> ((Double) a.getAnchorPoint().x).compareTo(b.getAnchorPoint().x));
+                entityCopy.sort((a, b) -> ((Double) a.getAnchorPoint().x).compareTo(b.getAnchorPoint().x));
             } else {
-                entityList.sort((a, b) -> ((Double) a.getAnchorPoint().y).compareTo(b.getAnchorPoint().y));
+                entityCopy.sort((a, b) -> ((Double) a.getAnchorPoint().y).compareTo(b.getAnchorPoint().y));
             }
 
             int cutIndex = findEWCutElement(entityList);
-            List<Entity> entityListA = entityList.subList(0, cutIndex);
-            List<Entity> entityListB = entityList.subList(cutIndex, entityList.size());
+            List<Entity> entityListA = entityCopy.subList(0, cutIndex);
+            List<Entity> entityListB = entityCopy.subList(cutIndex, entityCopy.size());
 
             double sumA = entityListA.stream().mapToDouble(entity -> entity.getWeight(revision)).sum();
             double sumB = entityListB.stream().mapToDouble(entity -> entity.getWeight(revision)).sum();
             double sumTotal = sumA + sumB;
             Rectangle rectangleA, rectangleB;
 
-            if (rectangle.width > rectangle.height) {
-
-                double rectangleWidthA = (sumA / sumTotal) * rectangle.width;
-                double rectangleWidthB = (sumB / sumTotal) * rectangle.width;
-                double boundary = (entityListA.get(entityListA.size() - 1).getAnchorPoint().x + entityListB.get(0).getAnchorPoint().x) / 2;
-
-                rectangleA = new Rectangle(rectangle.x, rectangle.y,
-                        boundary - rectangle.x, rectangle.height);
-
-                rectangleB = new Rectangle(rectangle.x + rectangleA.width, rectangle.y,
-                        rectangle.width - rectangleA.width, rectangle.height);
-
-                double affineMatrixA[] = {rectangleWidthA / rectangleA.width, 0, 0, 1, rectangle.x * (1 - (rectangleWidthA / rectangleA.width)), 0};
-
-                double affineMatrixB[] = {rectangleWidthB / rectangleB.width, 0, 0, 1, (rectangle.x + rectangle.width) * (1 - (rectangleWidthB / rectangleB.width)), 0};
-
-                affineTransformation(entityListA, affineMatrixA);
-                affineTransformation(rectangleA, affineMatrixA);
-                affineTransformation(entityListB, affineMatrixB);
-                affineTransformation(rectangleB, affineMatrixB);
-
+            if (entityListA.size() == 0) {
+                equalWeight(entityListB, rectangle);
+            } else if (entityListB.size() == 0) {
+                equalWeight(entityListA, rectangle);
             } else {
 
-                double rectangleHeightA = (sumA / sumTotal) * rectangle.height;
-                double rectangleHeightB = (sumB / sumTotal) * rectangle.height;
-                double boundary = (entityListA.get(entityListA.size() - 1).getAnchorPoint().y + entityListB.get(0).getAnchorPoint().y) / 2;
+                if (rectangle.width > rectangle.height) {
 
-                rectangleA = new Rectangle(rectangle.x, rectangle.y,
-                        rectangle.width, boundary - rectangle.y);
-                rectangleB = new Rectangle(rectangle.x, rectangle.y + rectangleA.height,
-                        rectangle.width, rectangle.height - rectangleA.height);
+                    double rectangleWidthA = (sumA / sumTotal) * rectangle.width;
+                    double rectangleWidthB = (sumB / sumTotal) * rectangle.width;
+                    double boundary = (entityListA.get(entityListA.size() - 1).getAnchorPoint().x + entityListB.get(0).getAnchorPoint().x) / 2;
 
-                double affineMatrixA[] = {1, 0, 0, rectangleHeightA / rectangleA.height, 0, rectangle.y * (1 - (rectangleHeightA / rectangleA.height))};
-                double affineMatrixB[] = {1, 0, 0, rectangleHeightB / rectangleB.height, 0, (rectangle.y + rectangle.height) * (1 - (rectangleHeightB / rectangleB.height))};
+                    rectangleA = new Rectangle(rectangle.x, rectangle.y,
+                            boundary - rectangle.x, rectangle.height);
 
-                affineTransformation(entityListA, affineMatrixA);
-                affineTransformation(rectangleA, affineMatrixA);
-                affineTransformation(entityListB, affineMatrixB);
-                affineTransformation(rectangleB, affineMatrixB);
+                    rectangleB = new Rectangle(rectangle.x + rectangleA.width, rectangle.y,
+                            rectangle.width - rectangleA.width, rectangle.height);
 
+                    double affineMatrixA[] = {rectangleWidthA / rectangleA.width, 0, 0, 1, rectangle.x * (1 - (rectangleWidthA / rectangleA.width)), 0};
+
+                    double affineMatrixB[] = {rectangleWidthB / rectangleB.width, 0, 0, 1, (rectangle.x + rectangle.width) * (1 - (rectangleWidthB / rectangleB.width)), 0};
+
+                    affineTransformation(entityListA, affineMatrixA);
+                    affineTransformation(rectangleA, affineMatrixA);
+                    affineTransformation(entityListB, affineMatrixB);
+                    affineTransformation(rectangleB, affineMatrixB);
+
+                } else {
+
+                    double rectangleHeightA = (sumA / sumTotal) * rectangle.height;
+                    double rectangleHeightB = (sumB / sumTotal) * rectangle.height;
+                    double boundary = (entityListA.get(entityListA.size() - 1).getAnchorPoint().y + entityListB.get(0).getAnchorPoint().y) / 2;
+
+                    rectangleA = new Rectangle(rectangle.x, rectangle.y,
+                            rectangle.width, boundary - rectangle.y);
+                    rectangleB = new Rectangle(rectangle.x, rectangle.y + rectangleA.height,
+                            rectangle.width, rectangle.height - rectangleA.height);
+
+                    double affineMatrixA[] = {1, 0, 0, rectangleHeightA / rectangleA.height, 0, rectangle.y * (1 - (rectangleHeightA / rectangleA.height))};
+                    double affineMatrixB[] = {1, 0, 0, rectangleHeightB / rectangleB.height, 0, (rectangle.y + rectangle.height) * (1 - (rectangleHeightB / rectangleB.height))};
+
+                    affineTransformation(entityListA, affineMatrixA);
+                    affineTransformation(rectangleA, affineMatrixA);
+                    affineTransformation(entityListB, affineMatrixB);
+                    affineTransformation(rectangleB, affineMatrixB);
+
+                }
+
+                equalWeight(entityListA, rectangleA);
+                equalWeight(entityListB, rectangleB);
             }
-
-            equalWeight(entityListA, rectangleA);
-            equalWeight(entityListB, rectangleB);
         }
     }
 
