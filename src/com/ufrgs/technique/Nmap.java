@@ -1,7 +1,9 @@
 package com.ufrgs.technique;
 
+import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
+import com.ufrgs.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +27,11 @@ public class Nmap {
             entity.setMovingPoint(entity.getAnchorPoint().x, entity.getAnchorPoint().y);
         }
 
-        //equalWeight(entityList, rectangle);
-        alternateCut(entityList, rectangle);
+        if (Main.STRATEGY == Constants.ALTERNATE_CUT) {
+            alternateCut(entityList, rectangle);
+        } else if (Main.STRATEGY == Constants.EQUAL_WEIGHT) {
+            equalWeight(entityList, rectangle);
+        }
 
         for (Entity entity : entityCopy) {
             if (!entity.isLeaf()) {

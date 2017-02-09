@@ -3,12 +3,17 @@ package com.ufrgs;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
 import com.ufrgs.technique.SquarifiedTreemap;
+import com.ufrgs.util.Constants;
 import com.ufrgs.util.DataHelper;
 import com.ufrgs.view.Panel;
 
 import javax.swing.*;
 
 public class Main {
+
+    // Settings
+    public static boolean STRATEGY = Constants.ALTERNATE_CUT;
+    public static boolean DISPLAY = Constants.ANIMATION;
 
     private static Entity root;
     private static Rectangle canvas = new Rectangle(800, 600);

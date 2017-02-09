@@ -1,8 +1,10 @@
 package com.ufrgs.view;
 
+import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
 import com.ufrgs.technique.Nmap;
+import com.ufrgs.util.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,7 +60,6 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
     private void computeNmap() {
         new Nmap(root, canvas, revision);
-        int a = 0;
     }
 
     @Override
@@ -81,7 +82,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 entity.draw(graphics, progress);
             }
         }
-
+        // Improves graphics on Linux
         Toolkit.getDefaultToolkit().sync();
     }
 
@@ -106,16 +107,17 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
 
         if (progress < 1) {
-            //progress += 0.001;
+            progress += 0.001;
             repaint();
         } else  {
-            // Auto
-            lastRevisionWeight = root.getWeight(revision);
-            revision++;
-            progress = 0.0;
-            computeNmap();
-            // Manual
-            // progress = 1;
+            if (Main.DISPLAY == Constants.ANIMATION) {
+                lastRevisionWeight = root.getWeight(revision);
+                revision++;
+                progress = 0.0;
+                computeNmap();
+            } else if (Main.DISPLAY == Constants.STEP) {
+                progress = 1;
+            }
         }
     }
 }
