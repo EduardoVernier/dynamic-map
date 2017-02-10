@@ -12,11 +12,11 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static boolean STRATEGY = Constants.EQUAL_WEIGHT;
-    public static boolean DISPLAY = Constants.ANIMATION;
+    public static boolean STRATEGY = Constants.ALTERNATE_CUT;
+    public static boolean DISPLAY = Constants.STEP;
 
     private static Entity root;
-    private static Rectangle canvas = new Rectangle(800, 600);
+    private static Rectangle canvas = new Rectangle(1200, 900);
 
     public static void main(String[] args) {
 
@@ -35,7 +35,7 @@ public class Main {
         Panel panel = new Panel(root, canvas);
         frame.add(panel);
         frame.addKeyListener(panel);
-        frame.setSize(800, 600);
+        frame.setSize(1200, 900);
         frame.setVisible(true);
     }
 }

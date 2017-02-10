@@ -78,10 +78,17 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         graphics.scale(scale, scale);
 
         for (Entity entity : entityList) {
-            if (entity.getWeight(revision) > 0) {
+            if (entity.getWeight(revision) > 0 && entity.isLeaf()) {
                 entity.draw(graphics, progress);
             }
         }
+
+        for (Entity entity : entityList) {
+            if (entity.getWeight(revision) > 0 && !entity.isLeaf()) {
+                entity.draw(graphics, progress);
+            }
+        }
+
         // Improves graphics on Linux
         Toolkit.getDefaultToolkit().sync();
     }
@@ -96,10 +103,12 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     public void keyReleased(KeyEvent keyEvent) {
 
         if (keyEvent.getKeyCode() == KeyEvent.VK_X) {
-            lastRevisionWeight = root.getWeight(revision);
-            revision++;
-            progress = 0.0;
-            computeNmap();
+            if (revision < root.getNumberOfRevisions() - 1) {
+                lastRevisionWeight = root.getWeight(revision);
+                revision++;
+                progress = 0.0;
+                computeNmap();
+            }
         }
     }
 

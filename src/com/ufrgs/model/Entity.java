@@ -121,6 +121,10 @@ public class Entity {
 
             graphics.setColor(Color.black);
             graphics.draw(new Rectangle2D.Double(x, y, width, height));
+        } else {
+            graphics.setColor(Color.white);
+            graphics.setStroke(new BasicStroke(4, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+            graphics.draw(new Rectangle2D.Double(x, y, width, height));
         }
     }
 }
