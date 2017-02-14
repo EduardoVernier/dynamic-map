@@ -26,13 +26,16 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     // Drawing
     List<Entity> entityList;
     double maxWeight;
+    Font bigFont = new Font("Bitstream Vera Sans", Font.PLAIN, 22);
+    Font mediumFont = new Font("Bitstream Vera Sans", Font.PLAIN, 18);
+    Font smallFont = new Font("Bitstream Vera Sans", Font.PLAIN, 14);
     // Animation
     private double lastRevisionWeight = 0;
     private double progress = 0.0;
     private Timer timer;
-    private int DELAY = 3;
+    private int DELAY = 0;
 
-    public Panel(JFrame frame, Entity root, Rectangle canvas) {
+    public Panel(Entity root, Rectangle canvas) {
 
         this.root = root;
         this.canvas = canvas;
@@ -42,6 +45,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         entityList = new ArrayList<>();
         flattenTree(root);
         computeNmap();
+
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -78,17 +82,36 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         double scale = (progress * (root.getWeight(revision)) + (1 - progress) * lastRevisionWeight) / maxWeight;
         graphics.scale(scale, scale);
 
+        // Draw leafs
         for (Entity entity : entityList) {
             if (entity.getWeight(revision) > 0 && entity.isLeaf()) {
-                entity.draw(graphics, progress, this);
+                entity.draw(graphics, progress);
             }
         }
 
+        // Draw parents
         for (Entity entity : entityList) {
             if (entity.getWeight(revision) > 0 && !entity.isLeaf()) {
-                entity.draw(graphics, progress, this);
+                entity.draw(graphics, progress);
             }
         }
+
+        // Set font size
+        if (scale > 0.7) {
+            setFont(smallFont);
+        } else if (scale > .5) {
+            setFont(mediumFont);
+        } else {
+            setFont(bigFont);
+        }
+
+        // Draw labels
+        for (Entity entity : entityList) {
+            if (entity.getWeight(revision) > 0 && entity.isLeaf()) {
+                entity.drawLabel(graphics, progress);
+            }
+        }
+
 
         // Improves graphics on Linux
         Toolkit.getDefaultToolkit().sync();
@@ -117,7 +140,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
 
         if (progress < 1) {
-            progress += 0.001;
+            progress += 0.01;
             repaint();
         } else  {
             if (Main.DISPLAY == Constants.ANIMATION) {

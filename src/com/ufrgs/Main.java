@@ -21,7 +21,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Prepare data for Dmap
-        root = DataHelper.buildHierarchy("dataset/synth");
+        root = DataHelper.buildHierarchy("dataset/calcuta");
         SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas);
         root = squarifiedTreemap.getTreeRoot();
 
@@ -32,7 +32,7 @@ public class Main {
 
         JFrame frame = new JFrame("Dynamic Treemap");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Panel panel = new Panel(frame, root, canvas);
+        Panel panel = new Panel(root, canvas);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
         frame.setSize(1200, 900);

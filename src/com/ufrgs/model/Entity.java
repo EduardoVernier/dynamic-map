@@ -1,7 +1,6 @@
 package com.ufrgs.model;
 
 import com.ufrgs.view.Colormap;
-import com.ufrgs.view.Panel;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -109,7 +108,7 @@ public class Entity {
         return children.size() == 0;
     }
 
-    public void draw(Graphics2D graphics, double progress, Panel panel) {
+    public void draw(Graphics2D graphics, double progress) {
 
         double x = rectangle.x * progress + pastRectangle.x * (1 - progress);
         double y = rectangle.y * progress + pastRectangle.y * (1 - progress);
@@ -122,18 +121,29 @@ public class Entity {
 
             graphics.setColor(Color.black);
             graphics.draw(new Rectangle2D.Double(x, y, width, height));
-
-            graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-            graphics.setPaint(Color.BLACK);
-            graphics.setFont(new Font("Abyssinica SIL", Font.PLAIN, 20));
-            String split[] = getId().split("/");
-            String id = split[split.length - 1];
-            graphics.drawString(id, (int) rectangle.x, (int) rectangle.y);
-
+            //panel.repaint((int) x, (int) y, (int) width, (int) height);
         } else {
             graphics.setColor(Color.white);
             graphics.setStroke(new BasicStroke(4, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
             graphics.draw(new Rectangle2D.Double(x, y, width, height));
         }
+    }
+
+    public void drawLabel(Graphics2D graphics, double progress) {
+
+        graphics.setPaint(Color.BLACK);
+        String split[] = getId().split("/");
+        String id = split[split.length - 1];
+
+        int x = (int) (rectangle.x * progress + pastRectangle.x * (1 - progress));
+        int y = (int) (rectangle.y * progress + pastRectangle.y * (1 - progress)) + 20;
+        int width = (int) (rectangle.width * progress + pastRectangle.width * (1 - progress));
+//
+//        while (id.length() > 0 && graphics.getFontMetrics().stringWidth(id) > width) {
+//            id = id.substring(id.length() - 2);
+////        }
+        graphics.drawString(id, x, y);
+//        panel.repaint(x, y-20, 10, 20);
+
     }
 }
