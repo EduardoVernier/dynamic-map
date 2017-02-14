@@ -1,6 +1,7 @@
 package com.ufrgs.model;
 
 import com.ufrgs.view.Colormap;
+import com.ufrgs.view.Panel;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -108,7 +109,7 @@ public class Entity {
         return children.size() == 0;
     }
 
-    public void draw(Graphics2D graphics, double progress) {
+    public void draw(Graphics2D graphics, double progress, Panel panel) {
 
         double x = rectangle.x * progress + pastRectangle.x * (1 - progress);
         double y = rectangle.y * progress + pastRectangle.y * (1 - progress);
@@ -121,6 +122,14 @@ public class Entity {
 
             graphics.setColor(Color.black);
             graphics.draw(new Rectangle2D.Double(x, y, width, height));
+
+            graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            graphics.setPaint(Color.BLACK);
+            graphics.setFont(new Font("Abyssinica SIL", Font.PLAIN, 20));
+            String split[] = getId().split("/");
+            String id = split[split.length - 1];
+            graphics.drawString(id, (int) rectangle.x, (int) rectangle.y);
+
         } else {
             graphics.setColor(Color.white);
             graphics.setStroke(new BasicStroke(4, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));

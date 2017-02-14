@@ -32,10 +32,11 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     private Timer timer;
     private int DELAY = 3;
 
-    public Panel(Entity root, Rectangle canvas) {
+    public Panel(JFrame frame, Entity root, Rectangle canvas) {
 
         this.root = root;
         this.canvas = canvas;
+        this.setLayout(null);
 
         maxWeight = root.getMaximumWeight();
         entityList = new ArrayList<>();
@@ -79,13 +80,13 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
         for (Entity entity : entityList) {
             if (entity.getWeight(revision) > 0 && entity.isLeaf()) {
-                entity.draw(graphics, progress);
+                entity.draw(graphics, progress, this);
             }
         }
 
         for (Entity entity : entityList) {
             if (entity.getWeight(revision) > 0 && !entity.isLeaf()) {
-                entity.draw(graphics, progress);
+                entity.draw(graphics, progress, this);
             }
         }
 
