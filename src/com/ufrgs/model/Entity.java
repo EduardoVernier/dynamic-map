@@ -115,13 +115,21 @@ public class Entity {
         double width = rectangle.width * progress + pastRectangle.width * (1 - progress);
         double height = rectangle.height * progress + pastRectangle.height * (1 - progress);
 
-        if (isLeaf()) {
-            graphics.setColor(Colormap.sequentialColormap(1 - getAspectRatio()));
-            graphics.fill(new Rectangle2D.Double(x, y, width, height));
+        graphics.setColor(Colormap.sequentialColormap(1 - getAspectRatio()));
+        graphics.fill(new Rectangle2D.Double(x, y, width, height));
+    }
 
-            graphics.setColor(Color.black);
+    public void drawBorder(Graphics2D graphics, double progress) {
+
+        double x = rectangle.x * progress + pastRectangle.x * (1 - progress);
+        double y = rectangle.y * progress + pastRectangle.y * (1 - progress);
+        double width = rectangle.width * progress + pastRectangle.width * (1 - progress);
+        double height = rectangle.height * progress + pastRectangle.height * (1 - progress);
+
+        if (isLeaf()) {
+            graphics.setColor(new Color(0,0,0,30));
+            graphics.setStroke(new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
             graphics.draw(new Rectangle2D.Double(x, y, width, height));
-            //panel.repaint((int) x, (int) y, (int) width, (int) height);
         } else {
             graphics.setColor(Color.white);
             graphics.setStroke(new BasicStroke(4, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));

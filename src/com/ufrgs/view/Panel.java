@@ -89,10 +89,16 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
             }
         }
 
-        // Draw parents
+        // Draw borders
+        for (Entity entity : entityList) {
+            if (entity.getWeight(revision) > 0 && entity.isLeaf()) {
+                entity.drawBorder(graphics, progress);
+            }
+        }
+
         for (Entity entity : entityList) {
             if (entity.getWeight(revision) > 0 && !entity.isLeaf()) {
-                entity.draw(graphics, progress);
+                entity.drawBorder(graphics, progress);
             }
         }
 
