@@ -129,21 +129,21 @@ public class Entity {
         }
     }
 
-    public void drawLabel(Graphics2D graphics, double progress) {
+    public void drawLabel(Graphics2D graphics, double progress, double scale) {
 
-        graphics.setPaint(Color.BLACK);
-        String split[] = getId().split("/");
-        String id = split[split.length - 1];
+        if (rectangle.height > 20) {
+            graphics.setPaint(Color.BLACK);
+            String split[] = getId().split("/");
+            String id = split[split.length - 1];
 
-        int x = (int) (rectangle.x * progress + pastRectangle.x * (1 - progress));
-        int y = (int) (rectangle.y * progress + pastRectangle.y * (1 - progress)) + 20;
-        int width = (int) (rectangle.width * progress + pastRectangle.width * (1 - progress));
-//
-//        while (id.length() > 0 && graphics.getFontMetrics().stringWidth(id) > width) {
-//            id = id.substring(id.length() - 2);
-////        }
-        graphics.drawString(id, x, y);
-//        panel.repaint(x, y-20, 10, 20);
+            int x = (int) (rectangle.x * progress + pastRectangle.x * (1 - progress)) + 4;
+            int y = (int) (rectangle.y * progress + pastRectangle.y * (1 - progress)) + 20;
+            int width = (int) (rectangle.width * progress + pastRectangle.width * (1 - progress)) - 5;
+            while (id.length() > 0 && graphics.getFontMetrics().stringWidth(id) > width) {
+                id = id.substring(0, id.length() > 2 ? id.length() - 2 : 0);
+            }
 
+            graphics.drawString(id, x, y);
+        }
     }
 }

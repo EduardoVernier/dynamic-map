@@ -97,7 +97,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
 
         // Set font size
-        if (scale > 0.7) {
+        if (scale > 0.8) {
             setFont(smallFont);
         } else if (scale > .5) {
             setFont(mediumFont);
@@ -108,7 +108,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         // Draw labels
         for (Entity entity : entityList) {
             if (entity.getWeight(revision) > 0 && entity.isLeaf()) {
-                entity.drawLabel(graphics, progress);
+                entity.drawLabel(graphics, progress, scale);
             }
         }
 
