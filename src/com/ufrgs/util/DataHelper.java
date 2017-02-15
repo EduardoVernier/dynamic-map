@@ -50,7 +50,7 @@ public class DataHelper {
                 String[] header = currentLine.split(",");
 
                 if (!header[0].equals("id") || !header[1].equals("weight")) {
-                    System.err.println("Error parsing csv file");
+                    System.err.println("Error parsing header - " + fileNames.get(revision));
                     System.exit(-1);
                 }
 

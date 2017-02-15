@@ -34,7 +34,7 @@ public class Nmap {
         }
 
         for (Entity entity : entityCopy) {
-            if (!entity.isLeaf()) {
+            if (!entity.isLeaf() && entity.getWeight(revision) > 0) {
 //                if (entity.getRectangle().width > 5 && entity.getRectangle().height > 5) {
 //                    int padding = 1; // To better display hierarchy
 //                    Rectangle newRectangle = new Rectangle(entity.getRectangle().x + padding, entity.getRectangle().y + padding,

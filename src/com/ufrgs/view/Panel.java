@@ -43,9 +43,14 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
         maxWeight = root.getMaximumWeight();
         entityList = new ArrayList<>();
-        flattenTree(root);
-        computeNmap();
 
+        flattenTree(root);
+        for (Entity entity : entityList) {
+            entity.setRectangle(null);
+        }
+        root.setRectangle(canvas);
+
+        computeNmap();
 
         timer = new Timer(DELAY, this);
         timer.start();
