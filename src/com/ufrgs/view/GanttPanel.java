@@ -23,8 +23,9 @@ public class GanttPanel extends JPanel {
         entityList = new ArrayList<>();
         flattenTree(root);
 
-        entityList = entityList.stream().filter(entity -> entity.isLeaf()).collect(Collectors.toList());
+        entityList = entityList.stream().filter(Entity::isLeaf).collect(Collectors.toList());
 
+        // Get max value for normalization
         for (int i = 0; i < entityList.size(); ++i) {
             Entity entity = entityList.get(i);
             if (entity.isLeaf()) {
@@ -35,6 +36,23 @@ public class GanttPanel extends JPanel {
                 }
             }
         }
+
+        // Count "arrivals and departures"
+        int arrivals = 0;
+        int departures = 0;
+        for (Entity entity : entityList) {
+            for (int r = 1; r < entity.getNumberOfRevisions(); ++r) {
+                if (entity.getWeight(r-1) == 0 && entity.getWeight(r) > 0) {
+                    arrivals++;
+                }
+
+                if (entity.getWeight(r) == 0 && entity.getWeight(r-1) > 0) {
+                    departures++;
+                }
+            }
+        }
+
+        System.out.println("Arrivals: " + arrivals + "  Departures: " + departures);
     }
 
     private void flattenTree(Entity entity) {
