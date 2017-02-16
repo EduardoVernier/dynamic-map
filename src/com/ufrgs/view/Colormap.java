@@ -18,12 +18,21 @@ public class Colormap {
 
     public static Color sequentialColormap(float v) {
 
+        if (v == 0.0) {
+            return new Color(0,0,0,0);
+        }
+
+        if (v > 1) {
+            v = 1;
+        }
+
         float d = v;
         while (d > 0.25) d -= 0.25;
         d *= 4;
 
         int f = (int) floor(v * 4);
         int c = (int) ceil(v * 4);
+
         return new Color (
                 sequential[f].getRed()/255f * (1 - d) + sequential[c].getRed()/255f * (d),
                 sequential[f].getGreen()/255f * (1 - d) + sequential[c].getGreen()/255f * (d),

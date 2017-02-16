@@ -56,10 +56,10 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         timer.start();
     }
 
-    private void flattenTree (Entity parent) {
+    private void flattenTree (Entity entity) {
 
-        entityList.add(parent);
-        for (Entity child : parent.getChildren()) {
+        entityList.add(entity);
+        for (Entity child : entity.getChildren()) {
             if (child.isLeaf()) {
                 entityList.add(child);
             } else {
@@ -122,7 +122,6 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 entity.drawLabel(graphics, progress, scale);
             }
         }
-
 
         // Improves graphics on Linux
         Toolkit.getDefaultToolkit().sync();
