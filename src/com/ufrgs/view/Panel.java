@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.concurrent.TimeUnit;
 
 
 public class Panel extends JPanel implements KeyListener, ActionListener {
@@ -154,6 +154,11 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
             repaint();
         } else  {
             if (Main.DISPLAY == Constants.ANIMATION) {
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;

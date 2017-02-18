@@ -58,7 +58,6 @@ public class Nmap {
 
     private void alternateCut(List<Entity> entityList, Rectangle rectangle, boolean verticalBissection) {
 
-
         List<Entity> entityCopy = new ArrayList<>();
         entityCopy.addAll(entityList);
         entityCopy.removeIf(entity -> entity.getWeight(revision) <= 0.0);
