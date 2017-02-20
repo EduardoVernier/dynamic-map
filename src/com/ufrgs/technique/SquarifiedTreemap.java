@@ -13,12 +13,15 @@ import static java.lang.Math.pow;
 
 public class SquarifiedTreemap {
 
+    private final int revision;
     private Entity treeRoot;
     private double normalizer = 0;
 
-    public SquarifiedTreemap(Entity root, Rectangle rectangle) {
-        treeRoot = root;
-        root.setRectangle(rectangle);
+    public SquarifiedTreemap(Entity root, Rectangle rectangle, int revision) {
+        this.treeRoot = root;
+        this.revision = revision;
+
+        root.setRectangle(rectangle, revision);
         root.initPoint(new Point(rectangle.x/2.0, rectangle.y/2.0));
         List<Entity> children = treemapMultidimensional(root.getChildren(), rectangle);
         for (Entity entity : children) {
@@ -33,6 +36,7 @@ public class SquarifiedTreemap {
     // Use recursion to compute single dimensional treemaps from a hierarchical dataset
     private List<Entity> treemapMultidimensional(List<Entity> entityList, Rectangle rectangle) {
 
+        entityList.removeIf(entity -> entity.getWeight(revision) <= 0);
         // Sort using entities weight -- layout tends to turn out better
         entityList.sort(Comparator.comparing(o -> ((Entity) o).getWeight(0)).reversed());
         // Make a copy of data, as the original is destroyed during treemapSingledimensional computation
@@ -43,7 +47,7 @@ public class SquarifiedTreemap {
 
         // Recursive calls for the children
         for (Entity entity : entityCopy) {
-            if (!entity.isLeaf()) {
+            if (!entity.isLeaf() && entity.getWeight(revision) > 0) {
                 List<Entity> newEntityList = new ArrayList<>();
                 newEntityList.addAll(entity.getChildren());
                 treemapMultidimensional(newEntityList, entity.getRectangle());
@@ -106,7 +110,7 @@ public class SquarifiedTreemap {
                 double y = subyOffset;
                 double width = areaWidth;
                 double height = getNormalizedWeight(entity) / areaWidth;
-                entity.setRectangle(new Rectangle(x, y, width, height));
+                entity.setRectangle(new Rectangle(x, y, width, height), revision);
                 subyOffset += getNormalizedWeight(entity) / areaWidth;
                 // Save center as we'll be using it as input to the nmap algorithm
                 entity.initPoint(new Point(x + width/2, y + height/2));
@@ -117,7 +121,7 @@ public class SquarifiedTreemap {
                 double y = subyOffset;
                 double width = getNormalizedWeight(entity) / areaHeight;
                 double height = areaHeight;
-                entity.setRectangle(new Rectangle(x, y, width, height));
+                entity.setRectangle(new Rectangle(x, y, width, height), revision);
                 subxOffset += getNormalizedWeight(entity) / areaHeight;
                 // Save center as we'll be using it as input to the nmap algorithm
                 entity.initPoint(new Point(x + width/2, y + height/2));
@@ -164,26 +168,13 @@ public class SquarifiedTreemap {
 
         double sum = 0;
         for (Entity entity : entityList) {
-            double max = 0;
-            for (int i = 0; i < entity.getNumberOfRevisions(); ++i) {
-                if (entity.getWeight(i) > max) {
-                    max = entity.getWeight(i);
-                }
-            }
-            sum += max;
+            sum += entity.getWeight(revision);
         }
         normalizer = area / sum;
     }
 
     private double getNormalizedWeight(Entity entity) {
-
-        double max = 0;
-        for (int i = 0; i < entity.getNumberOfRevisions(); ++i) {
-            if (entity.getWeight(i) > max) {
-                max = entity.getWeight(i);
-            }
-        }
-        return max * normalizer;
+        return entity.getWeight(revision) * normalizer;
     }
 }
 

@@ -7,10 +7,14 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 public class Entity {
 
     private String id;
     private List<Double> weightList;
+    public List<Double> distanceList;
     private Point movingPoint, anchorPoint;
     private Rectangle rectangle, pastRectangle;
     private List<Entity> children;
@@ -21,8 +25,10 @@ public class Entity {
         // Initialize lists
         children = new ArrayList<>();
         weightList = new ArrayList<>(numberOfRevisions);
+        distanceList = new ArrayList<>(numberOfRevisions);
         for (int i = 0; i < numberOfRevisions; ++i) {
             weightList.add(0.0);
+            distanceList.add(0.0);
         }
     }
 
@@ -82,7 +88,7 @@ public class Entity {
                 rectangle.height / rectangle.width);
     }
 
-    public void setRectangle(Rectangle newRectangle) {
+    public void setRectangle(Rectangle newRectangle, int revision) {
 
         if (this.rectangle == null) {
             pastRectangle = newRectangle;
@@ -90,6 +96,15 @@ public class Entity {
             pastRectangle = this.rectangle;
         }
         this.rectangle = newRectangle;
+        // Compute metric
+        if (newRectangle != null) {
+            double pastCenterX = (pastRectangle.x + pastRectangle.width)/2;
+            double currentCenterX = (rectangle.x + rectangle.width)/2;
+            double pastCenterY = (pastRectangle.y + pastRectangle.height)/2;
+            double currentCenterY = (rectangle.y + rectangle.height)/2;
+            double distance = sqrt(pow(pastCenterX - currentCenterX, 2) + pow(pastCenterY - currentCenterY, 2));
+            this.distanceList.set(revision, distance);
+        }
     }
 
     public void addChild(Entity entity) {
@@ -110,6 +125,10 @@ public class Entity {
 
     public void draw(Graphics2D graphics, double progress) {
 
+        if (rectangle == null  && pastRectangle == null) {
+            return;
+        }
+
         double x = rectangle.x * progress + pastRectangle.x * (1 - progress);
         double y = rectangle.y * progress + pastRectangle.y * (1 - progress);
         double width = rectangle.width * progress + pastRectangle.width * (1 - progress);
@@ -120,6 +139,10 @@ public class Entity {
     }
 
     public void drawBorder(Graphics2D graphics, double progress) {
+
+        if (rectangle == null  && pastRectangle == null) {
+            return;
+        }
 
         double x = rectangle.x * progress + pastRectangle.x * (1 - progress);
         double y = rectangle.y * progress + pastRectangle.y * (1 - progress);
@@ -139,6 +162,10 @@ public class Entity {
 
     public void drawLabel(Graphics2D graphics, double progress, double scale) {
 
+        if (rectangle == null  && pastRectangle == null) {
+            return;
+        }
+
         if (rectangle.height > 20) {
             graphics.setPaint(Color.BLACK);
             String split[] = getId().split("/");
@@ -153,5 +180,12 @@ public class Entity {
 
             graphics.drawString(id, x, y);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Entity{" +
+                "id='" + id + '\'' +
+                ", rectangle=" + rectangle + '}';
     }
 }

@@ -3,7 +3,7 @@ package com.ufrgs.view;
 import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
-import com.ufrgs.technique.Nmap;
+import com.ufrgs.technique.SquarifiedTreemap;
 import com.ufrgs.util.Constants;
 
 import javax.swing.*;
@@ -15,6 +15,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 public class Panel extends JPanel implements KeyListener, ActionListener {
@@ -22,6 +23,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     // Data
     private Entity root;
     private Rectangle canvas;
+    private JFrame frame;
     int revision = 0;
     // Drawing
     List<Entity> entityList;
@@ -35,10 +37,11 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     private Timer timer;
     private int DELAY = 0;
 
-    public Panel(Entity root, Rectangle canvas) {
+    public Panel(Entity root, Rectangle canvas, JFrame frame) {
 
         this.root = root;
         this.canvas = canvas;
+        this.frame = frame;
         this.setLayout(null);
 
         maxWeight = root.getMaximumWeight();
@@ -46,11 +49,11 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
         flattenTree(root);
         for (Entity entity : entityList) {
-            entity.setRectangle(null);
+            entity.setRectangle(null, 0);
         }
-        root.setRectangle(canvas);
+        root.setRectangle(canvas, 0);
 
-        computeNmap();
+        new SquarifiedTreemap(root, canvas, revision);
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -66,10 +69,6 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 flattenTree(child);
             }
         }
-    }
-
-    private void computeNmap() {
-        new Nmap(root, canvas, revision);
     }
 
     @Override
@@ -141,8 +140,19 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;
-                computeNmap();
+                new SquarifiedTreemap(root, canvas, revision);
+                frame.setTitle("Squarified - Revision " + revision);
+            } else {
+                printCsv();
             }
+        }
+    }
+
+    private void printCsv() {
+
+        for (Entity entity : entityList) {
+            String collect = entity.getId() + "," + entity.distanceList.stream().map(dist -> String.format("%.9f", dist)).collect(Collectors.joining(","));
+            System.out.println(collect);
         }
     }
 
@@ -162,7 +172,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;
-                computeNmap();
+                new SquarifiedTreemap(root, canvas, revision);
+                frame.setTitle("Squarified - Revision " + revision);
             } else if (Main.DISPLAY == Constants.STEP) {
                 progress = 1;
             }
