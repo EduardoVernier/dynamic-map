@@ -22,6 +22,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     // Data
     private Entity root;
     private Rectangle canvas;
+    private final JFrame frame;
     int revision = 0;
     // Drawing
     List<Entity> entityList;
@@ -35,10 +36,11 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     private Timer timer;
     private int DELAY = 0;
 
-    public Panel(Entity root, Rectangle canvas) {
+    public Panel(Entity root, Rectangle canvas, JFrame frame) {
 
         this.root = root;
         this.canvas = canvas;
+        this.frame = frame;
         this.setLayout(null);
 
         maxWeight = root.getMaximumWeight();
@@ -142,6 +144,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 revision++;
                 progress = 0.0;
                 computeNmap();
+                frame.setTitle("Dynamic - Revision " + revision);
             }
         }
     }
@@ -163,6 +166,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 revision++;
                 progress = 0.0;
                 computeNmap();
+                frame.setTitle("Dynamic - Revision " + revision);
             } else if (Main.DISPLAY == Constants.STEP) {
                 progress = 1;
             }

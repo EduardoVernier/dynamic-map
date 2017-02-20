@@ -13,10 +13,10 @@ public class Main {
 
     // Settings
     public static boolean STRATEGY = Constants.ALTERNATE_CUT;
-    public static boolean DISPLAY = Constants.ANIMATION;
+    public static boolean DISPLAY = Constants.STEP;
 
     private static Entity root;
-    private static Rectangle canvas = new Rectangle(1500, 1000);
+    private static Rectangle canvas = new Rectangle(800, 1000);
 
     public static void main(String[] args) {
 
@@ -32,10 +32,10 @@ public class Main {
 
         JFrame frame = new JFrame("Dynamic Treemap");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Panel panel = new Panel(root, canvas);
+        Panel panel = new Panel(root, canvas, frame);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
-        frame.setSize(1500, 1000);
+        frame.setSize(800, 1000);
         frame.setVisible(true);
 
 //        JFrame ganttFrame = new JFrame("Gantt Chart");
