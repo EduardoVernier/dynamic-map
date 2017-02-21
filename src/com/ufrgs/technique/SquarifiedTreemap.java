@@ -36,7 +36,6 @@ public class SquarifiedTreemap {
     // Use recursion to compute single dimensional treemaps from a hierarchical dataset
     private List<Entity> treemapMultidimensional(List<Entity> entityList, Rectangle rectangle) {
 
-        entityList.removeIf(entity -> entity.getWeight(revision) <= 0);
         // Sort using entities weight -- layout tends to turn out better
         entityList.sort(Comparator.comparing(o -> ((Entity) o).getWeight(0)).reversed());
         // Make a copy of data, as the original is destroyed during treemapSingledimensional computation
@@ -58,6 +57,8 @@ public class SquarifiedTreemap {
     }
 
     private void treemapSingledimensional(List<Entity> entityList, Rectangle rectangle) {
+
+        entityList.removeIf(entity -> entity.getWeight(revision) == 0.0);
 
         // Bruls' algorithm assumes that the data is normalized
         normalize(entityList, rectangle.width * rectangle.height);

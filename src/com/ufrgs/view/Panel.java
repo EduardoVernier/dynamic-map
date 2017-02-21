@@ -15,7 +15,6 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 
 public class Panel extends JPanel implements KeyListener, ActionListener {
@@ -53,7 +52,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
         root.setRectangle(canvas, 0);
 
-        new SquarifiedTreemap(root, canvas, revision);
+        SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas, revision);
+        this.root = squarifiedTreemap.getTreeRoot();
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -140,7 +140,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;
-                new SquarifiedTreemap(root, canvas, revision);
+                SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas, revision);
+                this.root = squarifiedTreemap.getTreeRoot();
                 frame.setTitle("Squarified - Revision " + revision);
             } else {
                 printCsv();
@@ -150,9 +151,12 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
     private void printCsv() {
 
-        for (Entity entity : entityList) {
-            String collect = entity.getId() + "," + entity.distanceList.stream().map(dist -> String.format("%.9f", dist)).collect(Collectors.joining(","));
-            System.out.println(collect);
+        for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
+            double sum = 0;
+            for (Entity entity : entityList) {
+                sum += entity.distanceList.get(i);
+            }
+            System.out.printf("%.8f\n", sum);
         }
     }
 
@@ -172,7 +176,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;
-                new SquarifiedTreemap(root, canvas, revision);
+                SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas, revision);
+                this.root = squarifiedTreemap.getTreeRoot();
                 frame.setTitle("Squarified - Revision " + revision);
             } else if (Main.DISPLAY == Constants.STEP) {
                 progress = 1;
