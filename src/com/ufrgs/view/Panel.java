@@ -48,9 +48,9 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
         flattenTree(root);
         for (Entity entity : entityList) {
-            entity.setRectangle(null);
+            entity.setRectangle(null, 0);
         }
-        root.setRectangle(canvas);
+        root.setRectangle(canvas, 0);
 
         computeNmap();
 
@@ -145,7 +145,20 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 progress = 0.0;
                 computeNmap();
                 frame.setTitle("Dynamic - Revision " + revision);
+            } else {
+                printCsv();
             }
+        }
+    }
+
+    private void printCsv() {
+
+        for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
+            double sum = 0;
+            for (Entity entity : entityList) {
+                sum += entity.distanceList.get(i);
+            }
+            System.out.printf("%.8f\n", sum);
         }
     }
 

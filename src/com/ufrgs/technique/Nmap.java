@@ -66,7 +66,7 @@ public class Nmap {
             return;
         } else if (entityCopy.size() == 1) {
             // Done dividing
-            entityCopy.get(0).setRectangle(rectangle);
+            entityCopy.get(0).setRectangle(rectangle, revision);
             entityCopy.get(0).setAnchorPoint(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
             // System.out.println("ctx.rect(" + rectangle.x + ", " + rectangle.y + ", " + rectangle.width + ", " + rectangle.height + ");");
         } else {
@@ -140,7 +140,7 @@ public class Nmap {
             return;
         } else if (entityCopy.size() == 1) {
             // Done dividing
-            entityCopy.get(0).setRectangle(rectangle);
+            entityCopy.get(0).setRectangle(rectangle, revision);
             //entityCopy.get(0).setPoint(rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
             // System.out.println("ctx.rect(" + rectangle.x + ", " + rectangle.y + ", " + rectangle.width + ", " + rectangle.height + ");");
         } else {

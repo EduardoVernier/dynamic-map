@@ -18,7 +18,7 @@ public class SquarifiedTreemap {
 
     public SquarifiedTreemap(Entity root, Rectangle rectangle) {
         treeRoot = root;
-        root.setRectangle(rectangle);
+        root.setRectangle(rectangle, 0);
         root.initPoint(new Point(rectangle.x/2.0, rectangle.y/2.0));
         List<Entity> children = treemapMultidimensional(root.getChildren(), rectangle);
         for (Entity entity : children) {
@@ -106,7 +106,7 @@ public class SquarifiedTreemap {
                 double y = subyOffset;
                 double width = areaWidth;
                 double height = getNormalizedWeight(entity) / areaWidth;
-                entity.setRectangle(new Rectangle(x, y, width, height));
+                entity.setRectangle(new Rectangle(x, y, width, height), 0);
                 subyOffset += getNormalizedWeight(entity) / areaWidth;
                 // Save center as we'll be using it as input to the nmap algorithm
                 entity.initPoint(new Point(x + width/2, y + height/2));
@@ -117,7 +117,7 @@ public class SquarifiedTreemap {
                 double y = subyOffset;
                 double width = getNormalizedWeight(entity) / areaHeight;
                 double height = areaHeight;
-                entity.setRectangle(new Rectangle(x, y, width, height));
+                entity.setRectangle(new Rectangle(x, y, width, height), 0);
                 subxOffset += getNormalizedWeight(entity) / areaHeight;
                 // Save center as we'll be using it as input to the nmap algorithm
                 entity.initPoint(new Point(x + width/2, y + height/2));
