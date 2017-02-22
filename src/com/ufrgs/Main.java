@@ -16,12 +16,12 @@ public class Main {
     public static boolean DISPLAY = Constants.STEP;
 
     private static Entity root;
-    private static Rectangle canvas = new Rectangle(800, 1000);
+    private static Rectangle canvas = new Rectangle(600, 1000);
 
     public static void main(String[] args) {
 
         // Prepare data for Dmap
-        root = DataHelper.buildHierarchy("dataset/calcuta");
+        root = DataHelper.buildHierarchy("dataset/exo");
         SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas);
         root = squarifiedTreemap.getTreeRoot();
 
@@ -35,9 +35,9 @@ public class Main {
         Panel panel = new Panel(root, canvas, frame);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
-        frame.setSize(800, 1000);
+        frame.setSize(600, 1000);
         frame.setVisible(true);
-
+//
 //        JFrame ganttFrame = new JFrame("Gantt Chart");
 //        ganttFrame.setSize(1650, 1080);
 //        ganttFrame.getContentPane().add(new GanttPanel(root, new Rectangle(1600, 1000)));
