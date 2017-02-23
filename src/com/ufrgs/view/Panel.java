@@ -19,22 +19,22 @@ import java.util.concurrent.TimeUnit;
 
 public class Panel extends JPanel implements KeyListener, ActionListener {
 
-    // Data
+    // Technique
+    List<Entity> entityList;
     private Entity root;
     private Rectangle canvas;
-    private final JFrame frame;
-    int revision = 0;
+    private int revision = 0;
     // Drawing
-    List<Entity> entityList;
-    double maxWeight;
-    Font bigFont = new Font("Bitstream Vera Sans", Font.PLAIN, 22);
-    Font mediumFont = new Font("Bitstream Vera Sans", Font.PLAIN, 18);
-    Font smallFont = new Font("Bitstream Vera Sans", Font.PLAIN, 14);
+    private final JFrame frame;
+    private double scale = 0;
+    private final Font bigFont = new Font("Bitstream Vera Sans", Font.PLAIN, 22);
+    private final Font mediumFont = new Font("Bitstream Vera Sans", Font.PLAIN, 18);
+    private final Font smallFont = new Font("Bitstream Vera Sans", Font.PLAIN, 14);
     // Animation
     private double lastRevisionWeight = 0;
     private double progress = 0.0;
     private Timer timer;
-    private int DELAY = 0;
+    private int DELAY = 30;
 
     public Panel(Entity root, Rectangle canvas, JFrame frame) {
 
@@ -42,8 +42,6 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         this.canvas = canvas;
         this.frame = frame;
         this.setLayout(null);
-
-        maxWeight = root.getMaximumWeight();
         entityList = new ArrayList<>();
 
         flattenTree(root);
@@ -86,7 +84,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
             }
         }
 
-        double scale = (progress * (root.getWeight(revision)) + (1 - progress) * lastRevisionWeight) / maxWeight;
+        scale = (progress * (root.getWeight(revision)) + (1 - progress) * lastRevisionWeight) / maxWeight;
         graphics.scale(scale, scale);
 
         // Draw leafs
@@ -119,9 +117,11 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
 
         // Draw labels
+        Entity.charWidth = graphics.getFontMetrics().stringWidth("X");
+        graphics.setPaint(Color.BLACK);
         for (Entity entity : entityList) {
             if (entity.getWeight(revision) > 0 && entity.isLeaf()) {
-                entity.drawLabel(graphics, progress, scale);
+                entity.drawLabel(graphics, progress);
             }
         }
 
@@ -166,7 +166,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
 
         if (progress < 1) {
-            progress += 0.01;
+            progress += 0.02;
             repaint();
         } else  {
             if (Main.DISPLAY == Constants.ANIMATION) {

@@ -13,15 +13,21 @@ import static java.lang.Math.sqrt;
 public class Entity {
 
     private String id;
+    private String shortId;
+    private String printId = "";
     private List<Double> weightList;
     public List<Double> distanceList;
     private Point movingPoint, anchorPoint;
     private Rectangle rectangle, pastRectangle;
     private List<Entity> children;
+    public static int charWidth = 0;
 
     public Entity(String id, int numberOfRevisions) {
 
         this.id = id;
+        String split[] = getId().split("/");
+        this.shortId = split[split.length - 1];
+
         // Initialize lists
         children = new ArrayList<>();
         weightList = new ArrayList<>(numberOfRevisions);
@@ -152,21 +158,30 @@ public class Entity {
         }
     }
 
-    public void drawLabel(Graphics2D graphics, double progress, double scale) {
+    private void updatePrintId(double progress) {
 
-        if (rectangle.height > 20) {
-            graphics.setPaint(Color.BLACK);
-            String split[] = getId().split("/");
-            String id = split[split.length - 1];
+        int width = (int) (rectangle.width * progress + pastRectangle.width * (1 - progress)) - charWidth/2;
+        if (charWidth > 0) {
+            if (width > charWidth * shortId.length()) {
+                printId = shortId;
+            } else {
+                printId = shortId.substring(0, width / charWidth);
+            }
+        }
+    }
+
+    public void drawLabel(Graphics2D graphics, double progress) {
+
+        if (rectangle.height > 20 && rectangle.width > 20) {
+
+            if (progress % 0.2 < 0.01) {
+                updatePrintId(progress);
+            }
 
             int x = (int) (rectangle.x * progress + pastRectangle.x * (1 - progress)) + 4;
             int y = (int) (rectangle.y * progress + pastRectangle.y * (1 - progress)) + 20;
-            int width = (int) (rectangle.width * progress + pastRectangle.width * (1 - progress)) - 5;
-            while (id.length() > 0 && graphics.getFontMetrics().stringWidth(id) > width) {
-                id = id.substring(0, id.length() > 2 ? id.length() - 2 : 0);
-            }
 
-            graphics.drawString(id, x, y);
+            graphics.drawString(printId, x, y);
         }
     }
 }
