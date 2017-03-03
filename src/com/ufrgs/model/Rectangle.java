@@ -41,4 +41,18 @@ public class Rectangle {
         this.width = width;
         this.height = height;
     }
+
+    public boolean intersects(Rectangle b) {
+        return (((this.x + this.width > b.x) || (b.x + b.width > this.x)) &&
+                ((this.y + this.height > b.y) || (b.y + b.height > this.y)));
+    }
+
+    public Rectangle intersection(Rectangle b) {
+
+        double x0 = Math.max(this.x, b.x);
+        double y0 = Math.max(this.y, b.y);
+        double x1 = Math.min(this.x + this.width, b.x + b.width);
+        double y1 = Math.min(this.y + this.height, b.y + b.height);
+        return new Rectangle(x0, y0, x1 - x0, y1 - y0);
+    }
 }

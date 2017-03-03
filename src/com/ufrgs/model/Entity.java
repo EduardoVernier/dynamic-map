@@ -84,6 +84,16 @@ public class Entity {
         return rectangle;
     }
 
+    public Rectangle getRectangle(double progress) {
+
+        double x = rectangle.x * progress + pastRectangle.x * (1 - progress);
+        double y = rectangle.y * progress + pastRectangle.y * (1 - progress);
+        double width = rectangle.width * progress + pastRectangle.width * (1 - progress);
+        double height = rectangle.height * progress + pastRectangle.height * (1 - progress);
+
+        return new Rectangle(x, y, width, height);
+    }
+
     public Rectangle getPastRectangle() {
         return pastRectangle;
     }
@@ -138,6 +148,14 @@ public class Entity {
 
         graphics.setColor(Colormap.sequentialColormap(1 - getAspectRatio()));
         graphics.fill(new Rectangle2D.Double(x, y, width, height));
+    }
+
+    public void drawIntersection(Graphics2D graphics, Entity entityB, double progress) {
+
+        Rectangle rectangle = this.getRectangle(progress).intersection(entityB.getRectangle(progress));
+
+        graphics.setColor(Colormap.sequentialColormap(((1 - getAspectRatio()) + (1 - entityB.getAspectRatio()))/2));
+        graphics.fill(new Rectangle2D.Double(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
     }
 
     public void drawBorder(Graphics2D graphics, double progress) {

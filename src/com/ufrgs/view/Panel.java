@@ -56,7 +56,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         timer.start();
     }
 
-    private void flattenTree (Entity entity) {
+    private void flattenTree(Entity entity) {
 
         entityList.add(entity);
         for (Entity child : entity.getChildren()) {
@@ -91,6 +91,21 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         for (Entity entity : entityList) {
             if (entity.getWeight(revision) > 0 && entity.isLeaf()) {
                 entity.draw(graphics, progress);
+            }
+        }
+
+        // Draw intersections
+        for (int i = 0; i < entityList.size(); ++i) {
+            Entity entityA = entityList.get(i);
+            for (int j = i; j < entityList.size(); ++j) {
+                Entity entityB = entityList.get(j);
+                if (entityA != entityB &&
+                        entityA.getWeight(revision) > 0 && entityA.isLeaf() &&
+                        entityB.getWeight(revision) > 0 && entityB.isLeaf() &&
+                        entityA.getRectangle(progress).intersects(entityB.getRectangle(progress))) {
+
+                    entityA.drawIntersection(graphics, entityB, progress);
+                }
             }
         }
 
@@ -130,10 +145,12 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent keyEvent) {}
+    public void keyTyped(KeyEvent keyEvent) {
+    }
 
     @Override
-    public void keyPressed(KeyEvent keyEvent) {}
+    public void keyPressed(KeyEvent keyEvent) {
+    }
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
@@ -168,7 +185,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         if (progress < 1) {
             progress += 0.02;
             repaint();
-        } else  {
+        } else {
             if (Main.DISPLAY == Constants.ANIMATION) {
                 try {
                     TimeUnit.SECONDS.sleep(1);
