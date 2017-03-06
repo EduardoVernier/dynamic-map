@@ -46,8 +46,8 @@ public class Entity {
         return weightList.size();
     }
 
-    public double getWeight(int index) {
-        return weightList.get(index);
+    public double getWeight(int revision) {
+        return weightList.get(revision);
     }
 
     public void setWeight(double weight, int revision) {
@@ -124,11 +124,11 @@ public class Entity {
     }
 
     public void addChild(Entity entity) {
-
         children.add(entity);
-        for (int revision = 0; revision < getNumberOfRevisions(); ++revision) {
-            weightList.set(revision, weightList.get(revision) + entity.getWeight(revision));
-        }
+    }
+
+    public List<Double> getWeightList() {
+        return weightList;
     }
 
     public List<Entity> getChildren() {
@@ -201,5 +201,25 @@ public class Entity {
 
             graphics.drawString(printId, x, y);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Entity{" +
+                "id='" + id + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entity entity = (Entity) o;
+        return id != null ? id.equals(entity.id) : entity.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }
