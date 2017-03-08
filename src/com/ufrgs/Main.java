@@ -13,16 +13,16 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static boolean STRATEGY = Constants.EQUAL_WEIGHT;
+    public static boolean STRATEGY = Constants.ALTERNATE_CUT;
     public static boolean DISPLAY = Constants.STEP;
 
     private static Entity root;
-    private static Rectangle canvas = new Rectangle(600, 1000);
+    private static Rectangle canvas = new Rectangle(1000, 1000);
 
     public static void main(String[] args) {
 
         // Prepare data for Dmap
-        root = DataHelper.buildHierarchy("dataset/calcuta");
+        root = DataHelper.buildHierarchy("dataset/alpha");
         SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas);
         root = squarifiedTreemap.getTreeRoot();
 
@@ -36,7 +36,7 @@ public class Main {
         Panel panel = new Panel(root, canvas, frame);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
-        frame.setSize(600, 1000);
+        frame.setSize(1000, 1000);
         frame.setVisible(true);
 
         JFrame ganttFrame = new JFrame("Gantt Chart");

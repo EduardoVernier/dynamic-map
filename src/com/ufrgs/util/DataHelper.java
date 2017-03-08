@@ -116,49 +116,6 @@ public class DataHelper {
         }
 
         sumTree(root);
-
-
-//                if (contains(auxList, prefix)) {
-//                    // Add child to parent known parent
-//                    int parentIndex = find(auxList, prefix);
-//                    Entity parentEntity = auxList.get(parentIndex);
-//                    parentEntity.addChild(entity);
-//                    // Remove child from list
-//                    entityList.remove(i);
-//                    --i;
-//                } else {
-//                    // Initialize package with its first found child
-//                    Entity newParent = new Entity(prefix, numberOfRevisions);
-//                    newParent.addChild(entity);
-//                    // Remove child from list
-//                    entityList.remove(i);
-//                    --i;
-//                    auxList.add(newParent);
-//                }
-//            } else {
-//                // Add to root
-//                root.addChild(entity);
-//                entityList.remove(i);
-//                --i;
-//            }
-//        }
-
-        // Make root carry full tree
-//        Collections.reverse(auxList);
-//        for (int i = 0; i < auxList.size(); ++i) {
-//            for (int j = i + 1; j < auxList.size(); ++j) {
-//                Entity entityA = auxList.get(i);
-//                Entity entityB = auxList.get(j);
-//
-//                if (entityA.getId().contains(entityB.getId())) {
-//                    entityB.addChild(entityA);
-//                    auxList.remove(i);
-//                    i--;
-//                    break;
-//                }
-//            }
-//        }
-
         return root;
     }
 

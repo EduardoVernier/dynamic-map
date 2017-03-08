@@ -70,6 +70,20 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
     private void computeNmap() {
         new Nmap(root, canvas, revision);
+        computeAspectRatioAverage();
+    }
+
+    private void computeAspectRatioAverage() {
+
+        double ratioSum = 0;
+        int nEntities = 0;
+        for (Entity entity : entityList) {
+            if (entity.getRectangle() != null) {
+                ratioSum += entity.getAspectRatio();
+                nEntities++;
+            }
+        }
+        System.out.printf("%.8f\n", ratioSum / nEntities);
     }
 
     @Override
@@ -95,19 +109,19 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
 
         // Draw intersections
-        for (int i = 0; i < entityList.size(); ++i) {
-            Entity entityA = entityList.get(i);
-            for (int j = i; j < entityList.size(); ++j) {
-                Entity entityB = entityList.get(j);
-                if (entityA != entityB &&
-                        entityA.getWeight(revision) > 0 && entityA.isLeaf() &&
-                        entityB.getWeight(revision) > 0 && entityB.isLeaf() &&
-                        entityA.getRectangle(progress).intersects(entityB.getRectangle(progress))) {
-
-                    entityA.drawIntersection(graphics, entityB, progress);
-                }
-            }
-        }
+//        for (int i = 0; i < entityList.size(); ++i) {
+//            Entity entityA = entityList.get(i);
+//            for (int j = i; j < entityList.size(); ++j) {
+//                Entity entityB = entityList.get(j);
+//                if (entityA != entityB &&
+//                        entityA.getWeight(revision) > 0 && entityA.isLeaf() &&
+//                        entityB.getWeight(revision) > 0 && entityB.isLeaf() &&
+//                        entityA.getRectangle(progress).intersects(entityB.getRectangle(progress))) {
+//
+//                    entityA.drawIntersection(graphics, entityB, progress);
+//                }
+//            }
+//        }
 
         // Draw borders
         for (Entity entity : entityList) {
@@ -170,6 +184,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
     private void printCsv() {
 
+        System.out.printf("\n\n");
         for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
             double sum = 0;
             for (Entity entity : entityList) {
