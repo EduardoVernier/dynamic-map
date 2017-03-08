@@ -1,0 +1,218 @@
+id,weight
+South Asia/Afghanistan,6.634452
+South Asia/Bangladesh,18.989660
+South Asia/Bhutan,36.284637
+South Asia/India,22.910146
+South Asia/Maldives,107.683701
+South Asia/Nepal,11.505088
+South Asia/Pakistan,12.242584
+South Asia/Sri Lanka,20.912506
+Europe and Central Asia/Albania,28.230908
+Europe and Central Asia/Andorra,0.000000
+Europe and Central Asia/Armenia,28.565139
+Europe and Central Asia/Austria,53.016162
+Europe and Central Asia/Azerbaijan,43.287474
+Europe and Central Asia/Belarus,56.896750
+Europe and Central Asia/Belgium,83.202019
+Europe and Central Asia/Bosnia and Herzegovina,33.903616
+Europe and Central Asia/Bulgaria,65.012407
+Europe and Central Asia/Channel Islands,0.000000
+Europe and Central Asia/Croatia,46.276172
+Europe and Central Asia/Cyprus,62.192470
+Europe and Central Asia/Czech Republic,82.545692
+Europe and Central Asia/Denmark,53.382762
+Europe and Central Asia/Estonia,83.056951
+Europe and Central Asia/Faroe Islands,0.000000
+Europe and Central Asia/Finland,37.679437
+Europe and Central Asia/France,28.947169
+Europe and Central Asia/Georgia,42.943617
+Europe and Central Asia/Germany,45.652016
+Europe and Central Asia/Gibraltar,0.000000
+Europe and Central Asia/Greece,32.503805
+Europe and Central Asia/Greenland,0.000000
+Europe and Central Asia/Hungary,88.655274
+Europe and Central Asia/Iceland,53.626122
+Europe and Central Asia/Ireland,113.786738
+Europe and Central Asia/Isle of Man,0.000000
+Europe and Central Asia/Italy,29.332135
+Europe and Central Asia/Kazakhstan,39.341758
+Europe and Central Asia/Kosovo,19.574201
+Europe and Central Asia/Kyrgyz Republic,37.448652
+Europe and Central Asia/Latvia,59.589406
+Europe and Central Asia/Liechtenstein,0.000000
+Europe and Central Asia/Lithuania,81.218289
+Europe and Central Asia/Luxembourg,203.268265
+Europe and Central Asia/Macedonia,47.845032
+Europe and Central Asia/Moldova,41.533244
+Europe and Central Asia/Monaco,0.000000
+Europe and Central Asia/Montenegro,40.143716
+Europe and Central Asia/Netherlands,82.565369
+Europe and Central Asia/Norway,38.860600
+Europe and Central Asia/Poland,47.589004
+Europe and Central Asia/Portugal,40.044079
+Europe and Central Asia/Romania,41.191684
+Europe and Central Asia/Russian Federation,27.537726
+Europe and Central Asia/San Marino,0.000000
+Europe and Central Asia/Serbia,43.375903
+Europe and Central Asia/Slovak Republic,91.803097
+Europe and Central Asia/Slovenia,76.389663
+Europe and Central Asia/Spain,32.545238
+Europe and Central Asia/Sweden,45.033148
+Europe and Central Asia/Switzerland,64.862703
+Europe and Central Asia/Tajikistan,9.055173
+Europe and Central Asia/Turkey,27.884801
+Europe and Central Asia/Turkmenistan,0.000000
+Europe and Central Asia/Ukraine,48.592962
+Europe and Central Asia/United Kingdom,28.074602
+Europe and Central Asia/Uzbekistan,23.236720
+Middle East and North Africa/Algeria,30.529285
+Middle East and North Africa/Bahrain,72.147990
+Middle East and North Africa/Djibouti,0.000000
+Middle East and North Africa/Egypt,14.434559
+Middle East and North Africa/Iran,24.168794
+Middle East and North Africa/Iraq,42.392501
+Middle East and North Africa/Israel,32.213197
+Middle East and North Africa/Jordan,43.333134
+Middle East and North Africa/Kuwait,68.505995
+Middle East and North Africa/Lebanon,57.498715
+Middle East and North Africa/Libya,0.000000
+Middle East and North Africa/Malta,147.319255
+Middle East and North Africa/Morocco,34.332616
+Middle East and North Africa/Oman,69.535914
+Middle East and North Africa/Qatar,67.998076
+Middle East and North Africa/Saudi Arabia,47.031893
+Middle East and North Africa/Syrian Arab Republic,0.000000
+Middle East and North Africa/Tunisia,45.569565
+Middle East and North Africa/United Arab Emirates,97.347362
+Middle East and North Africa/West Bank and Gaza,17.083740
+Middle East and North Africa/Yemen,21.483627
+East Asia and Pacific/American Samoa,0.000000
+East Asia and Pacific/Australia,20.904051
+East Asia and Pacific/Brunei Darussalam,68.619498
+East Asia and Pacific/Cambodia,62.322843
+East Asia and Pacific/China,24.080017
+East Asia and Pacific/Fiji,55.588796
+East Asia and Pacific/French Polynesia,0.000000
+East Asia and Pacific/Guam,0.000000
+East Asia and Pacific/Hong Kong,219.436900
+East Asia and Pacific/Indonesia,23.633916
+East Asia and Pacific/Japan,17.546379
+East Asia and Pacific/Kiribati,12.401737
+East Asia and Pacific/Korea,0.000000
+East Asia and Pacific/Rep. Korea,50.275534
+East Asia and Pacific/Lao PDR,40.373184
+East Asia and Pacific/China - Macao,84.668399
+East Asia and Pacific/Malaysia,73.792055
+East Asia and Pacific/Marshall Islands,0.000000
+East Asia and Pacific/Micronesia,0.000000
+East Asia and Pacific/Mongolia,52.248999
+East Asia and Pacific/Myanmar,20.090340
+East Asia and Pacific/Nauru,0.000000
+East Asia and Pacific/New Caledonia,0.000000
+East Asia and Pacific/New Zealand,27.970654
+East Asia and Pacific/Northern Mariana Islands,0.000000
+East Asia and Pacific/Palau,63.077282
+East Asia and Pacific/Papua New Guinea,0.000000
+East Asia and Pacific/Philippines,28.844561
+East Asia and Pacific/Samoa,28.239000
+East Asia and Pacific/Singapore,192.110395
+East Asia and Pacific/Solomon Islands,51.452093
+East Asia and Pacific/Thailand,69.285340
+East Asia and Pacific/Timor-Leste,5.789850
+East Asia and Pacific/Tonga,18.499459
+East Asia and Pacific/Tuvalu,0.000000
+East Asia and Pacific/Vanuatu,48.555790
+East Asia and Pacific/Vietnam,86.404769
+Sub-Saharan Africa/Angola,47.998691
+Sub-Saharan Africa/Benin,32.076258
+Sub-Saharan Africa/Botswana,62.282900
+Sub-Saharan Africa/Burkina Faso,25.936576
+Sub-Saharan Africa/Burundi,7.768183
+Sub-Saharan Africa/Cabo Verde,0.000000
+Sub-Saharan Africa/Cameroon,21.735359
+Sub-Saharan Africa/Central African Republic,13.030092
+Sub-Saharan Africa/Chad,34.161363
+Sub-Saharan Africa/Comoros,16.874714
+Sub-Saharan Africa/Dem. Rep. Congo,36.373695
+Sub-Saharan Africa/Rep. Congo,72.986759
+Sub-Saharan Africa/Cote d'Ivoire,41.328470
+Sub-Saharan Africa/Equatorial Guinea,66.806997
+Sub-Saharan Africa/Eritrea,0.000000
+Sub-Saharan Africa/Ethiopia,11.641620
+Sub-Saharan Africa/Gabon,44.520976
+Sub-Saharan Africa/Gambia,26.103519
+Sub-Saharan Africa/Ghana,39.523559
+Sub-Saharan Africa/Guinea,27.634305
+Sub-Saharan Africa/Guinea-Bissau,18.816277
+Sub-Saharan Africa/Kenya,16.924446
+Sub-Saharan Africa/Lesotho,0.000000
+Sub-Saharan Africa/Liberia,24.987581
+Sub-Saharan Africa/Madagascar,31.907910
+Sub-Saharan Africa/Malawi,33.960952
+Sub-Saharan Africa/Mali,23.115247
+Sub-Saharan Africa/Mauritania,37.683030
+Sub-Saharan Africa/Mauritius,51.062842
+Sub-Saharan Africa/Mozambique,33.359276
+Sub-Saharan Africa/Namibia,41.820013
+Sub-Saharan Africa/Niger,20.980051
+Sub-Saharan Africa/Nigeria,18.435126
+Sub-Saharan Africa/Rwanda,14.791474
+Sub-Saharan Africa/Sao Tome and Principe,0.000000
+Sub-Saharan Africa/Senegal,28.112258
+Sub-Saharan Africa/Seychelles,83.094152
+Sub-Saharan Africa/Sierra Leone,30.760039
+Sub-Saharan Africa/Somalia,14.503276
+Sub-Saharan Africa/South Africa,31.181918
+Sub-Saharan Africa/South Sudan,20.151231
+Sub-Saharan Africa/Sudan,8.149135
+Sub-Saharan Africa/Swaziland,48.957866
+Sub-Saharan Africa/Tanzania,19.414181
+Sub-Saharan Africa/Togo,44.498453
+Sub-Saharan Africa/Uganda,17.865505
+Sub-Saharan Africa/Zambia,38.822406
+Sub-Saharan Africa/Zimbabwe,27.061471
+ Latin America & Caribbean/Antigua and Barbuda,48.382666
+ Latin America & Caribbean/Argentina,14.317088
+ Latin America & Caribbean/Aruba,0.000000
+ Latin America & Caribbean/Bahamas,42.494637
+ Latin America & Caribbean/Barbados,36.834318
+ Latin America & Caribbean/Belize,67.175126
+ Latin America & Caribbean/Bolivia,43.293100
+ Latin America & Caribbean/Brazil,11.186835
+ Latin America & Caribbean/British Virgin Islands,0.000000
+ Latin America & Caribbean/Cayman Islands,0.000000
+ Latin America & Caribbean/Chile,33.417018
+ Latin America & Caribbean/Colombia,15.963306
+ Latin America & Caribbean/Costa Rica,32.182555
+ Latin America & Caribbean/Cuba,0.000000
+ Latin America & Caribbean/Curacao,0.000000
+ Latin America & Caribbean/Dominica,41.112685
+ Latin America & Caribbean/Dominican Republic,25.598713
+ Latin America & Caribbean/Ecuador,27.991460
+ Latin America & Caribbean/El Salvador,25.870712
+ Latin America & Caribbean/Grenada,27.996749
+ Latin America & Caribbean/Guatemala,23.158419
+ Latin America & Caribbean/Guyana,51.388404
+ Latin America & Caribbean/Haiti,18.929687
+ Latin America & Caribbean/Honduras,46.869340
+ Latin America & Caribbean/Jamaica,31.258355
+ Latin America & Caribbean/Mexico,32.309315
+ Latin America & Caribbean/Nicaragua,42.386468
+ Latin America & Caribbean/Panama,53.569787
+ Latin America & Caribbean/Paraguay,45.189068
+ Latin America & Caribbean/Peru,22.577701
+ Latin America & Caribbean/Puerto Rico,0.000000
+ Latin America & Caribbean/Sint Maarten (Dutch part),0.000000
+ Latin America & Caribbean/St. Kitts and Nevis,44.008258
+ Latin America & Caribbean/St. Lucia,45.601554
+ Latin America & Caribbean/St. Martin (French part),0.000000
+ Latin America & Caribbean/St. Vincent and the Grenadines,25.537857
+ Latin America & Caribbean/Suriname,45.219263
+ Latin America & Caribbean/Trinidad and Tobago,47.019666
+ Latin America & Caribbean/Turks and Caicos Islands,0.000000
+ Latin America & Caribbean/Uruguay,23.542662
+ Latin America & Caribbean/Venezuela,16.693827
+ Latin America & Caribbean/Virgin Islands (U.S.),0.000000
+North America/Bermuda,0.000000
+North America/Canada,31.656381
+North America/United States,13.656465

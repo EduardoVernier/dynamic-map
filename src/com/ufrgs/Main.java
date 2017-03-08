@@ -15,12 +15,12 @@ public class Main {
     public static boolean DISPLAY = Constants.STEP;
 
     private static Entity root;
-    private static Rectangle canvas = new Rectangle(1500, 1000);
+    private static Rectangle canvas = new Rectangle(1000, 1000);
 
     public static void main(String[] args) {
 
         // Prepare data for Dmap
-        root = DataHelper.buildHierarchy("dataset/iina");
+        root = DataHelper.buildHierarchy("dataset/alpha");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
@@ -32,7 +32,7 @@ public class Main {
         Panel panel = new Panel(root, canvas, frame);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
-        frame.setSize(1500, 1000);
+        frame.setSize(1000, 1000);
         frame.setVisible(true);
 
 //        JFrame ganttFrame = new JFrame("Gantt Chart");

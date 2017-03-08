@@ -24,7 +24,7 @@ public class Rectangle {
 
     public Rectangle cutArea(double area) {
 
-        if (width >= height) {
+        if (width > height) {
             double areaWidth = area / height;
             double newWidth = width - areaWidth;
             return new Rectangle(x + areaWidth, y, newWidth, height);

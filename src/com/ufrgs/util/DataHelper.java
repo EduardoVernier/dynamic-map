@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class DataHelper {
                         String id = split[0];
                         double weight = Double.parseDouble(split[1]);
                         if (contains(entityList, id)) {
-                            Entity entity = entityList.get(find(entityList, id));
+                            Entity entity = find(entityList, id);
                             entity.setWeight(weight, revision);
                         } else {
                             Entity entity = new Entity(id, numberOfRevisions);
@@ -93,72 +92,62 @@ public class DataHelper {
         // Lexicographic sort
         entityList.sort(Comparator.comparing(Entity::getId));
 
-        // Add children to direct parent
+        // Build hierarchy
         for (int i = 0; i < entityList.size(); ++i) {
+            Entity current = root;
             Entity entity = entityList.get(i);
             int dividerIndex = entity.getId().lastIndexOf("/");
 
             if (dividerIndex != -1) {
                 String prefix = entity.getId().substring(0, dividerIndex);
+                String[] parents = prefix.split("/");
 
-                if (contains(auxList, prefix)) {
-                    // Add child to parent known parent
-                    int parentIndex = find(auxList, prefix);
-                    Entity parentEntity = auxList.get(parentIndex);
-                    parentEntity.addChild(entity);
-                    // Remove child from list
-                    entityList.remove(i);
-                    --i;
-                } else {
-                    // Initialize package with its first found child
-                    Entity newParent = new Entity(prefix, numberOfRevisions);
-                    newParent.addChild(entity);
-                    // Remove child from list
-                    entityList.remove(i);
-                    --i;
-                    auxList.add(newParent);
+                for (String parentId : parents) {
+                    if (contains(current.getChildren(),parentId)) {
+                        current = find(current.getChildren(),parentId);
+                    } else {
+                        Entity parent = new Entity(parentId, numberOfRevisions);
+                        current.addChild(parent);
+                        current = parent;
+                    }
                 }
-            } else {
-                // Add to root
-                root.addChild(entity);
-                entityList.remove(i);
-                --i;
+                current.addChild(entity);
             }
         }
 
-        // Make root carry full tree
-        Collections.reverse(auxList);
-        for (int i = 0; i < auxList.size(); ++i) {
-            for (int j = i + 1; j < auxList.size(); ++j) {
-                Entity entityA = auxList.get(i);
-                Entity entityB = auxList.get(j);
-
-                if (entityA.getId().contains(entityB.getId())) {
-                    entityB.addChild(entityA);
-                    auxList.remove(i);
-                    i--;
-                    break;
-                }
-            }
-        }
-
+        sumTree(root);
         return root;
     }
 
-    private static int find(List<Entity> entityList, String entityId) {
+    private static List<Double> sumTree(Entity entity) {
+
+        if (entity.isLeaf()) {
+            return entity.getWeightList();
+        } else {
+            for (Entity child : entity.getChildren()) {
+                List<Double> weightList = sumTree(child);
+                for (int revision = 0; revision < weightList.size(); ++revision) {
+                    entity.setWeight(entity.getWeight(revision) + weightList.get(revision), revision);
+                }
+            }
+            return entity.getWeightList();
+        }
+    }
+
+    private static Entity find(List<Entity> entityList, String entityId) {
 
         for (int i = 0; i < entityList.size(); ++i) {
             if (entityList.get(i).getId().equals(entityId)){
-                return i;
+                return entityList.get(i);
             }
         }
-        return -1;
+        return null;
     }
 
-    private static boolean contains(List<Entity> entityList, String prefix) {
+    private static boolean contains(List<Entity> entityList, String id) {
 
         for (Entity entity : entityList) {
-            if (entity.getId().equals(prefix)){
+            if (entity.getId().equals(id)){
                 return true;
             }
         }

@@ -115,6 +115,10 @@ public class Entity {
         }
     }
 
+    public void addChildNotSumming(Entity entity) {
+        children.add(entity);
+    }
+
     public List<Entity> getChildren() {
         return children;
     }
@@ -187,5 +191,9 @@ public class Entity {
         return "Entity{" +
                 "id='" + id + '\'' +
                 ", rectangle=" + rectangle + '}';
+    }
+
+    public List<Double> getWeightList() {
+        return weightList;
     }
 }

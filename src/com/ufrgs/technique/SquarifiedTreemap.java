@@ -22,10 +22,9 @@ public class SquarifiedTreemap {
         this.revision = revision;
 
         root.setRectangle(rectangle, revision);
-        root.initPoint(new Point(rectangle.x/2.0, rectangle.y/2.0));
         List<Entity> children = treemapMultidimensional(root.getChildren(), rectangle);
         for (Entity entity : children) {
-            treeRoot.addChild(entity);
+            treeRoot.addChildNotSumming(entity); // Here is the problem
         }
     }
 
