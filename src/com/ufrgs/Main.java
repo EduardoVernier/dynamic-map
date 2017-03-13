@@ -11,7 +11,6 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static boolean STRATEGY = Constants.ALTERNATE_CUT;
     public static boolean DISPLAY = Constants.STEP;
 
     private static Entity root;
@@ -27,7 +26,7 @@ public class Main {
 
     private static void createAndShowGUI() {
 
-        JFrame frame = new JFrame("Squarified Treemap");
+        JFrame frame = new JFrame("Ordered Treemap");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Panel panel = new Panel(root, canvas, frame);
         frame.getContentPane().add(panel);
