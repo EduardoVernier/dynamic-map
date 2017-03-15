@@ -19,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Prepare data for Dmap
-        root = DataHelper.buildHierarchy("dataset/alpha");
+        root = DataHelper.buildHierarchy("dataset/calcuta");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
@@ -31,7 +31,7 @@ public class Main {
         Panel panel = new Panel(root, canvas, frame);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
-        frame.setSize(1500, 1000);
+        frame.setSize(1000, 1000);
         frame.setVisible(true);
 
 //        JFrame ganttFrame = new JFrame("Gantt Chart");
