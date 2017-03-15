@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Prepare data for Dmap
-        root = DataHelper.buildHierarchy("dataset/alpha");
+        root = DataHelper.buildHierarchy("dataset/synth");
         SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas);
         root = squarifiedTreemap.getTreeRoot();
 
