@@ -4,6 +4,7 @@ import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.min;
@@ -26,7 +27,19 @@ public class OrderedTreemap {
 
     private void treemapMultidimensional(List<Entity> entityList, Rectangle rectangle) {
 
+        List<Entity> entityCopy = new ArrayList<>();
+        entityCopy.addAll(entityList);
+
         treemapSingledimensional(entityList, rectangle);
+
+        // Recursive calls for the children
+        for (Entity entity : entityCopy) {
+            if (!entity.isLeaf() && entity.getWeight(revision) > 0) {
+                List<Entity> newEntityList = new ArrayList<>();
+                newEntityList.addAll(entity.getChildren());
+                treemapMultidimensional(newEntityList, entity.getRectangle());
+            }
+        }
     }
 
     private void treemapSingledimensional(List<Entity> entityList, Rectangle rectangle) {
@@ -36,42 +49,74 @@ public class OrderedTreemap {
 
         // Pivot-by-middle
         if (entityList.size() == 0) {
-
+            return;
         } else if (entityList.size() == 1) {
-
+            entityList.get(0).setRectangle(rectangle, revision);
         } else if (entityList.size() == 2) {
 
+            Entity A = entityList.get(0), B = entityList.get(1);
+            if (rectangle.width > rectangle.height) {
+                double aWidth = (getNormalizedWeight(A)/(getNormalizedWeight(A) + getNormalizedWeight(B))) * rectangle.width;
+                A.setRectangle(new Rectangle(rectangle.x, rectangle.y, aWidth, rectangle.height), revision);
+                B.setRectangle(new Rectangle(rectangle.x + aWidth, rectangle.y, rectangle.width - aWidth, rectangle.height), revision);
+            } else {
+                double aHeight = (getNormalizedWeight(A)/(getNormalizedWeight(A) + getNormalizedWeight(B))) * rectangle.height;
+                A.setRectangle(new Rectangle(rectangle.x, rectangle.y, rectangle.width, aHeight), revision);
+                B.setRectangle(new Rectangle(rectangle.x, rectangle.y + aHeight, rectangle.width, rectangle.height - aHeight), revision);
+            }
         } else if (entityList.size() == 3) {
 
+            Entity A = entityList.get(0), B = entityList.get(1), C = entityList.get(2);
+            if (rectangle.width > rectangle.height) {
+                double aWidth = (getNormalizedWeight(A)/(getNormalizedWeight(A) + getNormalizedWeight(B) + + getNormalizedWeight(C))) * rectangle.width;
+                A.setRectangle(new Rectangle(rectangle.x, rectangle.y, aWidth, rectangle.height), revision);
+                treemapSingledimensional(new ArrayList<>(Arrays.asList(B, C)), new Rectangle(rectangle.x + aWidth, rectangle.y, rectangle.width - aWidth, rectangle.height));
+            } else {
+                double aHeight = (getNormalizedWeight(A)/(getNormalizedWeight(A) + getNormalizedWeight(B) + getNormalizedWeight(C))) * rectangle.height;
+                A.setRectangle(new Rectangle(rectangle.x, rectangle.y, rectangle.width, aHeight), revision);
+                treemapSingledimensional(new ArrayList<>(Arrays.asList(B, C)), new Rectangle(rectangle.x, rectangle.y + aHeight, rectangle.width, rectangle.height - aHeight));
+            }
         } else {
 
             int pivotIndex = entityList.size()/2;
+            List<Entity> l1 = new ArrayList<>(entityList.subList(0, pivotIndex));
+            Rectangle r1 = null;
             Rectangle rMinusR1 = null;
 
+            double totalWeight = 0;
+            for (Entity entity : entityList) {
+                totalWeight += entity.getWeight(revision);
+            }
+
+            double l1Weight = 0;
+            for (Entity entity : l1) {
+                l1Weight += entity.getWeight(revision);
+            }
+
             if (rectangle.width > rectangle.height) {
-
-                List<Entity> l1 = entityList.subList(0, pivotIndex - 1);
-
-                double totalWeight = 0;
-                for (Entity entity : entityList) {
-                    totalWeight += entity.getWeight(revision);
-                }
-
-                double l1Weight = 0;
-                for (Entity entity : l1) {
-                    l1Weight += entity.getWeight(revision);
-                }
-
                 double r1Width = (l1Weight / totalWeight) * rectangle.width;
+                r1 = new Rectangle(rectangle.x, rectangle.y, r1Width, rectangle.height);
                 rMinusR1 = new Rectangle(rectangle.x + r1Width, rectangle.y, rectangle.width - r1Width, rectangle.height);
+
+            } else {
+                double r1Height = (l1Weight / totalWeight) * rectangle.height;
+                r1 = new Rectangle(rectangle.x, rectangle.y, rectangle.width, r1Height);
+                rMinusR1 = new Rectangle(rectangle.x, rectangle.y + r1Height, rectangle.width, rectangle.height - r1Height);
             }
 
             Entity pivot = entityList.get(pivotIndex);
             List<Entity> l2 = new ArrayList<>();
-            List<Entity> l3 = entityList.subList(pivotIndex + 1, entityList.size());
+            List<Entity> l3 = new ArrayList<>(entityList.subList(pivotIndex + 1, entityList.size()));
 
-            double pInitialWidth = getNormalizedWeight(pivot) / rMinusR1.height;
-            double pInitialHeight = rMinusR1.height;
+            double pInitialWidth, pInitialHeight;
+            if (rectangle.width > rectangle.height) {
+                pInitialWidth = getNormalizedWeight(pivot) / rMinusR1.height;
+                pInitialHeight = rMinusR1.height;
+            } else {
+                pInitialHeight = getNormalizedWeight(pivot) / rMinusR1.width;
+                pInitialWidth = rMinusR1.width;
+            }
+            pivot.setRectangle(new Rectangle(rMinusR1.x, rMinusR1.y, pInitialWidth, pInitialHeight), revision);
             double pPreviousAspectRatio = min(pInitialWidth/pInitialHeight, pInitialHeight/pInitialWidth);
 
             double pNewWidth = 0, pNewHeight = 0, pNewAspectRatio;
@@ -92,8 +137,12 @@ public class OrderedTreemap {
                     pNewAspectRatio = min(pNewWidth/pNewHeight, pNewHeight/pNewWidth);
 
                     if (pNewAspectRatio < pPreviousAspectRatio) {
-                        l3.add(0, l2.get(l2.size()));
+                        l3.add(0, l2.get(l2.size() - 1));
+                        l2.remove(l2.size() - 1);
                         break;
+                    } else {
+                        pivot.setRectangle(new Rectangle(rMinusR1.x, rMinusR1.y, pNewWidth, pNewHeight), revision);
+                        pPreviousAspectRatio = pNewAspectRatio;
                     }
                 } else {
 
@@ -102,27 +151,35 @@ public class OrderedTreemap {
                     pNewAspectRatio = min(pNewWidth/pNewHeight, pNewHeight/pNewWidth);
 
                     if (pNewAspectRatio < pPreviousAspectRatio) {
-                        l3.add(0, l2.get(l2.size()));
+                        l3.add(0, l2.get(l2.size() - 1));
+                        l2.remove(l2.size() - 1);
                         break;
+                    } else {
+                        pivot.setRectangle(new Rectangle(rMinusR1.x, rMinusR1.y, pNewWidth, pNewHeight), revision);
+                        pPreviousAspectRatio = pNewAspectRatio;
                     }
                 }
             }
 
             if (rectangle.width > rectangle.height) {
-                treemapSingledimensional(l2,
-                        new Rectangle(rMinusR1.x, rMinusR1.y + pNewHeight, pNewWidth, rMinusR1.height - pNewHeight));
-                treemapSingledimensional(l3,
-                        new Rectangle(rMinusR1.x + pNewWidth, rMinusR1.y, rMinusR1.width - pNewWidth, rMinusR1.height));
+                treemapSingledimensional(l1, r1);
+                if (l2.size() > 0) {
+                    Rectangle r2 = new Rectangle(rMinusR1.x, rMinusR1.y + pivot.getRectangle().height, pivot.getRectangle().width, rMinusR1.height - pivot.getRectangle().height);
+                    treemapSingledimensional(l2, r2);
+                }
+                Rectangle r3 = new Rectangle(rMinusR1.x + pivot.getRectangle().width, rMinusR1.y, rMinusR1.width - pivot.getRectangle().width, rMinusR1.height);
+                treemapSingledimensional(l3, r3);
             } else {
-                treemapSingledimensional(l2,
-                        new Rectangle(rMinusR1.x + pNewWidth, rMinusR1.y, rMinusR1.width - pNewWidth, pNewHeight));
-                treemapSingledimensional(l3,
-                        new Rectangle(rMinusR1.x, rMinusR1.y + pNewHeight, rMinusR1.width, rMinusR1.height - pNewHeight));
+                treemapSingledimensional(l1, r1);
+                if (l2.size() > 0) {
+                    Rectangle r2 = new Rectangle(rMinusR1.x + pivot.getRectangle().width, rMinusR1.y, rMinusR1.width - pivot.getRectangle().width, pivot.getRectangle().height);
+                    treemapSingledimensional(l2, r2);
+                }
+                Rectangle r3 = new Rectangle(rMinusR1.x, rMinusR1.y + pivot.getRectangle().height, rMinusR1.width, rMinusR1.height - pivot.getRectangle().height);
+                treemapSingledimensional(l3, r3);
             }
         }
-
     }
-
 
     private void normalize(List<Entity> entityList, double area) {
 

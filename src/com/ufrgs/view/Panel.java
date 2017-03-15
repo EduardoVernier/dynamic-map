@@ -3,7 +3,7 @@ package com.ufrgs.view;
 import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
-import com.ufrgs.technique.SquarifiedTreemap;
+import com.ufrgs.technique.OrderedTreemap;
 import com.ufrgs.util.Constants;
 
 import javax.swing.*;
@@ -52,8 +52,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
         root.setRectangle(canvas, 0);
 
-        SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas, revision);
-        this.root = squarifiedTreemap.getTreeRoot();
+        new OrderedTreemap(root, canvas, revision);
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -140,9 +139,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;
-                SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas, revision);
-                this.root = squarifiedTreemap.getTreeRoot();
-                frame.setTitle("Squarified - Revision " + revision);
+                new OrderedTreemap(root, canvas, revision);
+                frame.setTitle("Ordered - Revision " + revision);
             } else {
                 printCsv();
             }
@@ -176,9 +174,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;
-                SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas, revision);
-                this.root = squarifiedTreemap.getTreeRoot();
-                frame.setTitle("Squarified - Revision " + revision);
+                new OrderedTreemap(root, canvas, revision);
+                frame.setTitle("Ordered - Revision " + revision);
             } else if (Main.DISPLAY == Constants.STEP) {
                 progress = 1;
             }

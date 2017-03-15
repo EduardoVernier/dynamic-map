@@ -188,4 +188,23 @@ public class Entity {
                 "id='" + id + '\'' +
                 ", rectangle=" + rectangle + '}';
     }
+
+    public List<Double> getWeightList() {
+        return weightList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Entity entity = (Entity) o;
+
+        return id != null ? id.equals(entity.id) : entity.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

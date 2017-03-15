@@ -14,12 +14,12 @@ public class Main {
     public static boolean DISPLAY = Constants.STEP;
 
     private static Entity root;
-    private static Rectangle canvas = new Rectangle(1500, 1000);
+    private static Rectangle canvas = new Rectangle(1000, 1000);
 
     public static void main(String[] args) {
 
         // Prepare data for Dmap
-        root = DataHelper.buildHierarchy("dataset/iina");
+        root = DataHelper.buildHierarchy("dataset/alpha");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
