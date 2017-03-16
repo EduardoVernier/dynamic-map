@@ -3,7 +3,7 @@ package com.ufrgs.technique;
 import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
-import com.ufrgs.util.Constants;
+import com.ufrgs.util.Technique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,12 @@ public class Nmap {
     public Nmap(Entity root, Rectangle rectangle, int revision) {
 
         this.revision = revision;
+
+        // Compute Squarified Treemap to set anchors
+        if (revision == 0) {
+            new SquarifiedTreemap(root, rectangle, revision);
+        }
+
         nmap(root.getChildren(), rectangle);
     }
 
@@ -24,25 +30,20 @@ public class Nmap {
         entityCopy.addAll(entityList);
 
         for (Entity entity : entityCopy) {
-            entity.setMovingPoint(entity.getAnchorPoint().x, entity.getAnchorPoint().y);
+            if (entity.getWeight(revision) > 0) {
+                entity.setMovingPoint(entity.getAnchorPoint().x, entity.getAnchorPoint().y);
+            }
         }
 
-        if (Main.STRATEGY == Constants.ALTERNATE_CUT) {
+        if (Main.TECHNIQUE == Technique.NMAP_ALTERNATE_CUT) {
             alternateCut(entityList, rectangle);
-        } else if (Main.STRATEGY == Constants.EQUAL_WEIGHT) {
+        } else if (Main.TECHNIQUE == Technique.NMAP_EQUAL_WEIGHT) {
             equalWeight(entityList, rectangle);
         }
 
         for (Entity entity : entityCopy) {
             if (!entity.isLeaf() && entity.getWeight(revision) > 0) {
-//                if (entity.getRectangle().width > 5 && entity.getRectangle().height > 5) {
-//                    int padding = 1; // To better display hierarchy
-//                    Rectangle newRectangle = new Rectangle(entity.getRectangle().x + padding, entity.getRectangle().y + padding,
-//                            entity.getRectangle().width - padding, entity.getRectangle().height - padding);
-//                    nmap(entity.getChildren(), newRectangle);
-//                } else {
-                    nmap(entity.getChildren(), entity.getRectangle());
-//                }
+                nmap(entity.getChildren(), entity.getRectangle());
             }
         }
     }

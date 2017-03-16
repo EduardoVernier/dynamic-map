@@ -1,8 +1,10 @@
 package com.ufrgs.technique;
 
+import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Point;
 import com.ufrgs.model.Rectangle;
+import com.ufrgs.util.Technique;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,21 +15,21 @@ import static java.lang.Math.pow;
 
 public class SquarifiedTreemap {
 
+    private final int revision;
     private Entity treeRoot;
     private double normalizer = 0;
 
-    public SquarifiedTreemap(Entity root, Rectangle rectangle) {
-        treeRoot = root;
-        root.setRectangle(rectangle, 0);
+    public SquarifiedTreemap(Entity root, Rectangle rectangle, int revision) {
+        this.treeRoot = root;
+        this.revision = revision;
+
+        root.setRectangle(rectangle, revision);
         root.initPoint(new Point(rectangle.x/2.0, rectangle.y/2.0));
+
         List<Entity> children = treemapMultidimensional(root.getChildren(), rectangle);
         for (Entity entity : children) {
             treeRoot.addChild(entity);
         }
-    }
-
-    public Entity getTreeRoot() {
-        return treeRoot;
     }
 
     // Use recursion to compute single dimensional treemaps from a hierarchical dataset
@@ -43,7 +45,7 @@ public class SquarifiedTreemap {
 
         // Recursive calls for the children
         for (Entity entity : entityCopy) {
-            if (!entity.isLeaf()) {
+            if (!entity.isLeaf() && getNormalizedWeight(entity) > 0) {
                 List<Entity> newEntityList = new ArrayList<>();
                 newEntityList.addAll(entity.getChildren());
                 treemapMultidimensional(newEntityList, entity.getRectangle());
@@ -57,6 +59,10 @@ public class SquarifiedTreemap {
 
         // Bruls' algorithm assumes that the data is normalized
         normalize(entityList, rectangle.width * rectangle.height);
+
+        if (Main.TECHNIQUE != Technique.NMAP_ALTERNATE_CUT && Main.TECHNIQUE != Technique.NMAP_EQUAL_WEIGHT) {
+            entityList.removeIf(entity -> entity.getWeight(revision) == 0.0);
+        }
 
         List<Entity> currentRow = new ArrayList<Entity>();
         squarify(entityList, currentRow, rectangle);
@@ -106,10 +112,10 @@ public class SquarifiedTreemap {
                 double y = subyOffset;
                 double width = areaWidth;
                 double height = getNormalizedWeight(entity) / areaWidth;
-                entity.setRectangle(new Rectangle(x, y, width, height), 0);
+                entity.setRectangle(new Rectangle(x, y, width, height), revision);
                 subyOffset += getNormalizedWeight(entity) / areaWidth;
                 // Save center as we'll be using it as input to the nmap algorithm
-                entity.initPoint(new Point(x + width/2, y + height/2));
+                entity.initPoint(new Point(x + width / 2, y + height / 2));
             }
         } else {
             for (Entity entity : currentRow) {
@@ -117,10 +123,10 @@ public class SquarifiedTreemap {
                 double y = subyOffset;
                 double width = getNormalizedWeight(entity) / areaHeight;
                 double height = areaHeight;
-                entity.setRectangle(new Rectangle(x, y, width, height), 0);
+                entity.setRectangle(new Rectangle(x, y, width, height), revision);
                 subxOffset += getNormalizedWeight(entity) / areaHeight;
                 // Save center as we'll be using it as input to the nmap algorithm
-                entity.initPoint(new Point(x + width/2, y + height/2));
+                entity.initPoint(new Point(x + width / 2, y + height / 2));
             }
         }
     }
@@ -163,27 +169,36 @@ public class SquarifiedTreemap {
     private void normalize(List<Entity> entityList, double area) {
 
         double sum = 0;
-        for (Entity entity : entityList) {
-            double max = 0;
-            for (int i = 0; i < entity.getNumberOfRevisions(); ++i) {
-                if (entity.getWeight(i) > max) {
-                    max = entity.getWeight(i);
+        if (Main.TECHNIQUE == Technique.NMAP_ALTERNATE_CUT || Main.TECHNIQUE == Technique.NMAP_EQUAL_WEIGHT) {
+            for (Entity entity : entityList) {
+                double max = 0;
+                for (int i = 0; i < entity.getNumberOfRevisions(); ++i) {
+                    if (entity.getWeight(i) > max) {
+                        max = entity.getWeight(i);
+                    }
                 }
+                sum += max;
             }
-            sum += max;
+        } else {
+            for (Entity entity : entityList) {
+                sum += entity.getWeight(revision);
+            }
         }
         normalizer = area / sum;
     }
 
     private double getNormalizedWeight(Entity entity) {
 
-        double max = 0;
-        for (int i = 0; i < entity.getNumberOfRevisions(); ++i) {
-            if (entity.getWeight(i) > max) {
-                max = entity.getWeight(i);
+        if (Main.TECHNIQUE == Technique.NMAP_ALTERNATE_CUT || Main.TECHNIQUE == Technique.NMAP_EQUAL_WEIGHT) {
+            double max = 0;
+            for (int i = 0; i < entity.getNumberOfRevisions(); ++i) {
+                if (entity.getWeight(i) > max) {
+                    max = entity.getWeight(i);
+                }
             }
+            return max * normalizer;
+        } else {
+            return entity.getWeight(revision) * normalizer;
         }
-        return max * normalizer;
     }
 }
-

@@ -4,7 +4,7 @@ import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
 import com.ufrgs.technique.Nmap;
-import com.ufrgs.util.Constants;
+import com.ufrgs.util.Display;
 
 import javax.swing.*;
 import java.awt.*;
@@ -201,7 +201,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
             progress += 0.02;
             repaint();
         } else {
-            if (Main.DISPLAY == Constants.ANIMATION) {
+            if (Main.DISPLAY == Display.ANIMATION) {
                 try {
                     TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
@@ -212,7 +212,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 progress = 0.0;
                 computeNmap();
                 frame.setTitle("Dynamic - Revision " + revision);
-            } else if (Main.DISPLAY == Constants.STEP) {
+            } else if (Main.DISPLAY == Display.STEP) {
                 progress = 1;
             }
         }

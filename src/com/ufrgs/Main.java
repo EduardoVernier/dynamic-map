@@ -2,10 +2,9 @@ package com.ufrgs;
 
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
-import com.ufrgs.technique.SquarifiedTreemap;
-import com.ufrgs.util.Constants;
 import com.ufrgs.util.DataHelper;
-import com.ufrgs.view.GanttPanel;
+import com.ufrgs.util.Display;
+import com.ufrgs.util.Technique;
 import com.ufrgs.view.Panel;
 
 import javax.swing.*;
@@ -13,8 +12,8 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static boolean STRATEGY = Constants.ALTERNATE_CUT;
-    public static boolean DISPLAY = Constants.STEP;
+    public static Technique TECHNIQUE = Technique.NMAP_ALTERNATE_CUT;
+    public static Display DISPLAY = Display.STEP;
 
     private static Entity root;
     private static Rectangle canvas = new Rectangle(1000, 1000);
@@ -22,9 +21,9 @@ public class Main {
     public static void main(String[] args) {
 
         // Prepare data for Dmap
-        root = DataHelper.buildHierarchy("dataset/synth");
-        SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas);
-        root = squarifiedTreemap.getTreeRoot();
+        root = DataHelper.buildHierarchy("dataset/alpha");
+        //SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas);
+        //root = squarifiedTreemap.getTreeRoot();
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
@@ -39,9 +38,9 @@ public class Main {
         frame.setSize(1000, 1000);
         frame.setVisible(true);
 
-        JFrame ganttFrame = new JFrame("Gantt Chart");
-        ganttFrame.setSize(1650, 1080);
-        ganttFrame.getContentPane().add(new GanttPanel(root, new Rectangle(1600, 1000)));
-        ganttFrame.setVisible(true);
+//        JFrame ganttFrame = new JFrame("Gantt Chart");
+//        ganttFrame.setSize(1650, 1080);
+//        ganttFrame.getContentPane().add(new GanttPanel(root, new Rectangle(1600, 1000)));
+//        ganttFrame.setVisible(true);
     }
 }
