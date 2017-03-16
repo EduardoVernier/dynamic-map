@@ -108,14 +108,6 @@ public class Entity {
     }
 
     public void addChild(Entity entity) {
-
-        children.add(entity);
-        for (int revision = 0; revision < getNumberOfRevisions(); ++revision) {
-            weightList.set(revision, weightList.get(revision) + entity.getWeight(revision));
-        }
-    }
-
-    public void addChildNotSumming(Entity entity) {
         children.add(entity);
     }
 

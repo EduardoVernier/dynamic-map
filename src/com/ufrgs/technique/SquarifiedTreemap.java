@@ -24,7 +24,7 @@ public class SquarifiedTreemap {
         root.setRectangle(rectangle, revision);
         List<Entity> children = treemapMultidimensional(root.getChildren(), rectangle);
         for (Entity entity : children) {
-            treeRoot.addChildNotSumming(entity); // Here is the problem
+            treeRoot.addChild(entity);
         }
     }
 

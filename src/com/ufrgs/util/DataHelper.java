@@ -112,6 +112,8 @@ public class DataHelper {
                     }
                 }
                 current.addChild(entity);
+            } else {
+                root.addChild(entity);
             }
         }
 
