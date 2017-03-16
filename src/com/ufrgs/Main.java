@@ -12,7 +12,7 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.NMAP_ALTERNATE_CUT;
+    public static Technique TECHNIQUE = Technique.SQUARIFIED_TREEMAP;
     public static Display DISPLAY = Display.STEP;
 
     private static Entity root;
@@ -22,8 +22,6 @@ public class Main {
 
         // Prepare data for Dmap
         root = DataHelper.buildHierarchy("dataset/alpha");
-        //SquarifiedTreemap squarifiedTreemap = new SquarifiedTreemap(root, canvas);
-        //root = squarifiedTreemap.getTreeRoot();
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }

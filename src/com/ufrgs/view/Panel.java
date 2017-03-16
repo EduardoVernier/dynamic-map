@@ -4,6 +4,7 @@ import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
 import com.ufrgs.technique.Nmap;
+import com.ufrgs.technique.SquarifiedTreemap;
 import com.ufrgs.util.Display;
 
 import javax.swing.*;
@@ -50,7 +51,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
         root.setRectangle(canvas, 0);
 
-        computeNmap();
+        computeTreemap();
+        setFrameTitle();
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -68,9 +70,18 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
     }
 
-    private void computeNmap() {
-        new Nmap(root, canvas, revision);
-        computeAspectRatioAverage();
+    private void computeTreemap() {
+
+        switch (Main.TECHNIQUE) {
+            case NMAP_ALTERNATE_CUT:
+            case NMAP_EQUAL_WEIGHT:
+                new Nmap(root, canvas, revision);
+                break;
+            case SQUARIFIED_TREEMAP:
+                new SquarifiedTreemap(root, canvas, revision);
+                break;
+        }
+        // computeAspectRatioAverage();
     }
 
     private void computeAspectRatioAverage() {
@@ -78,7 +89,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         double ratioSum = 0;
         int nEntities = 0;
         for (Entity entity : entityList) {
-            if (entity.getRectangle() != null) {
+            if (entity.getWeight(revision) > 0) {
                 ratioSum += entity.getAspectRatio();
                 nEntities++;
             }
@@ -174,8 +185,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;
-                computeNmap();
-                frame.setTitle("Dynamic - Revision " + revision);
+                computeTreemap();
+                setFrameTitle();
             } else {
                 printCsv();
             }
@@ -210,11 +221,31 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;
-                computeNmap();
-                frame.setTitle("Dynamic - Revision " + revision);
+                computeTreemap();
+                setFrameTitle();
             } else if (Main.DISPLAY == Display.STEP) {
                 progress = 1;
             }
         }
+    }
+
+
+    private void setFrameTitle() {
+
+        switch (Main.TECHNIQUE) {
+            case NMAP_ALTERNATE_CUT:
+                frame.setTitle("Nmap - Alternate Cut - Revision " + revision);
+                break;
+            case NMAP_EQUAL_WEIGHT:
+                frame.setTitle("Nmap - Equal Weight - Revision " + revision);
+                break;
+            case SQUARIFIED_TREEMAP:
+                frame.setTitle("Squarified - Revision " + revision);
+                break;
+            case ORDERED_TREEMAP_PIVOT_BY_MIDDLE:
+                frame.setTitle("Ordered - Pivot-by-Middle - Revision " + revision);
+                break;
+        }
+
     }
 }
