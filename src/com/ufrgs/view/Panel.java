@@ -4,6 +4,7 @@ import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
 import com.ufrgs.technique.Nmap;
+import com.ufrgs.technique.OrderedTreemap;
 import com.ufrgs.technique.SquarifiedTreemap;
 import com.ufrgs.util.Display;
 
@@ -79,6 +80,9 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 break;
             case SQUARIFIED_TREEMAP:
                 new SquarifiedTreemap(root, canvas, revision);
+                break;
+            case ORDERED_TREEMAP_PIVOT_BY_MIDDLE:
+                new OrderedTreemap(root, canvas, revision);
                 break;
         }
         // computeAspectRatioAverage();

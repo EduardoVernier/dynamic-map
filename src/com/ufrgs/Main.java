@@ -12,7 +12,7 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.SQUARIFIED_TREEMAP;
+    public static Technique TECHNIQUE = Technique.ORDERED_TREEMAP_PIVOT_BY_MIDDLE;
     public static Display DISPLAY = Display.STEP;
 
     private static Entity root;
