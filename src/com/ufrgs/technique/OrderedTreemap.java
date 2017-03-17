@@ -1,7 +1,9 @@
 package com.ufrgs.technique;
 
+import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
+import com.ufrgs.util.Technique;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,11 +56,11 @@ public class OrderedTreemap {
 
             Entity A = entityList.get(0), B = entityList.get(1);
             if (rectangle.width > rectangle.height) {
-                double aWidth = (getNormalizedWeight(A)/(getNormalizedWeight(A) + getNormalizedWeight(B))) * rectangle.width;
+                double aWidth = (getNormalizedWeight(A) / (getNormalizedWeight(A) + getNormalizedWeight(B))) * rectangle.width;
                 A.setRectangle(new Rectangle(rectangle.x, rectangle.y, aWidth, rectangle.height), revision);
                 B.setRectangle(new Rectangle(rectangle.x + aWidth, rectangle.y, rectangle.width - aWidth, rectangle.height), revision);
             } else {
-                double aHeight = (getNormalizedWeight(A)/(getNormalizedWeight(A) + getNormalizedWeight(B))) * rectangle.height;
+                double aHeight = (getNormalizedWeight(A) / (getNormalizedWeight(A) + getNormalizedWeight(B))) * rectangle.height;
                 A.setRectangle(new Rectangle(rectangle.x, rectangle.y, rectangle.width, aHeight), revision);
                 B.setRectangle(new Rectangle(rectangle.x, rectangle.y + aHeight, rectangle.width, rectangle.height - aHeight), revision);
             }
@@ -66,17 +68,31 @@ public class OrderedTreemap {
 
             Entity A = entityList.get(0), B = entityList.get(1), C = entityList.get(2);
             if (rectangle.width > rectangle.height) {
-                double aWidth = (getNormalizedWeight(A)/(getNormalizedWeight(A) + getNormalizedWeight(B) + + getNormalizedWeight(C))) * rectangle.width;
+                double aWidth = (getNormalizedWeight(A) / (getNormalizedWeight(A) + getNormalizedWeight(B) + +getNormalizedWeight(C))) * rectangle.width;
                 A.setRectangle(new Rectangle(rectangle.x, rectangle.y, aWidth, rectangle.height), revision);
                 treemapSingledimensional(new ArrayList<>(Arrays.asList(B, C)), new Rectangle(rectangle.x + aWidth, rectangle.y, rectangle.width - aWidth, rectangle.height));
             } else {
-                double aHeight = (getNormalizedWeight(A)/(getNormalizedWeight(A) + getNormalizedWeight(B) + getNormalizedWeight(C))) * rectangle.height;
+                double aHeight = (getNormalizedWeight(A) / (getNormalizedWeight(A) + getNormalizedWeight(B) + getNormalizedWeight(C))) * rectangle.height;
                 A.setRectangle(new Rectangle(rectangle.x, rectangle.y, rectangle.width, aHeight), revision);
                 treemapSingledimensional(new ArrayList<>(Arrays.asList(B, C)), new Rectangle(rectangle.x, rectangle.y + aHeight, rectangle.width, rectangle.height - aHeight));
             }
         } else {
 
-            int pivotIndex = entityList.size()/2;
+            int pivotIndex = 0;
+            if (Main.TECHNIQUE == Technique.ORDERED_TREEMAP_PIVOT_BY_MIDDLE) {
+                pivotIndex = entityList.size() / 2;
+            } else if (Main.TECHNIQUE == Technique.ORDERED_TREEMAP_PIVOT_BY_SIZE){
+                int biggestValueIndex = 0;
+                double biggestValue = 0.0;
+                for (int i = 0; i < entityList.size(); ++i) {
+                    if (entityList.get(i).getWeight(revision) > biggestValue) {
+                        biggestValue = entityList.get(i).getWeight(revision);
+                        biggestValueIndex = i;
+                    }
+                }
+                pivotIndex = biggestValueIndex;
+            }
+
             Entity pivot = entityList.get(pivotIndex);
             List<Entity> l1 = new ArrayList<>(entityList.subList(0, pivotIndex));
             List<Entity> l2 = new ArrayList<>();
@@ -105,7 +121,7 @@ public class OrderedTreemap {
                 r = new Rectangle(rectangle.x, rectangle.y + r1Height, rectangle.width, getNormalizedWeight(pivot) / rMinusR1.width);
             }
 
-            double pPreviousAspectRatio = min(r.width/r.height, r.height/r.width);
+            double pPreviousAspectRatio = min(r.width / r.height, r.height / r.width);
 
             double pNewWidth = 0, pNewHeight = 0, pNewAspectRatio;
             while (l3.size() > 2) {
@@ -121,8 +137,8 @@ public class OrderedTreemap {
                 if (rectangle.width > rectangle.height) {
 
                     pNewWidth = (getNormalizedWeight(pivot) + l2Weight) / rMinusR1.height;
-                    pNewHeight = (getNormalizedWeight(pivot)/ (getNormalizedWeight(pivot) + l2Weight)) * rMinusR1.height;
-                    pNewAspectRatio = min(pNewWidth/pNewHeight, pNewHeight/pNewWidth);
+                    pNewHeight = (getNormalizedWeight(pivot) / (getNormalizedWeight(pivot) + l2Weight)) * rMinusR1.height;
+                    pNewAspectRatio = min(pNewWidth / pNewHeight, pNewHeight / pNewWidth);
 
                     if (pNewAspectRatio < pPreviousAspectRatio) {
                         l3.add(0, l2.get(l2.size() - 1));
@@ -135,8 +151,8 @@ public class OrderedTreemap {
                 } else {
 
                     pNewHeight = (getNormalizedWeight(pivot) + l2Weight) / rMinusR1.width;
-                    pNewWidth = (getNormalizedWeight(pivot)/ (getNormalizedWeight(pivot) + l2Weight)) * rMinusR1.width;
-                    pNewAspectRatio = min(pNewWidth/pNewHeight, pNewHeight/pNewWidth);
+                    pNewWidth = (getNormalizedWeight(pivot) / (getNormalizedWeight(pivot) + l2Weight)) * rMinusR1.width;
+                    pNewAspectRatio = min(pNewWidth / pNewHeight, pNewHeight / pNewWidth);
 
                     if (pNewAspectRatio < pPreviousAspectRatio) {
                         l3.add(0, l2.get(l2.size() - 1));

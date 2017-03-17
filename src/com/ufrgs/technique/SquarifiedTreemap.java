@@ -16,11 +16,9 @@ import static java.lang.Math.pow;
 public class SquarifiedTreemap {
 
     private final int revision;
-    private Entity treeRoot;
     private double normalizer = 0;
 
     public SquarifiedTreemap(Entity root, Rectangle rectangle, int revision) {
-        this.treeRoot = root;
         this.revision = revision;
 
         root.setRectangle(rectangle, revision);
@@ -28,7 +26,7 @@ public class SquarifiedTreemap {
 
         List<Entity> children = treemapMultidimensional(root.getChildren(), rectangle);
         for (Entity entity : children) {
-            treeRoot.addChild(entity);
+            root.addChild(entity);
         }
     }
 

@@ -82,10 +82,11 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 new SquarifiedTreemap(root, canvas, revision);
                 break;
             case ORDERED_TREEMAP_PIVOT_BY_MIDDLE:
+            case ORDERED_TREEMAP_PIVOT_BY_SIZE:
                 new OrderedTreemap(root, canvas, revision);
                 break;
         }
-        // computeAspectRatioAverage();
+        computeAspectRatioAverage();
     }
 
     private void computeAspectRatioAverage() {
@@ -248,6 +249,9 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 break;
             case ORDERED_TREEMAP_PIVOT_BY_MIDDLE:
                 frame.setTitle("Ordered - Pivot-by-Middle - Revision " + revision);
+                break;
+            case ORDERED_TREEMAP_PIVOT_BY_SIZE:
+                frame.setTitle("Ordered - Pivot-by-Size - Revision " + revision);
                 break;
         }
 

@@ -12,7 +12,7 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.ORDERED_TREEMAP_PIVOT_BY_MIDDLE;
+    public static Technique TECHNIQUE = Technique.ORDERED_TREEMAP_PIVOT_BY_SIZE;
     public static Display DISPLAY = Display.STEP;
 
     private static Entity root;
@@ -20,7 +20,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Prepare data for Dmap
         root = DataHelper.buildHierarchy("dataset/alpha");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
