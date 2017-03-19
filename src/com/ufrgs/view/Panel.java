@@ -5,6 +5,7 @@ import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
 import com.ufrgs.technique.Nmap;
 import com.ufrgs.technique.OrderedTreemap;
+import com.ufrgs.technique.SliceAndDice;
 import com.ufrgs.technique.SquarifiedTreemap;
 import com.ufrgs.util.Display;
 
@@ -85,6 +86,9 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
             case ORDERED_TREEMAP_PIVOT_BY_SIZE:
                 new OrderedTreemap(root, canvas, revision);
                 break;
+            case SLICE_AND_DICE:
+                new SliceAndDice(root, canvas, revision);
+                break;
         }
         computeAspectRatioAverage();
     }
@@ -99,7 +103,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 nEntities++;
             }
         }
-        System.out.printf("%.8f\n", ratioSum / nEntities);
+        System.out.printf("%d\n", nEntities);
     }
 
     @Override

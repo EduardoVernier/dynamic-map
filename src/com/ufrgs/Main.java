@@ -12,7 +12,7 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.ORDERED_TREEMAP_PIVOT_BY_SIZE;
+    public static Technique TECHNIQUE = Technique.SLICE_AND_DICE;
     public static Display DISPLAY = Display.STEP;
 
     private static Entity root;
@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        root = DataHelper.buildHierarchy("dataset/alpha");
+        root = DataHelper.buildHierarchy("dataset/gimp");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
@@ -32,7 +32,7 @@ public class Main {
         Panel panel = new Panel(root, canvas, frame);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
-        frame.setSize(1000, 1000);
+        frame.setSize(700, 700);
         frame.setVisible(true);
 
 //        JFrame ganttFrame = new JFrame("Gantt Chart");
