@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        root = DataHelper.buildHierarchy("dataset/gimp");
+        root = DataHelper.buildHierarchy("dataset/alpha");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
@@ -32,7 +32,7 @@ public class Main {
         Panel panel = new Panel(root, canvas, frame);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
-        frame.setSize(700, 700);
+        frame.setSize(1000, 1000);
         frame.setVisible(true);
 
 //        JFrame ganttFrame = new JFrame("Gantt Chart");

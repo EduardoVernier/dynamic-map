@@ -103,7 +103,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 nEntities++;
             }
         }
-        System.out.printf("%d\n", nEntities);
+        System.out.printf("%.8f\n", ratioSum / nEntities);
+        // System.out.printf("%d\n", nEntities);
     }
 
     @Override
@@ -256,6 +257,9 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 break;
             case ORDERED_TREEMAP_PIVOT_BY_SIZE:
                 frame.setTitle("Ordered - Pivot-by-Size - Revision " + revision);
+                break;
+            case SLICE_AND_DICE:
+                frame.setTitle("Slice and Dice - Revision " + revision);
                 break;
         }
 
