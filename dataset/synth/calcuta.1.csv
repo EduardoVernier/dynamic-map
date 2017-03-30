@@ -1,7 +1,7 @@
 id,weight
-A/a,5
-A/B/a,10
-A/B/b,15
-A/B/C/a,10
-A/C/a,2
-A/C/new,5
+a,4
+A/b,10
+A/B/c,13
+A/B/d,8
+A/B/C/e,8
+A/C/f,12

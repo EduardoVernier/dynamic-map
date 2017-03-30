@@ -1,0 +1,205 @@
+id,weight
+East Asia & Pacific/Brunei Darussalam,9695.500000
+East Asia & Pacific/Cambodia,5207.100000
+East Asia & Pacific/China,9724590.600000
+East Asia & Pacific/Fiji,1591.500000
+East Asia & Pacific/French Polynesia,832.400000
+East Asia & Pacific/Hong Kong SAR China,43795.000000
+East Asia & Pacific/Indonesia,573379.500000
+East Asia & Pacific/Japan,1191056.300000
+East Asia & Pacific/Kiribati,62.300000
+East Asia & Pacific/Korea Dem. People’s Rep.,48133.000000
+East Asia & Pacific/Korea Rep.,589400.600000
+East Asia & Pacific/Lao PDR,1624.500000
+East Asia & Pacific/Macao SAR China,2357.900000
+East Asia & Pacific/Malaysia,220405.000000
+East Asia & Pacific/Marshall Islands,102.700000
+East Asia & Pacific/Micronesia Fed. Sts.,128.300000
+East Asia & Pacific/Mongolia,27583.200000
+East Asia & Pacific/Myanmar,14297.600000
+East Asia & Pacific/Nauru,40.300000
+East Asia & Pacific/New Caledonia,3648.700000
+East Asia & Pacific/New Zealand,31503.200000
+East Asia & Pacific/Palau,223.700000
+East Asia & Pacific/Papua New Guinea,5229.100000
+East Asia & Pacific/Philippines,85584.100000
+East Asia & Pacific/Samoa,234.700000
+East Asia & Pacific/Singapore,38327.500000
+East Asia & Pacific/Solomon Islands,198.000000
+East Asia & Pacific/Thailand,290342.100000
+East Asia & Pacific/Timor-Leste,245.700000
+East Asia & Pacific/Tonga,102.700000
+East Asia & Pacific/Vanuatu,132.000000
+East Asia & Pacific/Vietnam,161887.000000
+Europe & Central Asia/Albania,5240.100000
+Europe & Central Asia/Andorra,491.400000
+Europe & Central Asia/Armenia,4917.400000
+Europe & Central Asia/Austria,65257.900000
+Europe & Central Asia/Azerbaijan,33446.700000
+Europe & Central Asia/Belarus,63655.500000
+Europe & Central Asia/Belgium,98917.300000
+Europe & Central Asia/Bosnia and Herzegovina,23886.800000
+Europe & Central Asia/Bulgaria,49343.200000
+Europe & Central Asia/Croatia,20058.500000
+Europe & Central Asia/Cyprus,7425.700000
+Europe & Central Asia/Czech Republic,106907.700000
+Europe & Central Asia/Denmark,40645.000000
+Europe & Central Asia/Estonia,18606.400000
+Europe & Central Asia/Faroe Islands,568.400000
+Europe & Central Asia/Finland,56636.800000
+Europe & Central Asia/France,331537.100000
+Europe & Central Asia/Georgia,6883.000000
+Europe & Central Asia/Germany,732120.200000
+Europe & Central Asia/Gibraltar,454.700000
+Europe & Central Asia/Greece,80725.300000
+Europe & Central Asia/Greenland,707.700000
+Europe & Central Asia/Hungary,47762.700000
+Europe & Central Asia/Iceland,1881.200000
+Europe & Central Asia/Ireland,35826.600000
+Europe & Central Asia/Italy,397994.200000
+Europe & Central Asia/Kazakhstan,259121.200000
+Europe & Central Asia/Kyrgyz Republic,7656.700000
+Europe & Central Asia/Latvia,7301.000000
+Europe & Central Asia/Liechtenstein,47.700000
+Europe & Central Asia/Lithuania,13787.900000
+Europe & Central Asia/Luxembourg,10938.700000
+Europe & Central Asia/Macedonia FYR,9387.500000
+Europe & Central Asia/Moldova,5038.500000
+Europe & Central Asia/Montenegro,2570.600000
+Europe & Central Asia/Netherlands,172400.300000
+Europe & Central Asia/Norway,45195.800000
+Europe & Central Asia/Poland,316997.500000
+Europe & Central Asia/Portugal,47623.300000
+Europe & Central Asia/Romania,84872.700000
+Europe & Central Asia/Russian Federation,1768073.400000
+Europe & Central Asia/Serbia,49192.800000
+Europe & Central Asia/Slovak Republic,34524.800000
+Europe & Central Asia/Slovenia,15192.400000
+Europe & Central Asia/Spain,270547.600000
+Europe & Central Asia/Sweden,51734.000000
+Europe & Central Asia/Switzerland,36967.000000
+Europe & Central Asia/Tajikistan,2350.500000
+Europe & Central Asia/Turkey,320840.500000
+Europe & Central Asia/Turkmenistan,62592.000000
+Europe & Central Asia/Ukraine,286444.000000
+Europe & Central Asia/United Kingdom,447935.100000
+Europe & Central Asia/Uzbekistan,113684.300000
+Latin America & Caribbean/Antigua and Barbuda,513.400000
+Latin America & Caribbean/Argentina,191633.800000
+Latin America & Caribbean/Aruba,2438.600000
+Latin America & Caribbean/Bahamas The,1906.800000
+Latin America & Caribbean/Barbados,1529.100000
+Latin America & Caribbean/Belize,597.700000
+Latin America & Caribbean/Bolivia,16145.800000
+Latin America & Caribbean/Brazil,439412.900000
+Latin America & Caribbean/British Virgin Islands,176.000000
+Latin America & Caribbean/Cayman Islands,594.100000
+Latin America & Caribbean/Chile,79243.900000
+Latin America & Caribbean/Colombia,76530.300000
+Latin America & Caribbean/Costa Rica,7741.000000
+Latin America & Caribbean/Cuba,35987.900000
+Latin America & Caribbean/Curacao,0.000000
+Latin America & Caribbean/Dominica,128.300000
+Latin America & Caribbean/Dominican Republic,22082.700000
+Latin America & Caribbean/Ecuador,39640.300000
+Latin America & Caribbean/El Salvador,6648.300000
+Latin America & Caribbean/Grenada,253.000000
+Latin America & Caribbean/Guatemala,11837.100000
+Latin America & Caribbean/Guyana,1782.200000
+Latin America & Caribbean/Haiti,2218.500000
+Latin America & Caribbean/Honduras,8954.800000
+Latin America & Caribbean/Jamaica,7722.700000
+Latin America & Caribbean/Mexico,466779.800000
+Latin America & Caribbean/Nicaragua,4880.800000
+Latin America & Caribbean/Panama,10098.900000
+Latin America & Caribbean/Paraguay,5320.800000
+Latin America & Caribbean/Peru,49632.800000
+Latin America & Caribbean/Sint Maarten (Dutch part),0.000000
+Latin America & Caribbean/St. Kitts and Nevis,267.700000
+Latin America & Caribbean/St. Lucia,407.000000
+Latin America & Caribbean/St. Vincent and the Grenadines,198.000000
+Latin America & Caribbean/Suriname,2170.900000
+Latin America & Caribbean/Trinidad and Tobago,46900.900000
+Latin America & Caribbean/Turks and Caicos Islands,190.700000
+Latin America & Caribbean/Uruguay,7763.000000
+Latin America & Caribbean/Venezuela RB,178806.600000
+Middle East & North Africa/Algeria,121187.000000
+Middle East & North Africa/Bahrain,29365.300000
+Middle East & North Africa/Djibouti,473.000000
+Middle East & North Africa/Egypt Arab Rep.,217163.400000
+Middle East & North Africa/Iran Islamic Rep.,619165.600000
+Middle East & North Africa/Iraq,133929.800000
+Middle East & North Africa/Israel,69130.300000
+Middle East & North Africa/Jordan,21668.300000
+Middle East & North Africa/Kuwait,91029.600000
+Middle East & North Africa/Lebanon,20450.900000
+Middle East & North Africa/Libya,39390.900000
+Middle East & North Africa/Malta,2519.200000
+Middle East & North Africa/Morocco,57685.600000
+Middle East & North Africa/Oman,56215.100000
+Middle East & North Africa/Qatar,80435.600000
+Middle East & North Africa/Saudi Arabia,500728.900000
+Middle East & North Africa/Syrian Arab Republic,56908.200000
+Middle East & North Africa/Tunisia,26021.000000
+Middle East & North Africa/United Arab Emirates,159584.200000
+Middle East & North Africa/West Bank and Gaza,2247.900000
+Middle East & North Africa/Yemen Rep.,19666.100000
+North America/Bermuda,396.000000
+North America/Canada,497329.500000
+North America/United States,5305279.900000
+South Asia/Afghanistan,12251.400000
+South Asia/Bangladesh,63571.100000
+South Asia/Bhutan,733.400000
+South Asia/India,1846763.500000
+South Asia/Maldives,953.400000
+South Asia/Nepal,5533.500000
+South Asia/Pakistan,162008.100000
+South Asia/Sri Lanka,15232.700000
+Sub-Saharan Africa/Angola,30340.800000
+Sub-Saharan Africa/Benin,5306.100000
+Sub-Saharan Africa/Botswana,4400.400000
+Sub-Saharan Africa/Burkina Faso,2211.200000
+Sub-Saharan Africa/Burundi,242.000000
+Sub-Saharan Africa/Cabo Verde,531.700000
+Sub-Saharan Africa/Cameroon,5768.200000
+Sub-Saharan Africa/Central African Republic,278.700000
+Sub-Saharan Africa/Chad,539.000000
+Sub-Saharan Africa/Comoros,150.300000
+Sub-Saharan Africa/Congo Dem. Rep.,2467.900000
+Sub-Saharan Africa/Congo Rep.,2233.200000
+Sub-Saharan Africa/Cote d'Ivoire,6398.900000
+Sub-Saharan Africa/Equatorial Guinea,6769.300000
+Sub-Saharan Africa/Eritrea,594.100000
+Sub-Saharan Africa/Ethiopia,7726.400000
+Sub-Saharan Africa/Gabon,4470.100000
+Sub-Saharan Africa/Gambia The,436.400000
+Sub-Saharan Africa/Ghana,9831.200000
+Sub-Saharan Africa/Guinea,2779.600000
+Sub-Saharan Africa/Guinea-Bissau,245.700000
+Sub-Saharan Africa/Kenya,13457.900000
+Sub-Saharan Africa/Lesotho,2200.200000
+Sub-Saharan Africa/Liberia,894.700000
+Sub-Saharan Africa/Madagascar,2313.900000
+Sub-Saharan Africa/Malawi,1188.100000
+Sub-Saharan Africa/Mali,1045.100000
+Sub-Saharan Africa/Mauritania,2394.600000
+Sub-Saharan Africa/Mauritius,3920.000000
+Sub-Saharan Africa/Mozambique,3223.300000
+Sub-Saharan Africa/Namibia,2823.600000
+Sub-Saharan Africa/Niger,1327.500000
+Sub-Saharan Africa/Nigeria,96093.700000
+Sub-Saharan Africa/Rwanda,663.700000
+Sub-Saharan Africa/Sao Tome and Principe,102.700000
+Sub-Saharan Africa/Senegal,8368.100000
+Sub-Saharan Africa/Seychelles,597.700000
+Sub-Saharan Africa/Sierra Leone,898.400000
+Sub-Saharan Africa/Somalia,575.700000
+Sub-Saharan Africa/South Africa,475037.800000
+Sub-Saharan Africa/South Sudan,0.000000
+Sub-Saharan Africa/Sudan,15658.100000
+Sub-Saharan Africa/Swaziland,1048.800000
+Sub-Saharan Africa/Tanzania,8093.100000
+Sub-Saharan Africa/Togo,2409.200000
+Sub-Saharan Africa/Uganda,4264.700000
+Sub-Saharan Africa/Zambia,2933.600000
+Sub-Saharan Africa/Zimbabwe,11628.100000
