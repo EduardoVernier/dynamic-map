@@ -1,7 +1,8 @@
 # dynamic-map
 Java implementation of treemapping techniques
 
-For the past 26 years, a great number of treemapping techniques have been proposed. Many of which have been designed with objectives such as producing good aspect ratios or preserving the order in the data in mind. Yet, only few techniques have been envisioned to deal with dynamic hierarchical datasets and sensibly respond to change in the data.
+Hierarchical data in which leaf nodes have associated attributes appear in several applications. Rectangular Treemaps (RTs) were designed to display this type of data by tightly packing cells representing the tree nodes, with additional information stored in the cell sizes and/or colors. For dynamic hierarchies, RTs have to obey several requirements regarding the optimal aspect ratio of cells, but also the stability of layout in presence of data changes. While static RTs studied the first requirement well, far less information is available on how RTs behave both requirements for dynamic data. We study how four known RT methods compare over several real-world dynamic hierarchies, and highlight how recent RT methods can be adapted to effectively handle optimal cell ratios and stability.
+
 This repository has the implementation of four treemapping techniques along with their variations: Squarified Treemap, Slice-and-Dice, Ordered Treemap, and Nmap.
 
 BRULS M., HUIZING K., VAN WIJK J.: Squarified treemaps.
