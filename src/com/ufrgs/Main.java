@@ -12,7 +12,7 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.SLICE_AND_DICE;
+    public static Technique TECHNIQUE = Technique.NMAP_ALTERNATE_CUT;
     public static Display DISPLAY = Display.STEP;
 
     private static Entity root;
@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        root = DataHelper.buildHierarchy("dataset/alpha");
+        root = DataHelper.buildHierarchy("dataset/loc/beets-loc");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
@@ -34,6 +34,12 @@ public class Main {
         frame.addKeyListener(panel);
         frame.setSize(1000, 1000);
         frame.setVisible(true);
+//        try {
+//            TimeUnit.SECONDS.sleep(10);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
 
 //        JFrame ganttFrame = new JFrame("Gantt Chart");
 //        ganttFrame.setSize(1650, 1080);

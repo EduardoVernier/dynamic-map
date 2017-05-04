@@ -104,7 +104,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
             }
         }
         System.out.printf("%.8f\n", ratioSum / nEntities);
-        // System.out.printf("%d\n", nEntities);
+        System.out.printf("%d\n", nEntities);
     }
 
     @Override
@@ -112,6 +112,12 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         super.paintComponent(g);
 
         Graphics2D graphics = (Graphics2D) g;
+
+        RenderingHints rh = new RenderingHints(
+                RenderingHints.KEY_DITHERING,
+                RenderingHints.VALUE_DITHER_ENABLE);
+        graphics.setRenderingHints(rh);
+
         double maxWeight = 0;
         for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
             if (root.getWeight(i) > maxWeight) {

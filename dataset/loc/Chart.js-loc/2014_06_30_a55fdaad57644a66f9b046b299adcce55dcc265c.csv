@@ -1,0 +1,16 @@
+id,weight
+art.js,3298
+c/Chart.Core.js,1885
+c/Chart.Line.js,344
+c/Chart.Radar.js,342
+c/Chart.Bar.js,295
+c/Chart.PolarArea.js,248
+c/Chart.Doughnut.js,184
+lpfile.js,87
+mples/doughnut.html,67
+mples/polar-area.html,60
+mples/pie.html,58
+mples/radar.html,53
+mples/line.html,54
+mples/bar.html,45
+art.min.js,10
