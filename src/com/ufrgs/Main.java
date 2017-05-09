@@ -8,28 +8,41 @@ import com.ufrgs.util.Technique;
 import com.ufrgs.view.Panel;
 
 import javax.swing.*;
+import java.io.File;
 
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.NMAP_ALTERNATE_CUT;
+    public static Technique TECHNIQUE = Technique.SLICE_AND_DICE;
     public static Display DISPLAY = Display.STEP;
 
-    private static Entity root;
-    private static Rectangle canvas = new Rectangle(1000, 1000);
+    public static String technique;
 
     public static void main(String[] args) {
 
-        root = DataHelper.buildHierarchy("dataset/loc/beets-loc");
+        File[] directories = new File("dataset").listFiles(File::isDirectory);
 
-        SwingUtilities.invokeLater(() -> createAndShowGUI());
+        for (File dirFile : directories) {
+
+            DISPLAY = Display.ANALISYS;
+            String dir = dirFile.toString();
+
+            Entity root = DataHelper.buildHierarchy(dir);
+
+            String dataset = dir.split("/")[dir.split("/").length-1];
+            technique = "snd";
+
+            SwingUtilities.invokeLater(() -> createAndShowGUI(dataset, root));
+        }
+
     }
 
-    private static void createAndShowGUI() {
+    private static void createAndShowGUI(String dataset, Entity root) {
 
+        Rectangle canvas = new Rectangle(1000, 1000);
         JFrame frame = new JFrame("Dynamic Treemap");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Panel panel = new Panel(root, canvas, frame);
+        Panel panel = new Panel(root, canvas, frame, dataset);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
         frame.setSize(1000, 1000);

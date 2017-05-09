@@ -17,6 +17,7 @@ public class Entity {
     private String printId = "";
     private List<Double> weightList;
     public List<Double> distanceList;
+    public List<Double> aspectRatioList;
     private Point movingPoint, anchorPoint;
     private Rectangle rectangle, pastRectangle;
     private List<Entity> children;
@@ -32,9 +33,11 @@ public class Entity {
         children = new ArrayList<>();
         weightList = new ArrayList<>(numberOfRevisions);
         distanceList = new ArrayList<>(numberOfRevisions);
+        aspectRatioList = new ArrayList<>(numberOfRevisions);
         for (int i = 0; i < numberOfRevisions; ++i) {
             weightList.add(0.0);
             distanceList.add(0.0);
+            aspectRatioList.add(0.0);
         }
     }
 
@@ -98,9 +101,9 @@ public class Entity {
         return pastRectangle;
     }
 
-    public float getAspectRatio() {
+    public double getAspectRatio() {
 
-        return (float) Double.min(rectangle.width / rectangle.height,
+        return Double.min(rectangle.width / rectangle.height,
                 rectangle.height / rectangle.width);
     }
 
@@ -120,6 +123,8 @@ public class Entity {
             double currentCenterY = (rectangle.y + rectangle.height)/2;
             double distance = sqrt(pow(pastCenterX - currentCenterX, 2) + pow(pastCenterY - currentCenterY, 2));
             this.distanceList.set(revision, distance);
+
+            this.aspectRatioList.set(revision, getAspectRatio());
         }
     }
 
@@ -146,7 +151,7 @@ public class Entity {
         double width = rectangle.width * progress + pastRectangle.width * (1 - progress);
         double height = rectangle.height * progress + pastRectangle.height * (1 - progress);
 
-        graphics.setColor(Colormap.sequentialColormap(1 - getAspectRatio()));
+        graphics.setColor(Colormap.sequentialColormap((float) (1 - getAspectRatio())));
         graphics.fill(new Rectangle2D.Double(x, y, width, height));
     }
 
@@ -154,7 +159,7 @@ public class Entity {
 
         Rectangle rectangle = this.getRectangle(progress).intersection(entityB.getRectangle(progress));
 
-        graphics.setColor(Colormap.sequentialColormap(((1 - getAspectRatio()) + (1 - entityB.getAspectRatio()))/2));
+        graphics.setColor(Colormap.sequentialColormap((float) (((1 - getAspectRatio()) + (1 - entityB.getAspectRatio()))/2)));
         graphics.fill(new Rectangle2D.Double(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
     }
 
