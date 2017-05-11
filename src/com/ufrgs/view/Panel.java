@@ -234,7 +234,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     private void writeReport() {
 
         List<String> lines = new ArrayList<>();
-        Path file = Paths.get(Main.technique + "/" + Main.technique + "-" +  this.dataset + ".csv");
+        Path file = Paths.get("results/" + Main.technique + "/" + Main.technique + "-" +  this.dataset + ".csv");
         lines.add("dataset,technique,revision,nCells,avgAR,avgMov");
 
         for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
@@ -246,6 +246,9 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                     ratioSum += entity.aspectRatioList.get(i);
                     movSum += entity.distanceList.get(i);
                     nEntities++;
+                }
+                if (i == 0) {
+                    movSum = 0;
                 }
             }
             lines.add(String.format("%s,%s,%d,%d,%f,%f", this.dataset, Main.technique, i, nEntities, ratioSum / nEntities, movSum / nEntities));

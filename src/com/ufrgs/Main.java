@@ -13,7 +13,7 @@ import java.io.File;
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.SLICE_AND_DICE;
+    public static Technique TECHNIQUE = Technique.NMAP_EQUAL_WEIGHT;
     public static Display DISPLAY = Display.STEP;
 
     public static String technique;
@@ -30,7 +30,7 @@ public class Main {
             Entity root = DataHelper.buildHierarchy(dir);
 
             String dataset = dir.split("/")[dir.split("/").length-1];
-            technique = "snd";
+            technique = "nmew";
 
             SwingUtilities.invokeLater(() -> createAndShowGUI(dataset, root));
         }
