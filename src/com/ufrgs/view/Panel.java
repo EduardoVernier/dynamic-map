@@ -126,7 +126,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
 
         scale = (progress * (root.getWeight(revision)) + (1 - progress) * lastRevisionWeight) / maxWeight;
-        graphics.scale(scale, scale);
+        // graphics.scale(scale, scale);
+        // PUT THIS LINE BACK TO MAKE IT SCALE
 
         // Draw leafs
         for (Entity entity : entityList) {
@@ -173,13 +174,13 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
 
         // Draw labels
-        Entity.charWidth = graphics.getFontMetrics().stringWidth("X");
-        graphics.setPaint(Color.BLACK);
-        for (Entity entity : entityList) {
-            if (entity.getWeight(revision) > 0 && entity.isLeaf()) {
-                entity.drawLabel(graphics, progress);
-            }
-        }
+//        Entity.charWidth = graphics.getFontMetrics().stringWidth("X");
+//        graphics.setPaint(Color.BLACK);
+//        for (Entity entity : entityList) {
+//            if (entity.getWeight(revision) > 0 && entity.isLeaf()) {
+//                entity.drawLabel(graphics, progress);
+//            }
+//        }
 
         // Improves graphics on Linux
         Toolkit.getDefaultToolkit().sync();

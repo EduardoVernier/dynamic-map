@@ -62,6 +62,15 @@ public class Entity {
         return anchorPoint;
     }
 
+    public int getFirstRevision() {
+        for (int i = 0; i < getNumberOfRevisions(); ++i) {
+            if (getWeight(i) > 0) {
+                return i;
+            }
+        }
+        return getNumberOfRevisions();
+    }
+
     public void setAnchorPoint(double x, double y) {
         anchorPoint.setValues(x, y);
     }
@@ -146,7 +155,8 @@ public class Entity {
         double width = rectangle.width * progress + pastRectangle.width * (1 - progress);
         double height = rectangle.height * progress + pastRectangle.height * (1 - progress);
 
-        graphics.setColor(Colormap.sequentialColormap(1 - getAspectRatio()));
+        // graphics.setColor(Colormap.sequentialColormap(1 - getAspectRatio()));
+        graphics.setColor(new Color(0,0,0,0));
         graphics.fill(new Rectangle2D.Double(x, y, width, height));
     }
 
