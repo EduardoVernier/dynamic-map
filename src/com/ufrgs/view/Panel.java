@@ -15,13 +15,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.*;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -211,7 +210,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
             double sum = 0;
             for (Entity entity : entityList) {
-                sum += entity.distanceList.get(i);
+                // sum += entity.distanceList.get(i);
             }
             System.out.printf("%.8f\n", sum);
         }
@@ -234,24 +233,22 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     private void writeReport() {
 
         List<String> lines = new ArrayList<>();
-        Path file = Paths.get("results/" + Main.technique + "/" + Main.technique + "-" +  this.dataset + ".csv");
-        lines.add("dataset,technique,revision,nCells,avgAR,avgMov");
+        Path file = Paths.get("results/" + Main.technique + "/" + Main.technique + "-" +  this.dataset + ".data");
 
+        lines.add(String.format("new %s %d", this.dataset, root.getNumberOfRevisions()));
         for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
-            double ratioSum = 0;
-            double movSum = 0;
-            int nEntities = 0;
+            List<String> tempLines = new ArrayList<>();
             for (Entity entity : entityList) {
-                if (entity.getWeight(i) > 0) {
-                    ratioSum += entity.aspectRatioList.get(i);
-                    movSum += entity.distanceList.get(i);
-                    nEntities++;
-                }
-                if (i == 0) {
-                    movSum = 0;
+                if (entity.getWeight(i) > 0 && entity.isLeaf()) {
+                    Rectangle rectangle = entity.rectangleList.get(i);
+                    tempLines.add(String.format("%s %.10f %.10f %.10f %.10f", entity.getId(), rectangle.x, rectangle.y, rectangle.width, rectangle.height));
                 }
             }
-            lines.add(String.format("%s,%s,%d,%d,%f,%f", this.dataset, Main.technique, i, nEntities, ratioSum / nEntities, movSum / nEntities));
+            tempLines.sort(String.CASE_INSENSITIVE_ORDER);
+            for (String line : tempLines) {
+                lines.add(line);
+            }
+            lines.add("");
         }
 
         try {

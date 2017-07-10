@@ -7,17 +7,13 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
-
 public class Entity {
 
     private String id;
     private String shortId;
     private String printId = "";
     private List<Double> weightList;
-    public List<Double> distanceList;
-    public List<Double> aspectRatioList;
+    public List<Rectangle> rectangleList;
     private Point movingPoint, anchorPoint;
     private Rectangle rectangle, pastRectangle;
     private List<Entity> children;
@@ -32,12 +28,10 @@ public class Entity {
         // Initialize lists
         children = new ArrayList<>();
         weightList = new ArrayList<>(numberOfRevisions);
-        distanceList = new ArrayList<>(numberOfRevisions);
-        aspectRatioList = new ArrayList<>(numberOfRevisions);
+        rectangleList = new ArrayList<>(numberOfRevisions);
         for (int i = 0; i < numberOfRevisions; ++i) {
             weightList.add(0.0);
-            distanceList.add(0.0);
-            aspectRatioList.add(0.0);
+            rectangleList.add(new Rectangle(0,0,0,0));
         }
     }
 
@@ -117,14 +111,7 @@ public class Entity {
         this.rectangle = newRectangle;
         // Compute metric
         if (newRectangle != null) {
-            double pastCenterX = (pastRectangle.x + pastRectangle.width)/2;
-            double currentCenterX = (rectangle.x + rectangle.width)/2;
-            double pastCenterY = (pastRectangle.y + pastRectangle.height)/2;
-            double currentCenterY = (rectangle.y + rectangle.height)/2;
-            double distance = sqrt(pow(pastCenterX - currentCenterX, 2) + pow(pastCenterY - currentCenterY, 2));
-            this.distanceList.set(revision, distance);
-
-            this.aspectRatioList.set(revision, getAspectRatio());
+            this.rectangleList.set(revision, new Rectangle(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
         }
     }
 
