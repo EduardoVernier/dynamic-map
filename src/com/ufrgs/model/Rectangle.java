@@ -22,6 +22,13 @@ public class Rectangle {
         return (width < height) ? width : height;
     }
 
+    // For the strip algrithm
+    public Rectangle subtractAreaFromTop(double area) {
+        double areaHeight = area / this.width;
+        double newheight = this.height - areaHeight;
+        return new Rectangle(x, y + areaHeight, width, newheight);
+    }
+
     public Rectangle cutArea(double area) {
 
         if (width > height) {

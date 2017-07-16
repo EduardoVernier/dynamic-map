@@ -180,8 +180,8 @@ public class Entity {
             graphics.setStroke(new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
             graphics.draw(new Rectangle2D.Double(x, y, width, height));
         } else {
-            graphics.setColor(Color.white);
-            graphics.setStroke(new BasicStroke(4, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+            graphics.setColor(Color.black);
+            graphics.setStroke(new BasicStroke(2, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
             graphics.draw(new Rectangle2D.Double(x, y, width, height));
         }
     }

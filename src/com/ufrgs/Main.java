@@ -12,15 +12,15 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.SQUARIFIED_TREEMAP;
+    public static Technique TECHNIQUE = Technique.STRIP;
     public static Display DISPLAY = Display.STEP;
 
     private static Entity root;
-    private static Rectangle canvas = new Rectangle(700, 700);
+    private static Rectangle canvas = new Rectangle(1000, 1000);
 
     public static void main(String[] args) {
 
-        root = DataHelper.buildHierarchy("dataset/loc/gimp");
+        root = DataHelper.buildHierarchy("dataset/alpha/");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
@@ -32,7 +32,7 @@ public class Main {
         Panel panel = new Panel(root, canvas, frame);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
-        frame.setSize(700, 700);
+        frame.setSize(1000, 1000);
         frame.setVisible(true);
 //        try {
 //            TimeUnit.SECONDS.sleep(10);

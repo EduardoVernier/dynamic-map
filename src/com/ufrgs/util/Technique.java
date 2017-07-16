@@ -8,5 +8,6 @@ public enum Technique {
     ORDERED_TREEMAP_PIVOT_BY_MIDDLE,
     ORDERED_TREEMAP_PIVOT_BY_SIZE,
     VMAP,
-    SLICE_AND_DICE
+    SLICE_AND_DICE,
+    STRIP
 }

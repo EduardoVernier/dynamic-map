@@ -3,10 +3,7 @@ package com.ufrgs.view;
 import com.ufrgs.Main;
 import com.ufrgs.model.Entity;
 import com.ufrgs.model.Rectangle;
-import com.ufrgs.technique.Nmap;
-import com.ufrgs.technique.OrderedTreemap;
-import com.ufrgs.technique.SliceAndDice;
-import com.ufrgs.technique.SquarifiedTreemap;
+import com.ufrgs.technique.*;
 import com.ufrgs.util.Display;
 
 import javax.swing.*;
@@ -89,6 +86,8 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
             case SLICE_AND_DICE:
                 new SliceAndDice(root, canvas, revision);
                 break;
+            case STRIP:
+                new StripTreemap(root, canvas, revision);
         }
         computeAspectRatioAverage();
     }
