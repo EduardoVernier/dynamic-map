@@ -7,16 +7,13 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
-
 public class Entity {
 
     private String id;
     private String shortId;
     private String printId = "";
     private List<Double> weightList;
-    public List<Double> distanceList;
+    public List<Rectangle> rectangleList;
     private Point movingPoint, anchorPoint;
     private Rectangle rectangle, pastRectangle;
     private List<Entity> children;
@@ -31,10 +28,10 @@ public class Entity {
         // Initialize lists
         children = new ArrayList<>();
         weightList = new ArrayList<>(numberOfRevisions);
-        distanceList = new ArrayList<>(numberOfRevisions);
+        rectangleList = new ArrayList<>(numberOfRevisions);
         for (int i = 0; i < numberOfRevisions; ++i) {
             weightList.add(0.0);
-            distanceList.add(0.0);
+            rectangleList.add(new Rectangle(0,0,0,0));
         }
     }
 
@@ -60,15 +57,6 @@ public class Entity {
 
     public Point getAnchorPoint() {
         return anchorPoint;
-    }
-
-    public int getFirstRevision() {
-        for (int i = 0; i < getNumberOfRevisions(); ++i) {
-            if (getWeight(i) > 0) {
-                return i;
-            }
-        }
-        return getNumberOfRevisions();
     }
 
     public void setAnchorPoint(double x, double y) {
@@ -107,9 +95,9 @@ public class Entity {
         return pastRectangle;
     }
 
-    public float getAspectRatio() {
+    public double getAspectRatio() {
 
-        return (float) Double.min(rectangle.width / rectangle.height,
+        return Double.min(rectangle.width / rectangle.height,
                 rectangle.height / rectangle.width);
     }
 
@@ -123,12 +111,7 @@ public class Entity {
         this.rectangle = newRectangle;
         // Compute metric
         if (newRectangle != null) {
-            double pastCenterX = (pastRectangle.x + pastRectangle.width)/2;
-            double currentCenterX = (rectangle.x + rectangle.width)/2;
-            double pastCenterY = (pastRectangle.y + pastRectangle.height)/2;
-            double currentCenterY = (rectangle.y + rectangle.height)/2;
-            double distance = sqrt(pow(pastCenterX - currentCenterX, 2) + pow(pastCenterY - currentCenterY, 2));
-            this.distanceList.set(revision, distance);
+            this.rectangleList.set(revision, new Rectangle(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
         }
     }
 
@@ -155,8 +138,7 @@ public class Entity {
         double width = rectangle.width * progress + pastRectangle.width * (1 - progress);
         double height = rectangle.height * progress + pastRectangle.height * (1 - progress);
 
-        // graphics.setColor(Colormap.sequentialColormap(1 - getAspectRatio()));
-        graphics.setColor(new Color(0,0,0,0));
+        graphics.setColor(Colormap.sequentialColormap((float) (1 - getAspectRatio())));
         graphics.fill(new Rectangle2D.Double(x, y, width, height));
     }
 
@@ -164,7 +146,7 @@ public class Entity {
 
         Rectangle rectangle = this.getRectangle(progress).intersection(entityB.getRectangle(progress));
 
-        graphics.setColor(Colormap.sequentialColormap(((1 - getAspectRatio()) + (1 - entityB.getAspectRatio()))/2));
+        graphics.setColor(Colormap.sequentialColormap((float) (((1 - getAspectRatio()) + (1 - entityB.getAspectRatio()))/2)));
         graphics.fill(new Rectangle2D.Double(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
     }
 

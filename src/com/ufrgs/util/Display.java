@@ -3,5 +3,6 @@ package com.ufrgs.util;
 public enum Display {
 
     STEP,
-    ANIMATION
+    ANIMATION,
+    ANALISYS
 }

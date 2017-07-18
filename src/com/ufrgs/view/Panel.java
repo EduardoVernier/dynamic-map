@@ -12,6 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Panel extends JPanel implements KeyListener, ActionListener {
 
+    private final String dataset;
     // Technique
     List<Entity> entityList;
     private Entity root;
@@ -36,8 +42,9 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     private Timer timer;
     private int DELAY = 30;
 
-    public Panel(Entity root, Rectangle canvas, JFrame frame) {
+    public Panel(Entity root, Rectangle canvas, JFrame frame, String dataset) {
 
+        this.dataset = dataset;
         this.root = root;
         this.canvas = canvas;
         this.frame = frame;
@@ -94,20 +101,6 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 break;
         }
         computeAspectRatioAverage();
-    }
-
-    private void computeAspectRatioAverage() {
-
-        double ratioSum = 0;
-        int nEntities = 0;
-        for (Entity entity : entityList) {
-            if (entity.getWeight(revision) > 0) {
-                ratioSum += entity.getAspectRatio();
-                nEntities++;
-            }
-        }
-        System.out.printf("%.8f\n", ratioSum / nEntities);
-        System.out.printf("%d\n", nEntities);
     }
 
     @Override
@@ -213,42 +206,103 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
     }
 
+
+
     private void printCsv() {
 
         System.out.printf("\n\n");
         for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
             double sum = 0;
             for (Entity entity : entityList) {
-                sum += entity.distanceList.get(i);
+                // sum += entity.distanceList.get(i);
             }
             System.out.printf("%.8f\n", sum);
         }
     }
 
+
+    private void computeAspectRatioAverage() {
+
+        double ratioSum = 0;
+        int nEntities = 0;
+        for (Entity entity : entityList) {
+            if (entity.getWeight(revision) > 0) {
+                ratioSum += entity.getAspectRatio();
+                nEntities++;
+            }
+        }
+        //System.out.printf("%d,%f,%d\n", revision, ratioSum / nEntities, nEntities);
+    }
+
+    private void writeReport() {
+
+        List<String> lines = new ArrayList<>();
+        Path file = Paths.get("results/" + Main.technique + "/" + Main.technique + "-" +  this.dataset + ".data");
+
+        lines.add(String.format("new %s %d", this.dataset, root.getNumberOfRevisions()));
+        for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
+            List<String> tempLines = new ArrayList<>();
+            for (Entity entity : entityList) {
+                if (entity.getWeight(i) > 0 && entity.isLeaf()) {
+                    Rectangle rectangle = entity.rectangleList.get(i);
+                    tempLines.add(String.format("%s %.10f %.10f %.10f %.10f", entity.getId(), rectangle.x, rectangle.y, rectangle.width, rectangle.height));
+                }
+            }
+            tempLines.sort(String.CASE_INSENSITIVE_ORDER);
+            for (String line : tempLines) {
+                lines.add(line);
+            }
+            lines.add("");
+        }
+
+        try {
+            Files.write(file, lines, Charset.forName("UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.print(dataset + " done.\n");
+    }
+
+
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
 
-        if (progress < 1) {
-            progress += 0.02;
-            repaint();
-        } else {
-            if (Main.DISPLAY == Display.ANIMATION) {
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        if (Main.DISPLAY == Display.ANALISYS) {
+            if (revision < root.getNumberOfRevisions() - 1) {
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;
                 computeTreemap();
                 setFrameTitle();
-            } else if (Main.DISPLAY == Display.STEP) {
-                progress = 1;
+            } else {
+
+                writeReport();
+                frame.dispose();
+                timer.stop();
+            }
+        } else {
+            if (progress < 1) {
+                progress += 0.02;
+                repaint();
+            } else {
+                if (Main.DISPLAY == Display.ANIMATION) {
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    lastRevisionWeight = root.getWeight(revision);
+                    revision++;
+                    progress = 0.0;
+                    computeTreemap();
+                    setFrameTitle();
+                } else if (Main.DISPLAY == Display.STEP) {
+                    progress = 1;
+                }
             }
         }
     }
-
 
     private void setFrameTitle() {
 
