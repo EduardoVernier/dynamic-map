@@ -42,6 +42,32 @@ public class Rectangle {
         }
     }
 
+    // Used only on Spiral
+    public Rectangle subtractAreaFrom(int cutDirection, double area) {
+
+        double areaHeight, newheight;
+        double areaWidth, newWidth;
+        switch (cutDirection) {
+            case 0:
+                areaHeight = area / this.width;
+                newheight = this.height - areaHeight;
+                return new Rectangle(x, y + areaHeight, width, newheight);
+            case 1:
+                areaWidth = area / height;
+                newWidth = width - areaWidth;
+                return new Rectangle(x, y, newWidth, height);
+            case 2:
+                areaHeight = area / this.width;
+                newheight = this.height - areaHeight;
+                return new Rectangle(x, y, width, newheight);
+            case 3:
+                areaWidth = area / height;
+                newWidth = width - areaWidth;
+                return new Rectangle(x + areaWidth, y, newWidth, height);
+        }
+        return null;
+    }
+
     public void setValues(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
@@ -61,5 +87,16 @@ public class Rectangle {
         double x1 = Math.min(this.x + this.width, b.x + b.width);
         double y1 = Math.min(this.y + this.height, b.y + b.height);
         return new Rectangle(x0, y0, x1 - x0, y1 - y0);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Rectangle{" +
+                "x=" + x +
+                ", y=" + y +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
     }
 }

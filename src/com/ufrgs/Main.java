@@ -12,7 +12,7 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.STRIP;
+    public static Technique TECHNIQUE = Technique.SPIRAL;
     public static Display DISPLAY = Display.STEP;
 
     private static Entity root;
@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        root = DataHelper.buildHierarchy("dataset/alpha/");
+        root = DataHelper.buildHierarchy("dataset/loc/exo");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }

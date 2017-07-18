@@ -5,22 +5,24 @@ import com.ufrgs.model.Point;
 import com.ufrgs.model.Rectangle;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Double.max;
 import static java.lang.Math.pow;
 
 
-public class StripTreemap {
+public class SpiralTreemap {
 
     private final int revision;
     private double normalizer = 0;
+    private int cutDirection = 0; // 0 WE - 1 ES - 2 SW - 3 WN
 
-    public StripTreemap(Entity root, Rectangle rectangle, int revision) {
+    public SpiralTreemap(Entity root, Rectangle rectangle, int revision) {
         this.revision = revision;
 
         root.setRectangle(rectangle, revision);
-        root.initPoint(new Point(rectangle.x/2.0, rectangle.y/2.0));
+        root.initPoint(new Point(rectangle.x / 2.0, rectangle.y / 2.0));
 
         List<Entity> children = treemapMultidimensional(root.getChildren(), rectangle);
         for (Entity entity : children) {
@@ -52,16 +54,17 @@ public class StripTreemap {
     }
 
     private void treemapSingledimensional(List<Entity> entityList, Rectangle rectangle) {
+        cutDirection = 0; // 0 WE - 1 ES - 2 SW - 3 WN
 
         // Bruls' algorithm assumes that the data is normalized
         normalize(entityList, rectangle.width * rectangle.height);
         entityList.removeIf(entity -> entity.getWeight(revision) == 0.0);
 
         List<Entity> currentRow = new ArrayList<Entity>();
-        strip(entityList, currentRow, rectangle);
+        squarify(entityList, currentRow, rectangle);
     }
 
-    private void strip(List<Entity> entityList, List<Entity> currentRow, Rectangle rectangle) {
+    private void squarify(List<Entity> entityList, List<Entity> currentRow, Rectangle rectangle) {
 
         // If all elements have been placed, save coordinates into objects
         if (entityList.size() == 0) {
@@ -70,10 +73,11 @@ public class StripTreemap {
         }
 
         // Test if new element should be included in current row
-        if (improvesRatio(currentRow, getNormalizedWeight(entityList.get(0)), rectangle.width)) {
+        double length = (cutDirection == 0 || cutDirection == 2) ? rectangle.width : rectangle.height;
+        if (improvesRatio(currentRow, getNormalizedWeight(entityList.get(0)), length)) {
             currentRow.add(entityList.get(0));
             entityList.remove(0);
-            strip(entityList, currentRow, rectangle);
+            squarify(entityList, currentRow, rectangle);
         } else {
             // New row must be created, subtract area of previous row from container
             double sum = 0;
@@ -81,10 +85,16 @@ public class StripTreemap {
                 sum += getNormalizedWeight(entity);
             }
 
-            Rectangle newRectangle = rectangle.subtractAreaFromTop(sum);
+            Rectangle newRectangle = rectangle.subtractAreaFrom(cutDirection, sum);
             saveCoordinates(currentRow, rectangle);
+            cutDirection++;
+            if (cutDirection > 3) {
+                cutDirection = 0;
+            }
+
             List<Entity> newCurrentRow = new ArrayList<>();
-            strip(entityList, newCurrentRow, newRectangle);
+            squarify(entityList, newCurrentRow, newRectangle);
+
         }
     }
 
@@ -99,29 +109,55 @@ public class StripTreemap {
         double areaWidth = normalizedSum / rectangle.height;
         double areaHeight = normalizedSum / rectangle.width;
 
-//        if (rectangle.width > rectangle.height) {
-//            for (Entity entity : currentRow) {
-//                double x = subxOffset;
-//                double y = subyOffset;
-//                double width = areaWidth;
-//                double height = getNormalizedWeight(entity) / areaWidth;
-//                entity.setRectangle(new Rectangle(x, y, width, height), revision);
-//                subyOffset += getNormalizedWeight(entity) / areaWidth;
-//                // Save center as we'll be using it as input to the nmap algorithm
-//                entity.initPoint(new Point(x + width / 2, y + height / 2));
-//            }
-//        } else {
-            for (Entity entity : currentRow) {
-                double x = subxOffset;
-                double y = subyOffset;
-                double width = getNormalizedWeight(entity) / areaHeight;
-                double height = areaHeight;
-                entity.setRectangle(new Rectangle(x, y, width, height), revision);
-                subxOffset += getNormalizedWeight(entity) / areaHeight;
-                // Save center as we'll be using it as input to the nmap algorithm
-                entity.initPoint(new Point(x + width / 2, y + height / 2));
-            }
-//        }
+        List<Entity> shallowCopy;
+        switch (cutDirection) {
+            case 0:
+                for (Entity entity : currentRow) {
+                    double x = subxOffset;
+                    double y = subyOffset;
+                    double width = getNormalizedWeight(entity) / areaHeight;
+                    double height = areaHeight;
+                    entity.setRectangle(new Rectangle(x, y, width, height), revision);
+                    subxOffset += getNormalizedWeight(entity) / areaHeight;
+                }
+                break;
+            case 1:
+                for (Entity entity : currentRow) {
+                    double x = subxOffset + rectangle.width - areaWidth;
+                    double y = subyOffset;
+                    double width = areaWidth;
+                    double height = getNormalizedWeight(entity) / areaWidth;
+                    entity.setRectangle(new Rectangle(x, y, width, height), revision);
+                    subyOffset += getNormalizedWeight(entity) / areaWidth;
+                }
+                break;
+            case 2:
+                shallowCopy = currentRow.subList(0, currentRow.size());
+                Collections.reverse(shallowCopy);
+                for (Entity entity : shallowCopy) {
+                    double x = subxOffset;
+                    double y = subyOffset + rectangle.height - areaHeight;
+                    double width = getNormalizedWeight(entity) / areaHeight;
+                    double height = areaHeight;
+                    entity.setRectangle(new Rectangle(x, y, width, height), revision);
+                    subxOffset += getNormalizedWeight(entity) / areaHeight;
+                }
+                shallowCopy.clear();
+                break;
+            case 3:
+                shallowCopy = currentRow.subList(0, currentRow.size());
+                Collections.reverse(shallowCopy);
+                for (Entity entity : shallowCopy) {
+                    double width = areaWidth;
+                    double height = getNormalizedWeight(entity) / areaWidth;
+                    double x = subxOffset;
+                    double y = subyOffset;
+                    entity.setRectangle(new Rectangle(x, y, width, height), revision);
+                    subyOffset += getNormalizedWeight(entity) / areaWidth;
+                }
+                shallowCopy.clear();
+                break;
+        }
     }
 
     // Test if adding a new entity to row improves ratios (get closer to 1)
@@ -169,7 +205,7 @@ public class StripTreemap {
     }
 
     private double getNormalizedWeight(Entity entity) {
-            return entity.getWeight(revision) * normalizer;
+        return entity.getWeight(revision) * normalizer;
 
     }
 }

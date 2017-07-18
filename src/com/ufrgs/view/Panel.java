@@ -88,6 +88,10 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
                 break;
             case STRIP:
                 new StripTreemap(root, canvas, revision);
+                break;
+            case SPIRAL:
+                new SpiralTreemap(root, canvas, revision);
+                break;
         }
         computeAspectRatioAverage();
     }
