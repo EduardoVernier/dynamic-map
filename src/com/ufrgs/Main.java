@@ -13,8 +13,8 @@ import java.io.File;
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.SQUARIFIED_TREEMAP;
-    public static Display DISPLAY = Display.STEP;
+    public static Technique TECHNIQUE = Technique.SPIRAL;
+    public static Display DISPLAY = Display.ANIMATION;
 
     public static String technique;
 
@@ -24,15 +24,16 @@ public class Main {
 
         for (File dirFile : directories) {
 
-            DISPLAY = Display.ANALISYS;
+//            DISPLAY = Display.ANALISYS;
             String dir = dirFile.toString();
 
             Entity root = DataHelper.buildHierarchy(dir);
 
             String dataset = dir.split("/")[dir.split("/").length-1];
-            technique = "sqr";
+            technique = "strip";
 
             SwingUtilities.invokeLater(() -> createAndShowGUI(dataset, root));
+            break;
         }
     }
 
