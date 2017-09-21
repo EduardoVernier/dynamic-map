@@ -13,24 +13,24 @@ import java.io.File;
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.SPIRAL;
-    public static Display DISPLAY = Display.ANIMATION;
+    public static Technique TECHNIQUE = Technique.NMAP_ALTERNATE_CUT;
+    public static Display DISPLAY = Display.STEP;
 
     public static String technique;
 
     public static void main(String[] args) {
 
-        File[] directories = new File("dataset").listFiles(File::isDirectory);
+        // File[] directories = new File("dataset").listFiles(File::isDirectory);
+        String directories[]  = {"dataset/names"};
+        for (String dirFile : directories) {
 
-        for (File dirFile : directories) {
-
-//            DISPLAY = Display.ANALISYS;
-            String dir = dirFile.toString();
+            DISPLAY = Display.ANALISYS;
+            String dir = dirFile;
 
             Entity root = DataHelper.buildHierarchy(dir);
 
             String dataset = dir.split("/")[dir.split("/").length-1];
-            technique = "strip";
+            technique = "nmac";
 
             SwingUtilities.invokeLater(() -> createAndShowGUI(dataset, root));
             break;
