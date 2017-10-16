@@ -12,6 +12,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Panel extends JPanel implements KeyListener, ActionListener {
 
+    private final String outputDir;
     // Technique
     List<Entity> entityList;
     private Entity root;
@@ -36,8 +43,9 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     private Timer timer;
     private int DELAY = 30;
 
-    public Panel(Entity root, Rectangle canvas, JFrame frame) {
+    public Panel(Entity root, Rectangle canvas, JFrame frame, String outputDir) {
 
+        this.outputDir = outputDir;
         this.root = root;
         this.canvas = canvas;
         this.frame = frame;
@@ -71,43 +79,29 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
     private void computeTreemap() {
 
-        switch (Main.TECHNIQUE) {
-            case NMAP_ALTERNATE_CUT:
-            case NMAP_EQUAL_WEIGHT:
+        switch (Main.technique) {
+            case nmac:
+            case nmew:
                 new Nmap(root, canvas, revision);
                 break;
-            case SQUARIFIED_TREEMAP:
+            case sqr:
                 new SquarifiedTreemap(root, canvas, revision);
                 break;
-            case ORDERED_TREEMAP_PIVOT_BY_MIDDLE:
-            case ORDERED_TREEMAP_PIVOT_BY_SIZE:
+            case otpbm:
+            case otpbs:
                 new OrderedTreemap(root, canvas, revision);
                 break;
-            case SLICE_AND_DICE:
+            case snd:
                 new SliceAndDice(root, canvas, revision);
                 break;
-            case STRIP:
+            case strip:
                 new StripTreemap(root, canvas, revision);
                 break;
-            case SPIRAL:
+            case spiral:
                 new SpiralTreemap(root, canvas, revision);
                 break;
         }
-        computeAspectRatioAverage();
-    }
-
-    private void computeAspectRatioAverage() {
-
-        double ratioSum = 0;
-        int nEntities = 0;
-        for (Entity entity : entityList) {
-            if (entity.getWeight(revision) > 0) {
-                ratioSum += entity.getAspectRatio();
-                nEntities++;
-            }
-        }
-        System.out.printf("%.8f\n", ratioSum / nEntities);
-        System.out.printf("%d\n", nEntities);
+        // computeAspectRatioAverage();
     }
 
     @Override
@@ -213,62 +207,116 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
         }
     }
 
+
+
     private void printCsv() {
 
         System.out.printf("\n\n");
         for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
             double sum = 0;
             for (Entity entity : entityList) {
-                sum += entity.distanceList.get(i);
+                // sum += entity.distanceList.get(i);
             }
             System.out.printf("%.8f\n", sum);
         }
     }
 
+
+    private void computeAspectRatioAverage() {
+
+        double ratioSum = 0;
+        int nEntities = 0;
+        for (Entity entity : entityList) {
+            if (entity.getWeight(revision) > 0) {
+                ratioSum += entity.getAspectRatio();
+                nEntities++;
+            }
+        }
+        //System.out.printf("%d,%f,%d\n", revision, ratioSum / nEntities, nEntities);
+    }
+
+    private void writeReport() {
+
+        new File(outputDir).mkdirs(); // In case path doesn't exist
+        for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
+            Path file = Paths.get(String.format("%s/t%d.rect", Main.outputDir, i));
+            List<String> lines = new ArrayList<>();
+            for (Entity entity : entityList) {
+                if (entity.getWeight(i) > 0 && entity.isLeaf()) {
+                    Rectangle rectangle = entity.rectangleList.get(i);
+                    lines.add(String.format("%s %.10f %.10f %.10f %.10f", entity.getId(), rectangle.x, rectangle.y, rectangle.width, rectangle.height));
+                }
+            }
+            lines.sort(String.CASE_INSENSITIVE_ORDER);
+            try {
+                Files.write(file, lines, Charset.forName("UTF-8"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+        System.out.print(outputDir + " done.\n");
+    }
+
+
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
 
-        if (progress < 1) {
-            progress += 0.02;
-            repaint();
-        } else {
-            if (Main.DISPLAY == Display.ANIMATION) {
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        if (Main.DISPLAY == Display.ANALISYS) {
+            if (revision < root.getNumberOfRevisions() - 1) {
                 lastRevisionWeight = root.getWeight(revision);
                 revision++;
                 progress = 0.0;
                 computeTreemap();
                 setFrameTitle();
-            } else if (Main.DISPLAY == Display.STEP) {
-                progress = 1;
+            } else {
+
+                writeReport();
+                frame.dispose();
+                timer.stop();
+            }
+        } else {
+            if (progress < 1) {
+                progress += 0.02;
+                repaint();
+            } else {
+                if (Main.DISPLAY == Display.ANIMATION) {
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    lastRevisionWeight = root.getWeight(revision);
+                    revision++;
+                    progress = 0.0;
+                    computeTreemap();
+                    setFrameTitle();
+                } else if (Main.DISPLAY == Display.STEP) {
+                    progress = 1;
+                }
             }
         }
     }
 
-
     private void setFrameTitle() {
 
-        switch (Main.TECHNIQUE) {
-            case NMAP_ALTERNATE_CUT:
+        switch (Main.technique) {
+            case nmac:
                 frame.setTitle("Nmap - Alternate Cut - Revision " + revision);
                 break;
-            case NMAP_EQUAL_WEIGHT:
+            case nmew:
                 frame.setTitle("Nmap - Equal Weight - Revision " + revision);
                 break;
-            case SQUARIFIED_TREEMAP:
+            case sqr:
                 frame.setTitle("Squarified - Revision " + revision);
                 break;
-            case ORDERED_TREEMAP_PIVOT_BY_MIDDLE:
+            case otpbm:
                 frame.setTitle("Ordered - Pivot-by-Middle - Revision " + revision);
                 break;
-            case ORDERED_TREEMAP_PIVOT_BY_SIZE:
+            case otpbs:
                 frame.setTitle("Ordered - Pivot-by-Size - Revision " + revision);
                 break;
-            case SLICE_AND_DICE:
+            case snd:
                 frame.setTitle("Slice and Dice - Revision " + revision);
                 break;
         }

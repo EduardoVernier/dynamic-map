@@ -32,7 +32,7 @@ public class DataHelper {
                 }
             }
         } else {
-            System.err.println("Invalid dir path.");
+            System.err.println("Invalid input dir path.");
             System.exit(-1);
         }
 

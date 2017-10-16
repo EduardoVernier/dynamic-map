@@ -79,9 +79,9 @@ public class OrderedTreemap {
         } else {
 
             int pivotIndex = 0;
-            if (Main.TECHNIQUE == Technique.ORDERED_TREEMAP_PIVOT_BY_MIDDLE) {
+            if (Main.technique == Technique.otpbm) {
                 pivotIndex = entityList.size() / 2;
-            } else if (Main.TECHNIQUE == Technique.ORDERED_TREEMAP_PIVOT_BY_SIZE){
+            } else if (Main.technique == Technique.otpbs){
                 int biggestValueIndex = 0;
                 double biggestValue = 0.0;
                 for (int i = 0; i < entityList.size(); ++i) {
