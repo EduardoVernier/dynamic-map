@@ -38,7 +38,6 @@ public class Main {
 
     private static void createAndShowGUI() {
 
-        Rectangle canvas = new Rectangle(1000, 1000);
         JFrame frame = new JFrame("Dynamic Treemap");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Panel panel = new Panel(root, canvas, frame, outputDir);
