@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 
@@ -244,7 +245,7 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
             for (Entity entity : entityList) {
                 if (entity.getWeight(i) > 0 && entity.isLeaf()) {
                     Rectangle rectangle = entity.rectangleList.get(i);
-                    lines.add(String.format("%s %.10f %.10f %.10f %.10f", entity.getId(), rectangle.x, rectangle.y, rectangle.width, rectangle.height));
+                    lines.add(String.format(Locale.ROOT, "%s %.10f %.10f %.10f %.10f", entity.getId(), rectangle.x, rectangle.y, rectangle.width, rectangle.height));
                 }
             }
             lines.sort(String.CASE_INSENSITIVE_ORDER);
