@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Panel extends JPanel implements KeyListener, ActionListener {
 
-    private final String dataset;
+    private final String outputDir;
     // Technique
     List<Entity> entityList;
     private Entity root;
@@ -42,9 +43,9 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
     private Timer timer;
     private int DELAY = 30;
 
-    public Panel(Entity root, Rectangle canvas, JFrame frame, String dataset) {
+    public Panel(Entity root, Rectangle canvas, JFrame frame, String outputDir) {
 
-        this.dataset = dataset;
+        this.outputDir = outputDir;
         this.root = root;
         this.canvas = canvas;
         this.frame = frame;
@@ -78,29 +79,29 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
     private void computeTreemap() {
 
-        switch (Main.TECHNIQUE) {
-            case NMAP_ALTERNATE_CUT:
-            case NMAP_EQUAL_WEIGHT:
+        switch (Main.technique) {
+            case nmac:
+            case nmew:
                 new Nmap(root, canvas, revision);
                 break;
-            case SQUARIFIED_TREEMAP:
+            case sqr:
                 new SquarifiedTreemap(root, canvas, revision);
                 break;
-            case ORDERED_TREEMAP_PIVOT_BY_MIDDLE:
-            case ORDERED_TREEMAP_PIVOT_BY_SIZE:
+            case otpbm:
+            case otpbs:
                 new OrderedTreemap(root, canvas, revision);
                 break;
-            case SLICE_AND_DICE:
+            case snd:
                 new SliceAndDice(root, canvas, revision);
                 break;
-            case STRIP:
+            case strip:
                 new StripTreemap(root, canvas, revision);
                 break;
-            case SPIRAL:
+            case spiral:
                 new SpiralTreemap(root, canvas, revision);
                 break;
         }
-        computeAspectRatioAverage();
+        // computeAspectRatioAverage();
     }
 
     @Override
@@ -236,32 +237,25 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
     private void writeReport() {
 
-        List<String> lines = new ArrayList<>();
-        Path file = Paths.get("results/" + Main.technique + "/" + Main.technique + "-" +  this.dataset + ".data");
-
-        lines.add(String.format("new %s %d", this.dataset, root.getNumberOfRevisions()));
+        new File(outputDir).mkdirs(); // In case path doesn't exist
         for (int i = 0; i < root.getNumberOfRevisions(); ++i) {
-            List<String> tempLines = new ArrayList<>();
+            Path file = Paths.get(String.format("%s/t%d.rect", Main.outputDir, i));
+            List<String> lines = new ArrayList<>();
             for (Entity entity : entityList) {
                 if (entity.getWeight(i) > 0 && entity.isLeaf()) {
                     Rectangle rectangle = entity.rectangleList.get(i);
-                    tempLines.add(String.format("%s %.10f %.10f %.10f %.10f", entity.getId(), rectangle.x, rectangle.y, rectangle.width, rectangle.height));
+                    lines.add(String.format("%s %.10f %.10f %.10f %.10f", entity.getId(), rectangle.x, rectangle.y, rectangle.width, rectangle.height));
                 }
             }
-            tempLines.sort(String.CASE_INSENSITIVE_ORDER);
-            for (String line : tempLines) {
-                lines.add(line);
+            lines.sort(String.CASE_INSENSITIVE_ORDER);
+            try {
+                Files.write(file, lines, Charset.forName("UTF-8"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
             }
-            lines.add("");
         }
-
-        try {
-            Files.write(file, lines, Charset.forName("UTF-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.print(dataset + " done.\n");
+        System.out.print(outputDir + " done.\n");
     }
 
 
@@ -306,23 +300,23 @@ public class Panel extends JPanel implements KeyListener, ActionListener {
 
     private void setFrameTitle() {
 
-        switch (Main.TECHNIQUE) {
-            case NMAP_ALTERNATE_CUT:
+        switch (Main.technique) {
+            case nmac:
                 frame.setTitle("Nmap - Alternate Cut - Revision " + revision);
                 break;
-            case NMAP_EQUAL_WEIGHT:
+            case nmew:
                 frame.setTitle("Nmap - Equal Weight - Revision " + revision);
                 break;
-            case SQUARIFIED_TREEMAP:
+            case sqr:
                 frame.setTitle("Squarified - Revision " + revision);
                 break;
-            case ORDERED_TREEMAP_PIVOT_BY_MIDDLE:
+            case otpbm:
                 frame.setTitle("Ordered - Pivot-by-Middle - Revision " + revision);
                 break;
-            case ORDERED_TREEMAP_PIVOT_BY_SIZE:
+            case otpbs:
                 frame.setTitle("Ordered - Pivot-by-Size - Revision " + revision);
                 break;
-            case SLICE_AND_DICE:
+            case snd:
                 frame.setTitle("Slice and Dice - Revision " + revision);
                 break;
         }

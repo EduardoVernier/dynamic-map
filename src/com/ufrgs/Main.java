@@ -8,55 +8,57 @@ import com.ufrgs.util.Technique;
 import com.ufrgs.view.Panel;
 
 import javax.swing.*;
-import java.io.File;
 
 public class Main {
 
     // Settings
-    public static Technique TECHNIQUE = Technique.NMAP_ALTERNATE_CUT;
-    public static Display DISPLAY = Display.STEP;
+    public static Display DISPLAY = Display.ANALISYS;
 
-    public static String technique;
+    private static Entity root;
+    private static Rectangle canvas;
+    public static String outputDir;
+    public static Technique technique;
 
     public static void main(String[] args) {
 
-        // File[] directories = new File("dataset").listFiles(File::isDirectory);
-        String directories[]  = {"dataset/names"};
-        for (String dirFile : directories) {
+        if (args.length == 5) {
+            technique = Technique.valueOf(args[0]);
+            String inputDir = args[1];
+            int width = Integer.valueOf(args[2]);
+            int height = Integer.valueOf(args[3]);
+            outputDir = args[4];
 
-            DISPLAY = Display.ANALISYS;
-            String dir = dirFile;
-
-            Entity root = DataHelper.buildHierarchy(dir);
-
-            String dataset = dir.split("/")[dir.split("/").length-1];
-            technique = "nmac";
-
-            SwingUtilities.invokeLater(() -> createAndShowGUI(dataset, root));
-            break;
+            canvas = new Rectangle(width, height);
+            root = DataHelper.buildHierarchy(inputDir);
+            SwingUtilities.invokeLater(() -> createAndShowGUI());
+        } else {
+            argsError();
         }
     }
 
-    private static void createAndShowGUI(String dataset, Entity root) {
+    private static void createAndShowGUI() {
 
         Rectangle canvas = new Rectangle(1000, 1000);
         JFrame frame = new JFrame("Dynamic Treemap");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Panel panel = new Panel(root, canvas, frame, dataset);
+        Panel panel = new Panel(root, canvas, frame, outputDir);
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
-        frame.setSize(1000, 1000);
+        frame.setSize((int) canvas.width, (int) canvas.height);
         frame.setVisible(true);
-//        try {
-//            TimeUnit.SECONDS.sleep(10);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+    }
 
-
-//        JFrame ganttFrame = new JFrame("Gantt Chart");
-//        ganttFrame.setSize(1650, 1080);
-//        ganttFrame.getContentPane().add(new GanttPanel(root, new Rectangle(1600, 1000)));
-//        ganttFrame.setVisible(true);
+    private static void argsError() {
+        System.out.println("Usage: java Main technique input_dir width height output_dir");
+        System.out.println("Techniques:\n" +
+                "\tNMAP_ALTERNATE_CUT,\n" +
+                "\tNMAP_EQUAL_WEIGHT,\n" +
+                "\tSQUARIFIED_TREEMAP,\n" +
+                "\tORDERED_TREEMAP_PIVOT_BY_MIDDLE,\n" +
+                "\tORDERED_TREEMAP_PIVOT_BY_SIZE,\n" +
+                "\tSLICE_AND_DICE,\n" +
+                "\tSTRIP,\n" +
+                "\tSPIRAL.");
+        System.out.println("Width and Height are given in pixels (integers).");
     }
 }

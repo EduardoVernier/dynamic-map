@@ -58,7 +58,7 @@ public class SquarifiedTreemap {
         // Bruls' algorithm assumes that the data is normalized
         normalize(entityList, rectangle.width * rectangle.height);
 
-        if (Main.TECHNIQUE != Technique.NMAP_ALTERNATE_CUT && Main.TECHNIQUE != Technique.NMAP_EQUAL_WEIGHT) {
+        if (Main.technique != Technique.nmac && Main.technique != Technique.nmew) {
             entityList.removeIf(entity -> entity.getWeight(revision) == 0.0);
         }
 
@@ -167,7 +167,7 @@ public class SquarifiedTreemap {
     private void normalize(List<Entity> entityList, double area) {
 
         double sum = 0;
-        if (Main.TECHNIQUE == Technique.NMAP_ALTERNATE_CUT || Main.TECHNIQUE == Technique.NMAP_EQUAL_WEIGHT) {
+        if (Main.technique == Technique.nmac || Main.technique == Technique.nmew) {
             for (Entity entity : entityList) {
                 double max = 0;
                 for (int i = 0; i < entity.getNumberOfRevisions(); ++i) {
@@ -187,7 +187,7 @@ public class SquarifiedTreemap {
 
     private double getNormalizedWeight(Entity entity) {
 
-        if (Main.TECHNIQUE == Technique.NMAP_ALTERNATE_CUT || Main.TECHNIQUE == Technique.NMAP_EQUAL_WEIGHT) {
+        if (Main.technique == Technique.nmac || Main.technique == Technique.nmew) {
             double max = 0;
             for (int i = 0; i < entity.getNumberOfRevisions(); ++i) {
                 if (entity.getWeight(i) > max) {

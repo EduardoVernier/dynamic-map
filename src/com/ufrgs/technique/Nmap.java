@@ -35,9 +35,9 @@ public class Nmap {
             }
         }
 
-        if (Main.TECHNIQUE == Technique.NMAP_ALTERNATE_CUT) {
+        if (Main.technique == Technique.nmac) {
             alternateCut(entityList, rectangle);
-        } else if (Main.TECHNIQUE == Technique.NMAP_EQUAL_WEIGHT) {
+        } else if (Main.technique == Technique.nmew) {
             equalWeight(entityList, rectangle);
         }
 

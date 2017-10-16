@@ -2,12 +2,12 @@ package com.ufrgs.util;
 
 public enum Technique {
 
-    NMAP_ALTERNATE_CUT,
-    NMAP_EQUAL_WEIGHT,
-    SQUARIFIED_TREEMAP,
-    ORDERED_TREEMAP_PIVOT_BY_MIDDLE,
-    ORDERED_TREEMAP_PIVOT_BY_SIZE,
-    SLICE_AND_DICE,
-    STRIP,
-    SPIRAL
+    nmac,
+    nmew,
+    sqr,
+    otpbm,
+    otpbs,
+    snd,
+    strip,
+    spiral
 }
