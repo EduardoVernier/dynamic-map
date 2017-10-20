@@ -12,25 +12,35 @@ import javax.swing.*;
 public class Main {
 
     // Settings
-    public static Display DISPLAY = Display.ANALISYS;
+    public static Display DISPLAY;
 
     private static Entity root;
     private static Rectangle canvas;
-    public static String outputDir;
+    public static String inputDir, outputDir;
     public static Technique technique;
+    public static int width, height;
 
     public static void main(String[] args) {
 
         if (args.length == 5) {
-            technique = Technique.valueOf(args[0]);
-            String inputDir = args[1];
-            int width = Integer.valueOf(args[2]);
-            int height = Integer.valueOf(args[3]);
-            outputDir = args[4];
 
-            canvas = new Rectangle(width, height);
-            root = DataHelper.buildHierarchy(inputDir);
-            SwingUtilities.invokeLater(() -> createAndShowGUI());
+            if (args[0].equals("-v")) {
+                DISPLAY = Display.STEP;
+                technique = Technique.valueOf(args[1]);
+                inputDir = args[2];
+                width = Integer.valueOf(args[3]);
+                height = Integer.valueOf(args[4]);
+            } else {
+                DISPLAY = Display.ANALISYS;
+                technique = Technique.valueOf(args[0]);
+                inputDir = args[1];
+                width = Integer.valueOf(args[2]);
+                height = Integer.valueOf(args[3]);
+                outputDir = args[4];
+            }
+                canvas = new Rectangle(width, height);
+                root = DataHelper.buildHierarchy(inputDir);
+                SwingUtilities.invokeLater(() -> createAndShowGUI());
         } else {
             argsError();
         }
@@ -44,20 +54,26 @@ public class Main {
         frame.getContentPane().add(panel);
         frame.addKeyListener(panel);
         frame.setSize((int) canvas.width, (int) canvas.height);
-        frame.setVisible(true);
+        frame.setVisible(DISPLAY != Display.ANALISYS);
     }
 
     private static void argsError() {
-        System.out.println("Usage: java Main technique input_dir width height output_dir");
+
+        System.out.println("Usage for simple analysis (output rectangles to disk):");
+        System.out.println("java -cp ./bin com.ufrgs.Main technique_code input_dir width height output_dir");
+        System.out.println("If you'd like to see and interact with the generated treemap, add the frag -v:");
+        System.out.println("java -cp ./bin com.ufrgs.Main -v technique_code input_dir width height");
+
+
         System.out.println("Techniques:\n" +
-                "\tNMAP_ALTERNATE_CUT,\n" +
-                "\tNMAP_EQUAL_WEIGHT,\n" +
-                "\tSQUARIFIED_TREEMAP,\n" +
-                "\tORDERED_TREEMAP_PIVOT_BY_MIDDLE,\n" +
-                "\tORDERED_TREEMAP_PIVOT_BY_SIZE,\n" +
-                "\tSLICE_AND_DICE,\n" +
-                "\tSTRIP,\n" +
-                "\tSPIRAL.");
-        System.out.println("Width and Height are given in pixels (integers).");
+                "\tnmac - NMAP_ALTERNATE_CUT,\n" +
+                "\tnmew - NMAP_EQUAL_WEIGHT,\n" +
+                "\tsqr - SQUARIFIED_TREEMAP,\n" +
+                "\totpbm - ORDERED_TREEMAP_PIVOT_BY_MIDDLE,\n" +
+                "\totpbs - ORDERED_TREEMAP_PIVOT_BY_SIZE,\n" +
+                "\tsnd - SLICE_AND_DICE,\n" +
+                "\tstrip - STRIP,\n" +
+                "\tspiral - SPIRAL.");
+        System.out.println("\tWidth and Height are given in pixels (integers).");
     }
 }

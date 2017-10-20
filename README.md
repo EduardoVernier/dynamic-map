@@ -9,7 +9,7 @@ To run the code that simply generates the rectangle series that can be used for 
 
 `java -cp ./bin com.ufrgs.Main technique_code input_dir width height output_dir`
 
-If you'd like to see and interact with the generated treemap, add the frag `-v`:
+If you'd like to see and interact with the generated treemap, add the frag `-v`. To advance a revision, press `x`, and to go back, press `z`;
 
 `java -cp ./bin com.ufrgs.Main -v technique_code input_dir width height`
 
