@@ -1,27 +1,39 @@
-# dynamic-map
+# dynamic-treemap
 Java implementation of treemapping techniques
 
-Hierarchical data in which leaf nodes have associated attributes appear in several applications. Rectangular Treemaps (RTs) were designed to display this type of data by tightly packing cells representing the tree nodes, with additional information stored in the cell sizes and/or colors. For dynamic hierarchies, RTs have to obey several requirements regarding the optimal aspect ratio of cells, but also the stability of layout in presence of data changes. While static RTs studied the first requirement well, far less information is available on how RTs behave both requirements for dynamic data. We study how four known RT methods compare over several real-world dynamic hierarchies, and highlight how recent RT methods can be adapted to effectively handle optimal cell ratios and stability.
+To compile the code, from the root directory, run:
 
-This repository has the implementation of four treemapping techniques along with their variations: 
-### Squarified Treemap
-### Slice-and-Dice
-### Ordered Treemap
-### Nmap
-### Strip Treemap
-### Spiral Treemap
+`mkdir bin; javac -d bin $(find . -name "*.java")`
+
+To run the code that simply generates the rectangle series that can be used for analysis, run:
+
+`java -cp ./bin com.ufrgs.Main technique_code input_dir width height output_dir`
+
+If you'd like to see and interact with the generated treemap, add the frag `-v`:
+
+`java -cp ./bin com.ufrgs.Main -v technique_code input_dir width height`
+
+The codes for the techniques are:
+
+Code     | Technique                        | Link to paper
+---      | ---                              | ---
+`snd`    | Slice and Dice                   | https://dl.acm.org/citation.cfm?id=115768
+`sqr`    | Squarified Treemap               | https://link.springer.com/chapter/10.1007/978-3-7091-6783-0_4
+`otpbm`  | Ordered Treemap Pivot-by-Middle  | https://dl.acm.org/citation.cfm?id=857710
+`otpbs`  | Ordered Treemap Pivot-by-Size    | https://dl.acm.org/citation.cfm?id=857710
+`strip`  | Strip Treemap                    | https://dl.acm.org/citation.cfm?id=857710
+`nmac`   | Nmap Alternate Cut               | http://ieeexplore.ieee.org/document/6876012/
+`nmew`   | Nmap Equal Weights               | http://ieeexplore.ieee.org/document/6876012/
+`spiral` | Spiral Treemap                   | http://ieeexplore.ieee.org/document/4376152/
 
 
-BRULS M., HUIZING K., VAN WIJK J.: Squarified treemaps.
-In In Proceedings of the Joint Eurographics and IEEE TCVG Symposium
-on Visualization (1999), Press, pp. 33–42.
 
-DUARTE F. S. L. G., SIKANSI F., FATORE F. M., FADEL S. G., PAULOVICH F. V.: Nmap: A novel neighborhood preservation space-filling algorithm.
-IEEE Transactions on Visualization and Computer Graphics 20, 12 (Dec 2014), 2063–2071.
 
-SHNEIDERMAN B.: Tree visualization with tree-maps: 2-d space-filling approach.
-ACM Trans. Graph. 11, 1 (Jan. 1992), 92–99.
 
-SHNEIDERMAN B., WATTENBERG M.: Ordered treemap layouts. 
-In Proceedings of the IEEE Symposium on Information Visualization 2001 (INFOVIS’01) (Washington, DC, USA, 2001), INFOVIS ’01,
-IEEE Computer Society, pp. 73–.
+
+
+
+
+
+
+
